@@ -14,6 +14,8 @@
 #include <node0/SceneNode.h>
 #include <node2/CompTransform.h>
 #include <node2/CompBoundingBox.h>
+#include <node2/CompColorCommon.h>
+#include <node2/CompColorMap.h>
 #include <sprite2/OrthoCamera.h>
 #include <gum/StringHelper.h>
 #include <gum/SymbolPool.h>
@@ -37,6 +39,10 @@ void WxStageDropTarget::OnDropText(wxCoord x, wxCoord y, const wxString& text)
 		return;
 	}
 
+	auto& cam = std::dynamic_pointer_cast<WxStageCanvas>(m_stage->GetImpl().GetCanvas())->GetCamera();
+	GD_ASSERT(cam, "null cam");
+	sm::vec2 pos = ee0::CameraHelper::TransPosScreenToProject(*cam, x, y);
+
 	for (int i = 1, n = keys.size(); i < n; ++i)
 	{
 		int idx = std::stoi(keys[i].c_str());
@@ -46,10 +52,6 @@ void WxStageDropTarget::OnDropText(wxCoord x, wxCoord y, const wxString& text)
 		}
 
 		auto sym = gum::SymbolPool::Instance()->Fetch(item->GetFilepath().c_str());
-
-		auto& cam = std::dynamic_pointer_cast<WxStageCanvas>(m_stage->GetImpl().GetCanvas())->GetCamera();
-		GD_ASSERT(cam, "null cam");
-		sm::vec2 pos = ee0::CameraHelper::TransPosScreenToProject(*cam, x, y);
 		bool handled = OnDropSymbol(sym, pos);
 		if (handled) {
 			continue;
@@ -61,19 +63,7 @@ void WxStageDropTarget::OnDropText(wxCoord x, wxCoord y, const wxString& text)
 		}
 
 		InsertNode(node);
-
-		// transform
-		auto& ctrans = node->AddComponent<n2::CompTransform>();
-		auto parent = node->GetParent();
-		if (parent) {
-			auto p_pos = parent->GetComponent<n2::CompTransform>().GetTrans().GetMatrix() * sm::vec2(0, 0);
-			pos -= p_pos;
-		}
-		ctrans.GetTrans().SetPosition(pos);
-
-		// bounding box
-		auto& bounding = node->GetComponent<n2::CompBoundingBox>();
-		bounding.Build(ctrans.GetTrans().GetSRT());
+		InitNodeComp(node, pos);
 	}
 
 	m_stage->GetSubjectMgr().NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
@@ -93,6 +83,27 @@ void WxStageDropTarget::InsertNode(const n0::SceneNodePtr& node)
 	
 	bool succ = m_stage->GetSubjectMgr().NotifyObservers(ee0::MSG_INSERT_SCENE_NODE, vars);
 	GD_ASSERT(succ, "no MSG_INSERT_SCENE_NODE");
+}
+
+void WxStageDropTarget::InitNodeComp(const n0::SceneNodePtr& node, const sm::vec2& pos)
+{
+	// transform
+	auto& ctrans = node->AddComponent<n2::CompTransform>();
+	auto parent = node->GetParent();
+	if (parent) {
+		auto p_pos = parent->GetComponent<n2::CompTransform>().GetTrans().GetMatrix() * sm::vec2(0, 0);
+		ctrans.GetTrans().SetPosition(pos - p_pos);
+	} else {
+		ctrans.GetTrans().SetPosition(pos);
+	}
+
+	// bounding box
+	auto& bounding = node->GetComponent<n2::CompBoundingBox>();
+	bounding.Build(ctrans.GetTrans().GetSRT());
+
+	// color 
+	node->AddComponent<n2::CompColorCommon>();
+	node->AddComponent<n2::CompColorMap>();
 }
 
 }

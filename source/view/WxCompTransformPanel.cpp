@@ -58,8 +58,10 @@ void WxCompTransformPanel::InitLayout()
 		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("  Y ")));
 		sizer->Add(m_pos_y = new wxTextCtrl(win, wxID_ANY, std::to_string(pos.y), wxDefaultPosition, INPUT_SIZE));
 
-		Connect(m_pos_x->GetId(), wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler(WxCompTransformPanel::UpdateTextValue));
-		Connect(m_pos_y->GetId(), wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler(WxCompTransformPanel::UpdateTextValue));
+		Connect(m_pos_x->GetId(), wxEVT_COMMAND_TEXT_UPDATED, 
+			wxCommandEventHandler(WxCompTransformPanel::UpdateTextValue));
+		Connect(m_pos_y->GetId(), wxEVT_COMMAND_TEXT_UPDATED, 
+			wxCommandEventHandler(WxCompTransformPanel::UpdateTextValue));
 
 		pane_sizer->Add(sizer);
 	}

@@ -60,7 +60,10 @@
     <ClInclude Include="..\..\..\include\ee2\WxCompTransformPanel.h">
       <Filter>view\detail</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\ee2\WxCompColorCommonPanel.h">
+    <ClInclude Include="..\..\..\include\ee2\WxCompColComPanel.h">
+      <Filter>view\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\WxCompColMapPanel.h">
       <Filter>view\detail</Filter>
     </ClInclude>
   </ItemGroup>
@@ -95,7 +98,10 @@
     <ClCompile Include="..\..\..\source\view\WxCompTransformPanel.cpp">
       <Filter>view\detail</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\view\WxCompColorCommonPanel.cpp">
+    <ClCompile Include="..\..\..\source\view\WxCompColComPanel.cpp">
+      <Filter>view\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\view\WxCompColMapPanel.cpp">
       <Filter>view\detail</Filter>
     </ClCompile>
   </ItemGroup>
