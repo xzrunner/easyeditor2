@@ -25,6 +25,9 @@
     <Filter Include="editop\node\state">
       <UniqueIdentifier>{300170f1-c3ff-4b6a-abfc-bce96eec44dd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="view\detail">
+      <UniqueIdentifier>{74500f27-1f9e-487e-9dc9-6da4e20f5958}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\ee2\NodeFactory.h">
@@ -54,6 +57,12 @@
     <ClInclude Include="..\..\..\include\ee2\WxStageCanvas.h">
       <Filter>view\stage</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\WxCompTransformPanel.h">
+      <Filter>view\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\WxCompColorCommonPanel.h">
+      <Filter>view\detail</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\data\NodeFactory.cpp">
@@ -82,6 +91,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\view\WxStageCanvas.cpp">
       <Filter>view\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\view\WxCompTransformPanel.cpp">
+      <Filter>view\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\view\WxCompColorCommonPanel.cpp">
+      <Filter>view\detail</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
