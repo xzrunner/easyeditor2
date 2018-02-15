@@ -20,11 +20,10 @@ public:
 	virtual void RefreshNodeComp() override;
 
 private:
-	void InitLayout();
+	void InitLayout(ee0::SubjectMgr& sub_mgr);
 
 private:
 	n2::CompColorMap& m_ccol;
-	ee0::SubjectMgr& m_sub_mgr;
 
 	ee0::WxColorSpinCtrl *m_rmap_ctrl, *m_gmap_ctrl, *m_bmap_ctrl;
 

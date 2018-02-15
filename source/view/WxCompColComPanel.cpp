@@ -12,9 +12,8 @@ WxCompColComPanel::WxCompColComPanel(wxWindow* parent,
 	                                 ee0::SubjectMgr& sub_mgr)
 	: ee0::WxCompPanel(parent, "ColorCommon")
 	, m_ccol(col)
-	, m_sub_mgr(sub_mgr)
 {
-	InitLayout();
+	InitLayout(sub_mgr);
 	Expand();
 }
 
@@ -24,13 +23,15 @@ void WxCompColComPanel::RefreshNodeComp()
 	m_add_ctrl->Refresh();
 }
 
-void WxCompColComPanel::InitLayout()
+void WxCompColComPanel::InitLayout(ee0::SubjectMgr& sub_mgr)
 {
 	wxWindow* win = GetPane();
 
 	wxSizer* pane_sizer = new wxBoxSizer(wxVERTICAL);
-	pane_sizer->Add(m_mul_ctrl = new ee0::WxColorSpinCtrl(win, m_ccol.GetColor().mul, "mul"));
-	pane_sizer->Add(m_add_ctrl = new ee0::WxColorSpinCtrl(win, m_ccol.GetColor().add, "add"));
+	pane_sizer->Add(m_mul_ctrl = 
+		new ee0::WxColorSpinCtrl(win, m_ccol.GetColor().mul, "mul", sub_mgr));
+	pane_sizer->Add(m_add_ctrl = 
+		new ee0::WxColorSpinCtrl(win, m_ccol.GetColor().add, "add", sub_mgr));
 
 	win->SetSizer(pane_sizer);
 	pane_sizer->SetSizeHints(win);
