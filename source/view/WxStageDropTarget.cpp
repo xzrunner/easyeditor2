@@ -14,8 +14,6 @@
 #include <node0/SceneNode.h>
 #include <node2/CompTransform.h>
 #include <node2/CompBoundingBox.h>
-#include <node2/CompColorCommon.h>
-#include <node2/CompColorMap.h>
 #include <sprite2/OrthoCamera.h>
 #include <gum/StringHelper.h>
 #include <gum/SymbolPool.h>
@@ -100,10 +98,6 @@ void WxStageDropTarget::InitNodeComp(const n0::SceneNodePtr& node, const sm::vec
 	// bounding box
 	auto& bounding = node->GetComponent<n2::CompBoundingBox>();
 	bounding.Build(ctrans.GetTrans().GetSRT());
-
-	// color 
-	node->AddComponent<n2::CompColorCommon>();
-	node->AddComponent<n2::CompColorMap>();
 }
 
 }
