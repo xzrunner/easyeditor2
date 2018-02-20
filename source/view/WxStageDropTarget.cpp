@@ -96,8 +96,8 @@ void WxStageDropTarget::InitNodeComp(const n0::SceneNodePtr& node, const sm::vec
 	}
 
 	// bounding box
-	auto& bounding = node->GetComponent<n2::CompBoundingBox>();
-	bounding.Build(ctrans.GetTrans().GetSRT());
+	auto& cbounding = node->GetComponent<n2::CompBoundingBox>();
+	cbounding.Build(ctrans.GetTrans().GetSRT());
 }
 
 }

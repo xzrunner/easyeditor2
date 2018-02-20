@@ -8,10 +8,19 @@
 namespace ee2
 {
 
+enum NodeType
+{
+	NODE_UNKNOWN = 0,
+
+	NODE_TEXT = 1,
+};
+
 class NodeFactory
 {
 public:
 	n0::SceneNodePtr Create(const s2::SymPtr& sym);
+
+	n0::SceneNodePtr Create(NodeType type);
 
 	CU_SINGLETON_DECLARATION(NodeFactory);
 
