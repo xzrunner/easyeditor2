@@ -7,6 +7,7 @@
 #include <node0/SceneNode.h>
 #include <node2/CompImage.h>
 #include <node2/CompText.h>
+#include <node2/CompSprite2.h>
 #include <node2/CompBoundingBox.h>
 #include <node2/CompTransform.h>
 
@@ -70,6 +71,12 @@ n0::SceneNodePtr NodeFactory::Create(NodeType type)
 			auto& ctext = node->AddComponent<n2::CompText>();
 			auto& tb = ctext.GetText().tb;
 			sz.Build(static_cast<float>(tb.width), static_cast<float>(tb.height));
+		}
+		break;
+	case NODE_SPRITE2:
+		{
+			auto& csprite2 = node->AddComponent<n2::CompSprite2>();
+			sz.Build(100, 100);
 		}
 		break;
 	}

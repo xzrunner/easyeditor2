@@ -28,6 +28,15 @@
     <Filter Include="view\detail">
       <UniqueIdentifier>{74500f27-1f9e-487e-9dc9-6da4e20f5958}</UniqueIdentifier>
     </Filter>
+    <Filter Include="view\detail\color">
+      <UniqueIdentifier>{69313306-4756-4045-abaf-2de0cf350b6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="view\detail\node">
+      <UniqueIdentifier>{8107ecf2-9dbf-4eea-95ce-abc7c63ece8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="view\detail\others">
+      <UniqueIdentifier>{3b67399f-8c5d-4f5f-911b-e4cf78e2208f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\ee2\NodeFactory.h">
@@ -57,20 +66,23 @@
     <ClInclude Include="..\..\..\include\ee2\WxStageCanvas.h">
       <Filter>view\stage</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\ee2\WxCompTransformPanel.h">
-      <Filter>view\detail</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\ee2\WxCompColComPanel.h">
-      <Filter>view\detail</Filter>
+      <Filter>view\detail\color</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\ee2\WxCompColMapPanel.h">
-      <Filter>view\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\ee2\WxCompTextPanel.h">
-      <Filter>view\detail</Filter>
+      <Filter>view\detail\color</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\ee2\WxCompImagePanel.h">
-      <Filter>view\detail</Filter>
+      <Filter>view\detail\node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\WxCompTextPanel.h">
+      <Filter>view\detail\node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\WxCompTransformPanel.h">
+      <Filter>view\detail\others</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\WxCompSprite2Panel.h">
+      <Filter>view\detail\node</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -101,20 +113,23 @@
     <ClCompile Include="..\..\..\source\view\WxStageCanvas.cpp">
       <Filter>view\stage</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\view\WxCompTransformPanel.cpp">
-      <Filter>view\detail</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\view\WxCompColComPanel.cpp">
-      <Filter>view\detail</Filter>
+      <Filter>view\detail\color</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\view\WxCompColMapPanel.cpp">
-      <Filter>view\detail</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\view\WxCompTextPanel.cpp">
-      <Filter>view\detail</Filter>
+      <Filter>view\detail\color</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\view\WxCompImagePanel.cpp">
-      <Filter>view\detail</Filter>
+      <Filter>view\detail\node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\view\WxCompTextPanel.cpp">
+      <Filter>view\detail\node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\view\WxCompTransformPanel.cpp">
+      <Filter>view\detail\others</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\view\WxCompSprite2Panel.cpp">
+      <Filter>view\detail\node</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

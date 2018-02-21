@@ -14,6 +14,7 @@ enum NodeType
 
 	NODE_IMAGE = 1,
 	NODE_TEXT,
+	NODE_SPRITE2,
 };
 
 class NodeFactory
