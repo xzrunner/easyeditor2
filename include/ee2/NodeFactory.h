@@ -12,7 +12,8 @@ enum NodeType
 {
 	NODE_UNKNOWN = 0,
 
-	NODE_TEXT = 1,
+	NODE_IMAGE = 1,
+	NODE_TEXT,
 };
 
 class NodeFactory

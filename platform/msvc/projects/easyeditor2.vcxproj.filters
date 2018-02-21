@@ -69,6 +69,9 @@
     <ClInclude Include="..\..\..\include\ee2\WxCompTextPanel.h">
       <Filter>view\detail</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\WxCompImagePanel.h">
+      <Filter>view\detail</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\data\NodeFactory.cpp">
@@ -108,6 +111,9 @@
       <Filter>view\detail</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\view\WxCompTextPanel.cpp">
+      <Filter>view\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\view\WxCompImagePanel.cpp">
       <Filter>view\detail</Filter>
     </ClCompile>
   </ItemGroup>

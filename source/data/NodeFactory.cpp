@@ -59,6 +59,12 @@ n0::SceneNodePtr NodeFactory::Create(NodeType type)
 
 	switch (type)
 	{
+	case NODE_IMAGE:
+		{
+			auto& cimage = node->AddComponent<n2::CompImage>();
+			sz.Build(100, 100);
+		}
+		break;
 	case NODE_TEXT:
 		{
 			auto& ctext = node->AddComponent<n2::CompText>();
