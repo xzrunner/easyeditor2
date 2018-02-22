@@ -2,9 +2,9 @@
 
 #include <ee0/SubjectMgr.h>
 
+#include <painting2/RenderCtxStack.h>
 #include <sprite2/OrthoCamera.h>
 #include <sprite2/Pseudo3DCamera.h>
-#include <sprite2/RenderCtxStack.h>
 
 namespace ee2
 {
@@ -49,7 +49,7 @@ bool CamTranslateState::OnMouseDrag(int x, int y)
 	case s2::CAM_PSEUDO3D:
 		{
 			auto& cam = dynamic_cast<s2::Pseudo3DCamera&>(m_cam);
-			auto ctx = s2::RenderCtxStack::Instance()->Top();
+			auto ctx = pt2::RenderCtxStack::Instance()->Top();
 			if (!ctx) {
 				return false;
 			}

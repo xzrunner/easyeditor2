@@ -4,7 +4,7 @@
 #include <ee0/color_config.h>
 #include <ee0/EditOP.h>
 
-#include <sprite2/RenderCtxStack.h>
+#include <painting2/RenderCtxStack.h>
 #include <sprite2/RVG.h>
 #include <sprite2/OrthoCamera.h>
 #include <node2/DrawNode.h>
@@ -33,7 +33,7 @@ void WxStageCanvas::OnNotify(ee0::MessageID msg, const ee0::VariantSet& variants
 
 void WxStageCanvas::OnSize(int w, int h)
 {
-	auto ctx = const_cast<s2::RenderContext*>(s2::RenderCtxStack::Instance()->Top());
+	auto ctx = const_cast<pt2::RenderContext*>(pt2::RenderCtxStack::Instance()->Top());
 	if (ctx)
 	{
 		ctx->SetViewport(0, 0, w, h);

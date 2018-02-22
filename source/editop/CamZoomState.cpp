@@ -2,7 +2,7 @@
 
 #include <ee0/SubjectMgr.h>
 
-#include <sprite2/RenderCtxStack.h>
+#include <painting2/RenderCtxStack.h>
 #include <sprite2/OrthoCamera.h>
 #include <sprite2/Pseudo3DCamera.h>
 
@@ -23,7 +23,7 @@ bool CamZoomState::OnMouseWheelRotation(int x, int y, int direction)
 	{
 	case s2::CAM_ORTHO2D:
 		{
-			auto ctx = s2::RenderCtxStack::Instance()->Top();
+			auto ctx = pt2::RenderCtxStack::Instance()->Top();
 			if (!ctx) {
 				return false;
 			}
