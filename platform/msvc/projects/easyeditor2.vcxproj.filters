@@ -84,6 +84,9 @@
     <ClInclude Include="..\..\..\include\ee2\WxCompSprite2Panel.h">
       <Filter>view\detail\node</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\WxCompMaskPanel.h">
+      <Filter>view\detail\node</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\data\NodeFactory.cpp">
@@ -129,6 +132,9 @@
       <Filter>view\detail\others</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\view\WxCompSprite2Panel.cpp">
+      <Filter>view\detail\node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\view\WxCompMaskPanel.cpp">
       <Filter>view\detail\node</Filter>
     </ClCompile>
   </ItemGroup>

@@ -14,6 +14,8 @@ enum NodeType
 
 	NODE_IMAGE = 1,
 	NODE_TEXT,
+	NODE_MASK,
+
 	NODE_SPRITE2,
 };
 
