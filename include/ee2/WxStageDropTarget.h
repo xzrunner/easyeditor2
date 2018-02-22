@@ -22,7 +22,8 @@ public:
 private:
 	void InsertNode(const n0::SceneNodePtr& node);
 
-	void InitNodeComp(const n0::SceneNodePtr& node, const sm::vec2& pos);
+	void InitNodeComp(const n0::SceneNodePtr& node, const sm::vec2& pos,
+		const std::string& filepath);
 
 private:
 	ee0::WxLibraryPanel* m_library;

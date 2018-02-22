@@ -9,6 +9,7 @@
 #include <ee0/WxDropTarget.h>
 #include <ee0/WxLibraryPanel.h>
 #include <ee0/WxLibraryItem.h>
+#include <ee0/CompNodeEditor.h>
 
 #include <guard/check.h>
 #include <node0/SceneNode.h>
@@ -61,7 +62,7 @@ void WxStageDropTarget::OnDropText(wxCoord x, wxCoord y, const wxString& text)
 		}
 
 		InsertNode(node);
-		InitNodeComp(node, pos);
+		InitNodeComp(node, pos, item->GetFilepath());
 	}
 
 	m_stage->GetSubjectMgr().NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
@@ -83,7 +84,9 @@ void WxStageDropTarget::InsertNode(const n0::SceneNodePtr& node)
 	GD_ASSERT(succ, "no MSG_INSERT_SCENE_NODE");
 }
 
-void WxStageDropTarget::InitNodeComp(const n0::SceneNodePtr& node, const sm::vec2& pos)
+void WxStageDropTarget::InitNodeComp(const n0::SceneNodePtr& node, 
+	                                 const sm::vec2& pos,
+	                                 const std::string& filepath)
 {
 	// transform
 	auto& ctrans = node->AddComponent<n2::CompTransform>();
@@ -98,6 +101,10 @@ void WxStageDropTarget::InitNodeComp(const n0::SceneNodePtr& node, const sm::vec
 	// bounding box
 	auto& cbounding = node->GetComponent<n2::CompBoundingBox>();
 	cbounding.Build(ctrans.GetTrans().GetSRT());
+
+	// editor
+	auto& ceditor = node->GetComponent<ee0::CompNodeEditor>();
+	ceditor.SetFilepath(filepath);
 }
 
 }
