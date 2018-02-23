@@ -15,7 +15,7 @@
 #include <node0/SceneNode.h>
 #include <node2/CompTransform.h>
 #include <node2/CompBoundingBox.h>
-#include <sprite2/OrthoCamera.h>
+#include <painting2/OrthoCamera.h>
 #include <gum/StringHelper.h>
 #include <gum/SymbolPool.h>
 

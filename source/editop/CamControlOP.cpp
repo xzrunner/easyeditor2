@@ -4,14 +4,14 @@
 
 #include <ee0/SubjectMgr.h>
 
-#include <sprite2/Camera.h>
+#include <painting2/Camera.h>
 
 #include <wx/defs.h>
 
 namespace ee2
 {
 
-CamControlOP::CamControlOP(s2::Camera& cam, ee0::SubjectMgr& sub_mgr, uint32_t flag)
+CamControlOP::CamControlOP(pt2::Camera& cam, ee0::SubjectMgr& sub_mgr, uint32_t flag)
 	: m_cam(cam)
 	, m_sub_mgr(sub_mgr)
 	, m_flag(flag)

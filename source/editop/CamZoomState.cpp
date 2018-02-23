@@ -3,15 +3,15 @@
 #include <ee0/SubjectMgr.h>
 
 #include <painting2/RenderCtxStack.h>
-#include <sprite2/OrthoCamera.h>
-#include <sprite2/Pseudo3DCamera.h>
+#include <painting2/OrthoCamera.h>
+#include <painting2/Pseudo3DCamera.h>
 
 #include <sm_c_vector.h>
 
 namespace ee2
 {
 
-CamZoomState::CamZoomState(s2::Camera& cam, ee0::SubjectMgr& sub_mgr)
+CamZoomState::CamZoomState(pt2::Camera& cam, ee0::SubjectMgr& sub_mgr)
 	: m_cam(cam)
 	, m_sub_mgr(sub_mgr)
 {
@@ -21,7 +21,7 @@ bool CamZoomState::OnMouseWheelRotation(int x, int y, int direction)
 {
 	switch (m_cam.Type())
 	{
-	case s2::CAM_ORTHO2D:
+	case pt2::CAM_ORTHO2D:
 		{
 			auto ctx = pt2::RenderCtxStack::Instance()->Top();
 			if (!ctx) {
@@ -38,13 +38,13 @@ bool CamZoomState::OnMouseWheelRotation(int x, int y, int direction)
 			//}
 			const float cx = static_cast<float>(x),
 				        cy = static_cast<float>(h - y);
-			auto& cam = dynamic_cast<s2::OrthoCamera&>(m_cam);
+			auto& cam = dynamic_cast<pt2::OrthoCamera&>(m_cam);
 			cam.Scale(scale, cx, cy, w, h);
 		}
 		break;
-	case s2::CAM_PSEUDO3D:
+	case pt2::CAM_PSEUDO3D:
 		{
-			auto& cam = dynamic_cast<s2::Pseudo3DCamera&>(m_cam);
+			auto& cam = dynamic_cast<pt2::Pseudo3DCamera&>(m_cam);
 			const sm_vec3* pos = cam.GetPos();
 			float dz = direction < 0 ? pos->z * 0.1f : - pos->z * 0.1f;
 			cam.Translate(sm::vec3(0, 0, dz));

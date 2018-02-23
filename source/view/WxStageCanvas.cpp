@@ -5,8 +5,8 @@
 #include <ee0/EditOP.h>
 
 #include <painting2/RenderCtxStack.h>
+#include <painting2/OrthoCamera.h>
 #include <sprite2/RVG.h>
-#include <sprite2/OrthoCamera.h>
 #include <node2/DrawNode.h>
 
 namespace ee2
@@ -16,7 +16,7 @@ WxStageCanvas::WxStageCanvas(WxStagePage* stage, std::shared_ptr<wxGLContext> gl
 	: ee0::WxStageCanvas(stage, stage->GetImpl(), glctx, USE_CONTEXT_STACK | HAS_2D)
 	, m_stage(stage)
 {
-	m_cam = std::make_shared<s2::OrthoCamera>();
+	m_cam = std::make_shared<pt2::OrthoCamera>();
 
 	stage->GetSubjectMgr().RegisterObserver(ee0::MSG_SET_CANVAS_DIRTY, this);
 }

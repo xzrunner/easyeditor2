@@ -3,13 +3,13 @@
 #include <ee0/SubjectMgr.h>
 
 #include <painting2/RenderCtxStack.h>
-#include <sprite2/OrthoCamera.h>
-#include <sprite2/Pseudo3DCamera.h>
+#include <painting2/OrthoCamera.h>
+#include <painting2/Pseudo3DCamera.h>
 
 namespace ee2
 {
 
-CamTranslateState::CamTranslateState(s2::Camera& cam, ee0::SubjectMgr& sub_mgr)
+CamTranslateState::CamTranslateState(pt2::Camera& cam, ee0::SubjectMgr& sub_mgr)
 	: m_cam(cam)
 	, m_sub_mgr(sub_mgr)
 {
@@ -38,17 +38,17 @@ bool CamTranslateState::OnMouseDrag(int x, int y)
 	auto offy = y - m_last_pos.y;
 	switch (m_cam.Type())
 	{
-	case s2::CAM_ORTHO2D:
+	case pt2::CAM_ORTHO2D:
 		{
-			auto& cam = dynamic_cast<s2::OrthoCamera&>(m_cam);
+			auto& cam = dynamic_cast<pt2::OrthoCamera&>(m_cam);
 			cam.Translate(sm::vec2(
 				static_cast<float>(offx), 
 				static_cast<float>(offy)));
 		}
 		break;
-	case s2::CAM_PSEUDO3D:
+	case pt2::CAM_PSEUDO3D:
 		{
-			auto& cam = dynamic_cast<s2::Pseudo3DCamera&>(m_cam);
+			auto& cam = dynamic_cast<pt2::Pseudo3DCamera&>(m_cam);
 			auto ctx = pt2::RenderCtxStack::Instance()->Top();
 			if (!ctx) {
 				return false;
