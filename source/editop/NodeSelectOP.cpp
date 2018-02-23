@@ -8,9 +8,9 @@
 #include <node0/SceneNode.h>
 #include <node2/CompBoundingBox.h>
 #include <node2/CompTransform.h>
-#include <sprite2/RVG.h>
 #include <guard/check.h>
 #include <painting2/Color.h>
+#include <painting2/PrimitiveDraw.h>
 
 namespace ee2
 {
@@ -94,8 +94,8 @@ bool NodeSelectOP::OnDraw() const
 				pos = world_mt * pos;
 			}
 
-			s2::RVG::SetColor(pt2::Color(255, 0, 0));
-			s2::RVG::Polyline(nullptr, bound, true);
+			pt2::PrimitiveDraw::SetColor(pt2::Color(255, 0, 0));
+			pt2::PrimitiveDraw::Polyline(nullptr, bound, true);
 
 			return true;
 		}

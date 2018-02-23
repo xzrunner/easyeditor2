@@ -6,7 +6,7 @@
 
 #include <painting2/RenderCtxStack.h>
 #include <painting2/OrthoCamera.h>
-#include <sprite2/RVG.h>
+#include <painting2/PrimitiveDraw.h>
 #include <node2/DrawNode.h>
 
 namespace ee2
@@ -53,8 +53,8 @@ void WxStageCanvas::OnDrawSprites() const
 void WxStageCanvas::DrawBackground() const
 {
 	const float EDGE = 100;
-	s2::RVG::SetColor(ee0::LIGHT_GREY);
-	s2::RVG::Cross(nullptr, sm::vec2(0, 0), EDGE, EDGE);
+	pt2::PrimitiveDraw::SetColor(ee0::LIGHT_GREY);
+	pt2::PrimitiveDraw::Cross(nullptr, sm::vec2(0, 0), EDGE, EDGE);
 }
 
 void WxStageCanvas::DrawNodes() const

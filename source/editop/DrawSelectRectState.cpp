@@ -4,7 +4,7 @@
 #include <ee0/CameraHelper.h>
 #include <ee0/color_config.h>
 
-#include <sprite2/RVG.h>
+#include <painting2/PrimitiveDraw.h>
 
 namespace ee2
 {
@@ -51,20 +51,20 @@ bool DrawSelectRectState::OnDraw() const
 		return false;
 	}
 
-	s2::RVG::LineWidth(2);
+	pt2::PrimitiveDraw::LineWidth(2);
 	if (m_last_pos.x > m_first_pos.x)
 	{
-		s2::RVG::SetColor(ee0::LIGHT_GREEN);
-		s2::RVG::Rect(nullptr, m_first_pos, m_last_pos, true);
-		s2::RVG::SetColor(ee0::SELECT_RED);
-		s2::RVG::Rect(nullptr, m_first_pos, m_last_pos, false);
+		pt2::PrimitiveDraw::SetColor(ee0::LIGHT_GREEN);
+		pt2::PrimitiveDraw::Rect(nullptr, m_first_pos, m_last_pos, true);
+		pt2::PrimitiveDraw::SetColor(ee0::SELECT_RED);
+		pt2::PrimitiveDraw::Rect(nullptr, m_first_pos, m_last_pos, false);
 	}
 	else
 	{
-		s2::RVG::SetColor(ee0::LIGHT_BLUE);
-		s2::RVG::Rect(nullptr, m_first_pos, m_last_pos, true);
-		s2::RVG::SetColor(ee0::SELECT_RED);
-		s2::RVG::Rect(nullptr, m_first_pos, m_last_pos, false);
+		pt2::PrimitiveDraw::SetColor(ee0::LIGHT_BLUE);
+		pt2::PrimitiveDraw::Rect(nullptr, m_first_pos, m_last_pos, true);
+		pt2::PrimitiveDraw::SetColor(ee0::SELECT_RED);
+		pt2::PrimitiveDraw::Rect(nullptr, m_first_pos, m_last_pos, false);
 	}
 
 	return false;
