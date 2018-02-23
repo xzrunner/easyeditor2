@@ -3,6 +3,9 @@
 
 #include <ee0/CompNodeEditor.h>
 #include <node0/SceneNode.h>
+#include <node2/CompBoundingBox.h>
+#include <node2/CompTransform.h>
+#include <node2/NodeHelper.h>
 #include <gum/SymbolPool.h>
 
 #include <wx/sizer.h>
@@ -15,10 +18,11 @@ namespace ee2
 {
 
 WxCompMaskPanel::WxCompMaskPanel(wxWindow* parent, n2::CompMask& cmask, 
-	                             ee0::SubjectMgr& sub_mgr)
+	                             ee0::SubjectMgr& sub_mgr, n0::SceneNode& node)
 	: ee0::WxCompPanel(parent, "Mask")
 	, m_cmask(cmask)
 	, m_sub_mgr(sub_mgr)
+	, m_node(node)
 {
 	InitLayout();
 	Expand();
@@ -100,13 +104,29 @@ void WxCompMaskPanel::InitLayout()
 void WxCompMaskPanel::OnSetBasePath(wxCommandEvent& event)
 {
 	auto node = CreateNodeFromFile();
+	if (!node) {
+		return;
+	}
+
 	m_cmask.SetBaseNode(node);
+
+	auto& ceditor = node->GetComponent<ee0::CompNodeEditor>();
+	m_base_path->SetValue(ceditor.GetFilepath());
 }
 
 void WxCompMaskPanel::OnSetMaskPath(wxCommandEvent& event)
 {
 	auto node = CreateNodeFromFile();
+	if (!node) {
+		return;
+	}
+
 	m_cmask.SetMaskNode(node);
+
+	auto& ceditor = node->GetComponent<ee0::CompNodeEditor>();
+	m_mask_path->SetValue(ceditor.GetFilepath());
+
+	n2::NodeHelper::SetBoundingSize(m_node, node->GetComponent<n2::CompBoundingBox>().GetSize());
 }
 
 n0::SceneNodePtr WxCompMaskPanel::CreateNodeFromFile()

@@ -15,7 +15,7 @@ class WxCompMaskPanel : public ee0::WxCompPanel
 {
 public:
 	WxCompMaskPanel(wxWindow* parent, n2::CompMask& cmask,
-		ee0::SubjectMgr& sub_mgr);
+		ee0::SubjectMgr& sub_mgr, n0::SceneNode& node);
 
 	virtual void RefreshNodeComp() override;
 
@@ -29,8 +29,9 @@ private:
 	n0::SceneNodePtr CreateNodeFromFile();
 
 private:
-	n2::CompMask&    m_cmask;
-	ee0::SubjectMgr& m_sub_mgr;
+	n2::CompMask&     m_cmask;
+	ee0::SubjectMgr&  m_sub_mgr;
+	n0::SceneNode&    m_node;
 
 	wxTextCtrl *m_base_path, *m_mask_path;
 
