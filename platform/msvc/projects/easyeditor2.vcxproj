@@ -21,6 +21,7 @@
     <ClInclude Include="..\..\..\include\ee2\WxCompColMapPanel.h" />
     <ClInclude Include="..\..\..\include\ee2\WxCompImagePanel.h" />
     <ClInclude Include="..\..\..\include\ee2\WxCompMaskPanel.h" />
+    <ClInclude Include="..\..\..\include\ee2\WxCompMeshPanel.h" />
     <ClInclude Include="..\..\..\include\ee2\WxCompSprite2Panel.h" />
     <ClInclude Include="..\..\..\include\ee2\WxCompTextPanel.h" />
     <ClInclude Include="..\..\..\include\ee2\WxCompTransformPanel.h" />
@@ -39,6 +40,7 @@
     <ClCompile Include="..\..\..\source\view\WxCompColMapPanel.cpp" />
     <ClCompile Include="..\..\..\source\view\WxCompImagePanel.cpp" />
     <ClCompile Include="..\..\..\source\view\WxCompMaskPanel.cpp" />
+    <ClCompile Include="..\..\..\source\view\WxCompMeshPanel.cpp" />
     <ClCompile Include="..\..\..\source\view\WxCompSprite2Panel.cpp" />
     <ClCompile Include="..\..\..\source\view\WxCompTextPanel.cpp" />
     <ClCompile Include="..\..\..\source\view\WxCompTransformPanel.cpp" />
@@ -89,7 +91,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\easyeditor0\include;..\..\..\..\cu\src;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\guard\include;..\..\..\..\bimp\include;..\..\..\..\painting2\include;..\..\..\..\sprite2\include;..\..\..\..\node0\include;..\..\..\..\node2\include;..\..\..\..\node3\include;..\..\..\..\gum\include;..\..\..\..\memmgr\include;..\..\..\..\external-editor\wx\include;..\..\..\..\external\rapidjson\include;..\..\..\..\external\json\include;..\..\..\..\external\boost\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\easyeditor0\include;..\..\..\..\cu\src;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\rigging\src\rigging;..\..\..\..\guard\include;..\..\..\..\bimp\include;..\..\..\..\polymesh\include;..\..\..\..\painting2\include;..\..\..\..\sprite2\include;..\..\..\..\node0\include;..\..\..\..\node2\include;..\..\..\..\node3\include;..\..\..\..\gum\include;..\..\..\..\memmgr\include;..\..\..\..\external-editor\wx\include;..\..\..\..\external\rapidjson\include;..\..\..\..\external\json\include;..\..\..\..\external\boost\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -103,7 +105,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\easyeditor0\include;..\..\..\..\cu\src;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\guard\include;..\..\..\..\bimp\include;..\..\..\..\painting2\include;..\..\..\..\sprite2\include;..\..\..\..\node0\include;..\..\..\..\node2\include;..\..\..\..\node3\include;..\..\..\..\gum\include;..\..\..\..\memmgr\include;..\..\..\..\external-editor\wx\include;..\..\..\..\external\rapidjson\include;..\..\..\..\external\json\include;..\..\..\..\external\boost\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\easyeditor0\include;..\..\..\..\cu\src;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\rigging\src\rigging;..\..\..\..\guard\include;..\..\..\..\bimp\include;..\..\..\..\polymesh\include;..\..\..\..\painting2\include;..\..\..\..\sprite2\include;..\..\..\..\node0\include;..\..\..\..\node2\include;..\..\..\..\node3\include;..\..\..\..\gum\include;..\..\..\..\memmgr\include;..\..\..\..\external-editor\wx\include;..\..\..\..\external\rapidjson\include;..\..\..\..\external\json\include;..\..\..\..\external\boost\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>

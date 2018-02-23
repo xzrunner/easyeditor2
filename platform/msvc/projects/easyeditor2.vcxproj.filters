@@ -87,6 +87,9 @@
     <ClInclude Include="..\..\..\include\ee2\WxCompMaskPanel.h">
       <Filter>view\detail\node</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\WxCompMeshPanel.h">
+      <Filter>view\detail\node</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\data\NodeFactory.cpp">
@@ -135,6 +138,9 @@
       <Filter>view\detail\node</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\view\WxCompMaskPanel.cpp">
+      <Filter>view\detail\node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\view\WxCompMeshPanel.cpp">
       <Filter>view\detail\node</Filter>
     </ClCompile>
   </ItemGroup>
