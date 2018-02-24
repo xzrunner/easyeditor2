@@ -39,9 +39,13 @@ n0::SceneNodePtr NodeFactory::Create(const s2::SymPtr& sym)
 		auto& cimage = node->AddComponent<n2::CompImage>();
 		cimage.SetTexture(img_sym->GetTexture());
 
+		// transform
+		auto& ctrans = node->AddComponent<n2::CompTransform>();
+
 		// aabb
 		sm::rect sz(img_sym->GetNoTrimedSize().x, img_sym->GetNoTrimedSize().y);
-		node->AddComponent<n2::CompBoundingBox>(sz);
+		auto& cbounding = node->AddComponent<n2::CompBoundingBox>(sz);
+		cbounding.Build(ctrans.GetTrans().GetSRT());
 
 		// editor
 		node->AddComponent<ee0::CompNodeEditor>();
