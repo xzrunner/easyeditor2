@@ -47,7 +47,10 @@ void WxStageCanvas::OnDrawSprites() const
 	DrawBackground();
 	DrawNodes();
 
-	m_stage->GetImpl().GetEditOP()->OnDraw();
+	auto& op = m_stage->GetImpl().GetEditOP();
+	if (op) {
+		op->OnDraw();
+	}
 }
 
 void WxStageCanvas::DrawBackground() const
