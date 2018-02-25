@@ -4,6 +4,8 @@
 
 #include <sprite2/SymType.h>
 #include <sprite2/ImageSymbol.h>
+#include <gum/ImageSymbol.h>
+#include <gum/Image.h>
 #include <node0/SceneNode.h>
 #include <node2/CompImage.h>
 #include <node2/CompText.h>
@@ -31,12 +33,13 @@ n0::SceneNodePtr NodeFactory::Create(const s2::SymPtr& sym)
 	n0::SceneNodePtr node = nullptr;
 	if (sym->Type() == s2::SYM_IMAGE)
 	{
-		auto img_sym = std::dynamic_pointer_cast<s2::ImageSymbol>(sym);
+		auto img_sym = std::dynamic_pointer_cast<gum::ImageSymbol>(sym);
 
 		node = std::make_shared<n0::SceneNode>();
 
 		// image
 		auto& cimage = node->AddComponent<n2::CompImage>();
+		cimage.SetFilepath(img_sym->GetImage()->GetResPath().GetFilepath().c_str());
 		cimage.SetTexture(img_sym->GetTexture());
 
 		// transform
