@@ -16,7 +16,7 @@ public:
 
 	virtual void OnNotify(ee0::MessageID msg, const ee0::VariantSet& variants) override;
 
-	const std::vector<n0::SceneNodePtr>& GetAllNodes() const { return m_nodes; }
+	virtual void Traverse(std::function<bool(const n0::SceneNodePtr&)> func) const override;
 
 private:
 	void InsertSceneNode(const ee0::VariantSet& variants);

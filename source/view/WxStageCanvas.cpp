@@ -7,7 +7,7 @@
 #include <painting2/RenderCtxStack.h>
 #include <painting2/OrthoCamera.h>
 #include <painting2/PrimitiveDraw.h>
-#include <node2/DrawNode.h>
+#include <node2/RenderSystem.h>
 
 namespace ee2
 {
@@ -62,10 +62,10 @@ void WxStageCanvas::DrawBackground() const
 
 void WxStageCanvas::DrawNodes() const
 {
-	auto& nodes = m_stage->GetAllNodes();
-	for (auto& node : nodes) {
-		n2::DrawNode::Draw(node, sm::Matrix2D());
-	}
+	m_stage->Traverse([&](const n0::SceneNodePtr& node)->bool {
+		n2::RenderSystem::Draw(node, sm::Matrix2D());
+		return true;
+	});
 }
 
 }

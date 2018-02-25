@@ -114,17 +114,23 @@ n0::SceneNodePtr NodeSelectOP::QueryByPos(int screen_x, int screen_y) const
 	GD_ASSERT(cam, "null cam");
 	auto pos = ee0::CameraHelper::TransPosScreenToProject(*cam, screen_x, screen_y);
 
-	auto& nodes = dynamic_cast<WxStagePage&>(m_stage).GetAllNodes();
-	for (auto& node : nodes)
+	n0::SceneNodePtr ret = nullptr;
+	m_stage.Traverse([&](const n0::SceneNodePtr& node)->bool
 	{
-		auto ret = QueryByPos(node, pos);
-		if (ret) {
+		auto query = QueryByPos(node, pos);
+		if (query) 
+		{
 			m_draw_state_disable = true;
-			return ret;
+			ret = query;
+			return false;
 		}
-	}
+		else
+		{
+			return true;
+		}
+	});
 
-	return nullptr;
+	return ret;
 }
 
 void NodeSelectOP::QueryByRect(const sm::ivec2& p0, const sm::ivec2& p1, bool contain, 
@@ -135,11 +141,11 @@ void NodeSelectOP::QueryByRect(const sm::ivec2& p0, const sm::ivec2& p1, bool co
 	auto pos0 = ee0::CameraHelper::TransPosScreenToProject(*cam, p0.x, p0.y);
 	auto pos1 = ee0::CameraHelper::TransPosScreenToProject(*cam, p1.x, p1.y);
 	sm::rect rect(pos0, pos1);
-	
-	auto& nodes = dynamic_cast<WxStagePage&>(m_stage).GetAllNodes();
-	for (auto& node : nodes) {
+
+	m_stage.Traverse([&](const n0::SceneNodePtr& node)->bool {
 		QueryByRect(node, rect, contain, result);
-	}
+		return true;
+	});
 }
 
 n0::SceneNodePtr NodeSelectOP::QueryByPos(const n0::SceneNodePtr& node, const sm::vec2& pos) const

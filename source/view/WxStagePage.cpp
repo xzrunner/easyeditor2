@@ -30,6 +30,15 @@ void WxStagePage::OnNotify(ee0::MessageID msg, const ee0::VariantSet& variants)
 	}
 }
 
+void WxStagePage::Traverse(std::function<bool(const n0::SceneNodePtr&)> func) const
+{
+	for (auto& node : m_nodes) {
+		if (!func(node)) {
+			break;
+		}
+	}
+}
+
 void WxStagePage::InsertSceneNode(const ee0::VariantSet& variants)
 {
 	auto var = variants.GetVariant("node");
