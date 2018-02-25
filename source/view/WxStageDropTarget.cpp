@@ -84,7 +84,7 @@ void WxStageDropTarget::InitNodeComp(const n0::SceneNodePtr& node,
 	                                 const std::string& filepath)
 {
 	// transform
-	auto& ctrans = node->AddComponent<n2::CompTransform>();
+	auto& ctrans = node->GetComponent<n2::CompTransform>();
 	auto parent = node->GetParent();
 	if (parent) {
 		auto p_pos = parent->GetComponent<n2::CompTransform>().GetTrans().GetMatrix() * sm::vec2(0, 0);
