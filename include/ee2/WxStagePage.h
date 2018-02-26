@@ -21,6 +21,9 @@ public:
 private:
 	void InsertSceneNode(const ee0::VariantSet& variants);
 	void DeleteSceneNode(const ee0::VariantSet& variants);
+	void ClearSceneNode();
+
+	bool DeleteSceneNode(const n0::SceneNodePtr& node);
 
 private:
 	std::vector<n0::SceneNodePtr> m_nodes;
