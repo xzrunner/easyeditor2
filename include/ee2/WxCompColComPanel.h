@@ -4,8 +4,6 @@
 
 #include <node2/CompColorCommon.h>
 
-class wxSpinCtrl;
-
 namespace ee0 { class SubjectMgr; class WxColorSpinCtrl; }
 
 namespace ee2
