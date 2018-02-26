@@ -8,18 +8,17 @@
 
 #include <memory>
 
-namespace ee0 { class EditOpState; }
+namespace ee0 { class EditOpState; class WxStagePage; }
 
 namespace ee2
 {
 
-class WxStagePage;
 class CamControlOP;
 
 class NodeSelectOP : public ee0::NodeSelectOP
 {
 public:
-	NodeSelectOP(WxStagePage& stage);
+	NodeSelectOP(ee0::WxStagePage& stage);
 	virtual ~NodeSelectOP() = default;
 
 	virtual bool OnMouseLeftDown(int x, int y) override;

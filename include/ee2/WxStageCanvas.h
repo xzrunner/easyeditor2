@@ -5,17 +5,16 @@
 
 #include <memory>
 
+namespace ee0 { class WxStagePage; }
 namespace pt2 { class Camera; }
 
 namespace ee2
 {
 
-class WxStagePage;
-
 class WxStageCanvas : public ee0::WxStageCanvas, public ee0::Observer
 {
 public:
-	WxStageCanvas(WxStagePage* stage, std::shared_ptr<wxGLContext> glctx = nullptr);
+	WxStageCanvas(ee0::WxStagePage* stage, std::shared_ptr<wxGLContext> glctx = nullptr);
 
 	virtual void OnNotify(ee0::MessageID msg, const ee0::VariantSet& variants) override;
 
@@ -32,7 +31,7 @@ private:
 	void DrawNodes() const;
 
 private:
-	WxStagePage* m_stage;
+	ee0::WxStagePage* m_stage;
 
 	std::shared_ptr<pt2::Camera> m_cam = nullptr;
 

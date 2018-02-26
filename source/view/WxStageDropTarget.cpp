@@ -1,5 +1,4 @@
 #include "ee2/WxStageDropTarget.h"
-#include "ee2/WxStagePage.h"
 #include "ee2/NodeFactory.h"
 #include "ee2/WxStageCanvas.h"
 
@@ -11,6 +10,7 @@
 #include <ee0/WxLibraryItem.h>
 #include <ee0/CompNodeEditor.h>
 #include <ee0/MsgHelper.h>
+#include <ee0/WxStagePage.h>
 
 #include <guard/check.h>
 #include <node0/SceneNode.h>
@@ -23,7 +23,7 @@
 namespace ee2
 {
 
-WxStageDropTarget::WxStageDropTarget(ee0::WxLibraryPanel* library, WxStagePage* stage)
+WxStageDropTarget::WxStageDropTarget(ee0::WxLibraryPanel* library, ee0::WxStagePage* stage)
 	: WxDropTarget()
 	, m_library(library)
 	, m_stage(stage)
@@ -56,8 +56,9 @@ void WxStageDropTarget::OnDropText(wxCoord x, wxCoord y, const wxString& text)
 			continue;
 		}
 
-		InsertNode(node);
 		InitNodeComp(node, pos, item->GetFilepath());
+
+		InsertNode(node);
 	}
 
 	m_stage->GetSubjectMgr().NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);

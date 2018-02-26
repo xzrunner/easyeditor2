@@ -1,6 +1,6 @@
 #include "ee2/WxStageCanvas.h"
-#include "ee2/WxStagePage.h"
 
+#include <ee0/WxStagePage.h>
 #include <ee0/color_config.h>
 #include <ee0/EditOP.h>
 
@@ -12,7 +12,7 @@
 namespace ee2
 {
 
-WxStageCanvas::WxStageCanvas(WxStagePage* stage, std::shared_ptr<wxGLContext> glctx)
+WxStageCanvas::WxStageCanvas(ee0::WxStagePage* stage, std::shared_ptr<wxGLContext> glctx)
 	: ee0::WxStageCanvas(stage, stage->GetImpl(), glctx, USE_CONTEXT_STACK | HAS_2D)
 	, m_stage(stage)
 {

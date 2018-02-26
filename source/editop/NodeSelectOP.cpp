@@ -1,9 +1,9 @@
 #include "ee2/NodeSelectOP.h"
-#include "ee2/WxStagePage.h"
 #include "ee2/WxStageCanvas.h"
 #include "ee2/DrawSelectRectState.h"
 
 #include <ee0/CameraHelper.h>
+#include <ee0/WxStagePage.h>
 
 #include <node0/SceneNode.h>
 #include <node2/CompBoundingBox.h>
@@ -15,7 +15,7 @@
 namespace ee2
 {
 
-NodeSelectOP::NodeSelectOP(WxStagePage& stage)
+NodeSelectOP::NodeSelectOP(ee0::WxStagePage& stage)
 	: ee0::NodeSelectOP(stage)
 	, m_draw_state_disable(false)
 {
