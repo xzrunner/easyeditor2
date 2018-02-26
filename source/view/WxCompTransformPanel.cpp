@@ -1,6 +1,8 @@
 #include "ee2/WxCompTransformPanel.h"
 
+#include <node0/SceneNode.h>
 #include <node2/CompTransform.h>
+#include <node2/CompBoundingBox.h>
 
 #include <ee0/SubjectMgr.h>
 
@@ -13,10 +15,12 @@ namespace ee2
 
 WxCompTransformPanel::WxCompTransformPanel(wxWindow* parent, 
 	                                       n2::CompTransform& trans, 
-	                                       ee0::SubjectMgr& sub_mgr)
+	                                       ee0::SubjectMgr& sub_mgr,
+	                                       n0::SceneNode& node)
 	: ee0::WxCompPanel(parent, "Transform")
 	, m_ctrans(trans)
 	, m_sub_mgr(sub_mgr)
+	, m_node(node)
 {
 	InitLayout();
 	Expand();
@@ -174,6 +178,10 @@ void WxCompTransformPanel::UpdateTextValue(wxCommandEvent& event)
 		auto& shear = trans.GetShear();
 		trans.SetShear(sm::vec2(shear.x, y));
 	}
+
+	// update bounding
+	auto& cbb = m_node.GetComponent<n2::CompBoundingBox>();
+	cbb.Build(trans.GetSRT());
 
 	m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
