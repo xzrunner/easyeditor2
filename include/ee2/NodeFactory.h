@@ -23,8 +23,6 @@ enum NodeType
 class NodeFactory
 {
 public:
-	n0::SceneNodePtr Create(const s2::SymPtr& sym);
-
 	n0::SceneNodePtr Create(NodeType type);
 
 	CU_SINGLETON_DECLARATION(NodeFactory);

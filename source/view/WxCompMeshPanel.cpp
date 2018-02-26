@@ -6,7 +6,7 @@
 #include <node2/CompBoundingBox.h>
 #include <node2/CompTransform.h>
 #include <node2/NodeHelper.h>
-#include <gum/SymbolPool.h>
+#include <ns/NodeFactory.h>
 
 #include <wx/sizer.h>
 #include <wx/textctrl.h>
@@ -98,11 +98,7 @@ n0::SceneNodePtr WxCompMeshPanel::CreateNodeFromFile()
 	}
 
 	std::string filepath = dlg.GetPath().ToStdString();
-	auto sym = gum::SymbolPool::Instance()->Fetch(filepath.c_str());
-	if (!sym) {
-		return nullptr;
-	}
-	auto node = NodeFactory::Instance()->Create(sym);
+	auto node = ns::NodeFactory::CreateNode(filepath);
 	if (!node) {
 		return nullptr;
 	}

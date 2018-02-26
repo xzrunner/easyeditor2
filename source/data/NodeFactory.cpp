@@ -24,40 +24,6 @@ NodeFactory::NodeFactory()
 {
 }
 
-n0::SceneNodePtr NodeFactory::Create(const s2::SymPtr& sym)
-{
-	if (!sym) {
-		return nullptr;
-	}
-
-	n0::SceneNodePtr node = nullptr;
-	if (sym->Type() == s2::SYM_IMAGE)
-	{
-		auto img_sym = std::dynamic_pointer_cast<gum::ImageSymbol>(sym);
-
-		node = std::make_shared<n0::SceneNode>();
-
-		// image
-		auto& cimage = node->AddComponent<n2::CompImage>();
-		cimage.SetFilepath(img_sym->GetImage()->GetResPath().GetFilepath().c_str());
-		cimage.SetTexture(img_sym->GetTexture());
-
-		// transform
-		auto& ctrans = node->AddComponent<n2::CompTransform>();
-
-		// aabb
-		sm::rect sz(img_sym->GetNoTrimedSize().x, img_sym->GetNoTrimedSize().y);
-		auto& cbounding = node->AddComponent<n2::CompBoundingBox>(sz);
-		cbounding.Build(ctrans.GetTrans().GetSRT());
-
-		// editor
-		node->AddComponent<ee0::CompNodeEditor>();
-
-		auto& tex = img_sym->GetTexture();
-	}
-	return node;
-}
-
 n0::SceneNodePtr NodeFactory::Create(NodeType type)
 {
 	if (type == NODE_UNKNOWN) {

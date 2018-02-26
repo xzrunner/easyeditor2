@@ -18,7 +18,7 @@
 #include <node2/CompBoundingBox.h>
 #include <painting2/OrthoCamera.h>
 #include <gum/StringHelper.h>
-#include <gum/SymbolPool.h>
+#include <ns/NodeFactory.h>
 
 namespace ee2
 {
@@ -51,13 +51,7 @@ void WxStageDropTarget::OnDropText(wxCoord x, wxCoord y, const wxString& text)
 			continue;
 		}
 
-		auto sym = gum::SymbolPool::Instance()->Fetch(item->GetFilepath().c_str());
-		bool handled = OnDropSymbol(sym, pos);
-		if (handled) {
-			continue;
-		}
-
-		auto node = NodeFactory::Instance()->Create(sym);
+		auto node = ns::NodeFactory::CreateNode(item->GetFilepath());
 		if (!node) {
 			continue;
 		}
