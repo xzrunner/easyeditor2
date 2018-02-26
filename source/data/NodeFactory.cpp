@@ -11,6 +11,7 @@
 #include <node2/CompText.h>
 #include <node2/CompMask.h>
 #include <node2/CompMesh.h>
+#include <node2/CompScale9.h>
 #include <node2/CompSprite2.h>
 #include <node2/CompBoundingBox.h>
 #include <node2/CompTransform.h>
@@ -57,6 +58,12 @@ n0::SceneNodePtr NodeFactory::Create(NodeType type)
 	case NODE_MESH:
 		{
 			node->AddComponent<n2::CompMesh>();
+			sz.Build(100, 100);
+		}
+		break;
+	case NODE_SCALE9:
+		{
+			node->AddComponent<n2::CompScale9>();
 			sz.Build(100, 100);
 		}
 		break;

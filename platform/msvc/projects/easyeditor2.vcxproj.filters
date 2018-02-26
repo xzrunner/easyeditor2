@@ -90,6 +90,9 @@
     <ClInclude Include="..\..\..\include\ee2\WxCompMeshPanel.h">
       <Filter>view\detail\node</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\WxCompScale9Panel.h">
+      <Filter>view\detail\node</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\data\NodeFactory.cpp">
@@ -141,6 +144,9 @@
       <Filter>view\detail\node</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\view\WxCompMeshPanel.cpp">
+      <Filter>view\detail\node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\view\WxCompScale9Panel.cpp">
       <Filter>view\detail\node</Filter>
     </ClCompile>
   </ItemGroup>

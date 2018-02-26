@@ -16,6 +16,7 @@ enum NodeType
 	NODE_TEXT,
 	NODE_MASK,
 	NODE_MESH,
+	NODE_SCALE9,
 
 	NODE_SPRITE2,
 };
