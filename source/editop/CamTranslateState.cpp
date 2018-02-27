@@ -5,6 +5,8 @@
 #include <painting2/RenderCtxStack.h>
 #include <painting2/OrthoCamera.h>
 #include <painting2/Pseudo3DCamera.h>
+#include <painting2/Blackboard.h>
+#include <painting2/Context.h>
 
 namespace ee2
 {
@@ -49,7 +51,8 @@ bool CamTranslateState::OnMouseDrag(int x, int y)
 	case pt2::CAM_PSEUDO3D:
 		{
 			auto& cam = dynamic_cast<pt2::Pseudo3DCamera&>(m_cam);
-			auto ctx = pt2::RenderCtxStack::Instance()->Top();
+			auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+			auto ctx = pt2_ctx.GetCtxStack().Top();
 			if (!ctx) {
 				return false;
 			}

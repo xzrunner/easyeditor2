@@ -5,6 +5,8 @@
 #include <painting2/RenderCtxStack.h>
 #include <painting2/OrthoCamera.h>
 #include <painting2/Pseudo3DCamera.h>
+#include <painting2/Blackboard.h>
+#include <painting2/Context.h>
 
 #include <sm_c_vector.h>
 
@@ -23,7 +25,8 @@ bool CamZoomState::OnMouseWheelRotation(int x, int y, int direction)
 	{
 	case pt2::CAM_ORTHO2D:
 		{
-			auto ctx = pt2::RenderCtxStack::Instance()->Top();
+			auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+			auto ctx = pt2_ctx.GetCtxStack().Top();
 			if (!ctx) {
 				return false;
 			}

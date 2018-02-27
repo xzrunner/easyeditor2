@@ -7,6 +7,8 @@
 #include <painting2/RenderCtxStack.h>
 #include <painting2/OrthoCamera.h>
 #include <painting2/PrimitiveDraw.h>
+#include <painting2/Blackboard.h>
+#include <painting2/Context.h>
 #include <node2/RenderSystem.h>
 
 namespace ee2
@@ -35,7 +37,8 @@ void WxStageCanvas::OnNotify(ee0::MessageID msg, const ee0::VariantSet& variants
 
 void WxStageCanvas::OnSize(int w, int h)
 {
-	auto ctx = const_cast<pt2::RenderContext*>(pt2::RenderCtxStack::Instance()->Top());
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	auto ctx = const_cast<pt2::RenderContext*>(pt2_ctx.GetCtxStack().Top());
 	if (ctx)
 	{
 		ctx->SetViewport(0, 0, w, h);
