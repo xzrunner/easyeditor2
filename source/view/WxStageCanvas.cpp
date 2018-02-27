@@ -12,8 +12,10 @@
 namespace ee2
 {
 
-WxStageCanvas::WxStageCanvas(ee0::WxStagePage* stage, std::shared_ptr<wxGLContext> glctx)
-	: ee0::WxStageCanvas(stage, stage->GetImpl(), glctx, USE_CONTEXT_STACK | HAS_2D)
+WxStageCanvas::WxStageCanvas(ee0::WxStagePage* stage, 
+	                         std::shared_ptr<wxGLContext> glctx, 
+	                         const std::shared_ptr<gum::RenderContext>& gum_rc)
+	: ee0::WxStageCanvas(stage, stage->GetImpl(), glctx, gum_rc, USE_CONTEXT_STACK | HAS_2D)
 	, m_stage(stage)
 {
 	m_cam = std::make_shared<pt2::OrthoCamera>();

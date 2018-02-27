@@ -14,7 +14,8 @@ namespace ee2
 class WxStageCanvas : public ee0::WxStageCanvas, public ee0::Observer
 {
 public:
-	WxStageCanvas(ee0::WxStagePage* stage, std::shared_ptr<wxGLContext> glctx = nullptr);
+	WxStageCanvas(ee0::WxStagePage* stage, std::shared_ptr<wxGLContext> glctx = nullptr,
+		const std::shared_ptr<gum::RenderContext>& gum_rc = nullptr);
 
 	virtual void OnNotify(ee0::MessageID msg, const ee0::VariantSet& variants) override;
 
