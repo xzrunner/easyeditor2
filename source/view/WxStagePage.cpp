@@ -13,7 +13,9 @@ WxStagePage::WxStagePage(wxWindow* parent, ee0::WxLibraryPanel* library)
 	m_sub_mgr.RegisterObserver(ee0::MSG_DELETE_SCENE_NODE, this);
 	m_sub_mgr.RegisterObserver(ee0::MSG_CLEAR_SCENE_NODE, this);
 
-	SetDropTarget(new WxStageDropTarget(library, this));
+	if (library) {
+		SetDropTarget(new WxStageDropTarget(library, this));
+	}
 }
 
 void WxStagePage::OnNotify(ee0::MessageID msg, const ee0::VariantSet& variants)
