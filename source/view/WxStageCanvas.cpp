@@ -4,11 +4,11 @@
 #include <ee0/color_config.h>
 #include <ee0/EditOP.h>
 
-#include <painting2/WindowContext.h>
 #include <painting2/OrthoCamera.h>
 #include <painting2/PrimitiveDraw.h>
 #include <painting2/Blackboard.h>
 #include <painting2/RenderContext.h>
+#include <painting2/WindowContext.h>
 #include <node2/RenderSystem.h>
 
 namespace ee2
