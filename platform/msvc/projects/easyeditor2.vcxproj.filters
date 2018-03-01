@@ -34,7 +34,7 @@
     <Filter Include="view\detail\node">
       <UniqueIdentifier>{8107ecf2-9dbf-4eea-95ce-abc7c63ece8a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="view\detail\others">
+    <Filter Include="view\detail\geo">
       <UniqueIdentifier>{3b67399f-8c5d-4f5f-911b-e4cf78e2208f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -79,7 +79,7 @@
       <Filter>view\detail\node</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\ee2\WxCompTransformPanel.h">
-      <Filter>view\detail\others</Filter>
+      <Filter>view\detail\geo</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\ee2\WxCompSprite2Panel.h">
       <Filter>view\detail\node</Filter>
@@ -135,7 +135,7 @@
       <Filter>view\detail\node</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\view\WxCompTransformPanel.cpp">
-      <Filter>view\detail\others</Filter>
+      <Filter>view\detail\geo</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\view\WxCompSprite2Panel.cpp">
       <Filter>view\detail\node</Filter>
