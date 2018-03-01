@@ -2,11 +2,11 @@
 
 #include <ee0/SubjectMgr.h>
 
-#include <painting2/WndCtxStack.h>
 #include <painting2/OrthoCamera.h>
 #include <painting2/Pseudo3DCamera.h>
 #include <painting2/Blackboard.h>
 #include <painting2/RenderContext.h>
+#include <painting2/WindowContext.h>
 
 #include <sm_c_vector.h>
 
@@ -25,14 +25,13 @@ bool CamZoomState::OnMouseWheelRotation(int x, int y, int direction)
 	{
 	case pt2::CAM_ORTHO2D:
 		{
-			auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-			auto ctx = pt2_ctx.GetCtxStack().Top();
-			if (!ctx) {
+			auto& wc = pt2::Blackboard::Instance()->GetWindowContext();
+			if (!wc) {
 				return false;
 			}
 
-			int w = ctx->GetScreenWidth(),
-				h = ctx->GetScreenHeight();
+			int w = wc->GetScreenWidth(),
+				h = wc->GetScreenHeight();
 			float scale = 1;
 			//if (GetKeyState(WXK_CONTROL)) {
 			//	scale = direction > 0 ? 1 / 1.01f : 1.01f;
