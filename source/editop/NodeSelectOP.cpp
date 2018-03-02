@@ -6,6 +6,7 @@
 #include <ee0/WxStagePage.h>
 
 #include <node0/SceneNode.h>
+#include <node0/CompComplex.h>
 #include <node2/CompBoundingBox.h>
 #include <node2/CompTransform.h>
 #include <guard/check.h>
@@ -84,15 +85,15 @@ bool NodeSelectOP::OnDraw() const
 
 			// todo
 			sm::Matrix2D world_mt;
-			auto parent = node->GetParent();
-			while (parent) {
-				auto& ctrans = parent->GetComponent<n2::CompTransform>();
-				world_mt = ctrans.GetTrans().GetMatrix() * world_mt;
-				parent = parent->GetParent();
-			}
-			for (auto& pos : bound) {
-				pos = world_mt * pos;
-			}
+			//auto parent = node->GetParent();
+			//while (parent) {
+			//	auto& ctrans = parent->GetComponent<n2::CompTransform>();
+			//	world_mt = ctrans.GetTrans().GetMatrix() * world_mt;
+			//	parent = parent->GetParent();
+			//}
+			//for (auto& pos : bound) {
+			//	pos = world_mt * pos;
+			//}
 
 			pt2::PrimitiveDraw::SetColor(pt2::Color(255, 0, 0));
 			pt2::PrimitiveDraw::Polyline(nullptr, bound, true);
@@ -155,13 +156,19 @@ n0::SceneNodePtr NodeSelectOP::QueryByPos(const n0::SceneNodePtr& node, const sm
 		return node;
 	}
 
-	auto& children = node->GetAllChildren();
-	auto mt = node->GetComponent<n2::CompTransform>().GetTrans().GetMatrix().Inverted();
-	sm::vec2 child_pos = mt * pos;
-	for (auto& child : children) {
-		auto ret = QueryByPos(child, child_pos);
-		if (ret) {
-			return ret;
+	if (node->HasComponent<n0::CompComplex>())
+	{
+		auto mt = node->GetComponent<n2::CompTransform>().GetTrans().GetMatrix().Inverted();
+		sm::vec2 child_pos = mt * pos;
+
+		auto& ccomplex = node->GetComponent<n0::CompComplex>();
+		auto& children = ccomplex.GetAllChildren();
+		for (auto& child : children) 
+		{
+			auto ret = QueryByPos(child, child_pos);
+			if (ret) {
+				return ret;
+			}
 		}
 	}
 
@@ -179,11 +186,16 @@ void NodeSelectOP::QueryByRect(const n0::SceneNodePtr& node, const sm::rect& rec
 		result.push_back(node);
 	}
 
-	auto& children = node->GetAllChildren();
-	// todo
-//	auto& mt = node->GetComponent<n2::CompTransform>().GetTransformMat();
-	for (auto& child : children) {
-		QueryByRect(child, rect, contain, result);
+	if (node->HasComponent<n0::CompComplex>())
+	{
+		// todo
+		//	auto& mt = node->GetComponent<n2::CompTransform>().GetTransformMat();
+
+		auto& ccomplex = node->GetComponent<n0::CompComplex>();
+		auto& children = ccomplex.GetAllChildren();
+		for (auto& child : children) {
+			QueryByRect(child, rect, contain, result);
+		}
 	}
 
 	m_draw_state_disable = !result.empty();

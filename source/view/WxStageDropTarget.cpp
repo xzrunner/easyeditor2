@@ -80,13 +80,15 @@ void WxStageDropTarget::InitNodeComp(const n0::SceneNodePtr& node,
 {
 	// transform
 	auto& ctrans = node->GetComponent<n2::CompTransform>();
-	auto parent = node->GetParent();
-	if (parent) {
-		auto p_pos = parent->GetComponent<n2::CompTransform>().GetTrans().GetMatrix() * sm::vec2(0, 0);
-		ctrans.GetTrans().SetPosition(pos - p_pos);
-	} else {
-		ctrans.GetTrans().SetPosition(pos);
-	}
+	// todo
+	//auto parent = node->GetParent();
+	//if (parent) {
+	//	auto p_pos = parent->GetComponent<n2::CompTransform>().GetTrans().GetMatrix() * sm::vec2(0, 0);
+	//	ctrans.GetTrans().SetPosition(pos - p_pos);
+	//} else {
+	//	ctrans.GetTrans().SetPosition(pos);
+	//}
+	ctrans.GetTrans().SetPosition(pos);
 
 	// bounding box
 	auto& cbounding = node->GetComponent<n2::CompBoundingBox>();
