@@ -1,5 +1,4 @@
 #include "ee2/WxStageDropTarget.h"
-#include "ee2/NodeFactory.h"
 #include "ee2/WxStageCanvas.h"
 
 #include <ee0/MessageID.h>
@@ -51,7 +50,7 @@ void WxStageDropTarget::OnDropText(wxCoord x, wxCoord y, const wxString& text)
 			continue;
 		}
 
-		auto node = ns::NodeFactory::CreateNode(item->GetFilepath());
+		auto node = ns::NodeFactory::Create(item->GetFilepath());
 		if (!node) {
 			continue;
 		}

@@ -1,5 +1,4 @@
 #include "ee2/WxCompMaskPanel.h"
-#include "ee2/NodeFactory.h"
 
 #include <ee0/CompNodeEditor.h>
 #include <node0/SceneNode.h>
@@ -138,7 +137,7 @@ n0::SceneNodePtr WxCompMaskPanel::CreateNodeFromFile()
 	}
 
 	std::string filepath = dlg.GetPath().ToStdString();
-	auto node = ns::NodeFactory::CreateNode(filepath);
+	auto node = ns::NodeFactory::Create(filepath);
 	if (!node) {
 		return nullptr;
 	}
