@@ -15,7 +15,6 @@
     <ClInclude Include="..\..\..\include\ee2\CamTranslateState.h" />
     <ClInclude Include="..\..\..\include\ee2\CamZoomState.h" />
     <ClInclude Include="..\..\..\include\ee2\DrawSelectRectState.h" />
-    <ClInclude Include="..\..\..\include\ee2\NodeFactory.h" />
     <ClInclude Include="..\..\..\include\ee2\NodeSelectOP.h" />
     <ClInclude Include="..\..\..\include\ee2\WxCompColComPanel.h" />
     <ClInclude Include="..\..\..\include\ee2\WxCompColMapPanel.h" />
@@ -28,10 +27,8 @@
     <ClInclude Include="..\..\..\include\ee2\WxCompTransformPanel.h" />
     <ClInclude Include="..\..\..\include\ee2\WxStageCanvas.h" />
     <ClInclude Include="..\..\..\include\ee2\WxStageDropTarget.h" />
-    <ClInclude Include="..\..\..\include\ee2\WxStagePage.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\source\data\NodeFactory.cpp" />
     <ClCompile Include="..\..\..\source\editop\CamControlOP.cpp" />
     <ClCompile Include="..\..\..\source\editop\CamTranslateState.cpp" />
     <ClCompile Include="..\..\..\source\editop\CamZoomState.cpp" />
@@ -48,7 +45,6 @@
     <ClCompile Include="..\..\..\source\view\WxCompTransformPanel.cpp" />
     <ClCompile Include="..\..\..\source\view\WxStageCanvas.cpp" />
     <ClCompile Include="..\..\..\source\view\WxStageDropTarget.cpp" />
-    <ClCompile Include="..\..\..\source\view\WxStagePage.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectName>4.easyeditor2</ProjectName>

@@ -7,9 +7,6 @@
     <Filter Include="view\stage">
       <UniqueIdentifier>{48d48c6b-c169-4d9c-a227-ae13808ef908}</UniqueIdentifier>
     </Filter>
-    <Filter Include="data">
-      <UniqueIdentifier>{a620297d-ba9d-4458-a45b-f318d66fb9ce}</UniqueIdentifier>
-    </Filter>
     <Filter Include="editop">
       <UniqueIdentifier>{b254b4ae-06bf-4f2d-bb3b-522aafe857ed}</UniqueIdentifier>
     </Filter>
@@ -39,9 +36,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\include\ee2\NodeFactory.h">
-      <Filter>data</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\ee2\CamControlOP.h">
       <Filter>editop\camera</Filter>
     </ClInclude>
@@ -58,9 +52,6 @@
       <Filter>editop\node\state</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\ee2\WxStageDropTarget.h">
-      <Filter>view\stage</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\ee2\WxStagePage.h">
       <Filter>view\stage</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\ee2\WxStageCanvas.h">
@@ -95,9 +86,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\source\data\NodeFactory.cpp">
-      <Filter>data</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\editop\CamControlOP.cpp">
       <Filter>editop\camera</Filter>
     </ClCompile>
@@ -114,9 +102,6 @@
       <Filter>editop\node\state</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\view\WxStageDropTarget.cpp">
-      <Filter>view\stage</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\view\WxStagePage.cpp">
       <Filter>view\stage</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\view\WxStageCanvas.cpp">
