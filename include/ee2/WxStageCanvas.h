@@ -27,13 +27,12 @@ protected:
 	virtual void OnDrawSprites() const override;
 
 	virtual void DrawBackground() const;
+	virtual void DrawNodes() const;
 
-private:
-	void DrawNodes() const;
-
-private:
+protected:
 	ee0::WxStagePage* m_stage;
 
+private:
 	std::shared_ptr<pt2::Camera> m_cam = nullptr;
 
 }; // WxStageCanvas
