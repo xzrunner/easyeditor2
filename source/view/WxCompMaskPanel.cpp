@@ -32,13 +32,13 @@ void WxCompMaskPanel::RefreshNodeComp()
 	auto& base = m_cmask.GetBaseNode();
 	if (base)
 	{
-		auto& ceditor = base->GetComponent<ee0::CompNodeEditor>();
+		auto& ceditor = base->GetUniqueComp<ee0::CompNodeEditor>();
 		m_base_path->SetValue(ceditor.GetFilepath());
 	}
 	auto& mask = m_cmask.GetMaskNode();
 	if (mask)
 	{
-		auto& ceditor = mask->GetComponent<ee0::CompNodeEditor>();
+		auto& ceditor = mask->GetUniqueComp<ee0::CompNodeEditor>();
 		m_mask_path->SetValue(ceditor.GetFilepath());
 	}
 }
@@ -57,7 +57,7 @@ void WxCompMaskPanel::InitLayout()
 
 		std::string path;
 		if (auto node = m_cmask.GetBaseNode()) {
-			auto& ceditor = node->GetComponent<ee0::CompNodeEditor>();
+			auto& ceditor = node->GetUniqueComp<ee0::CompNodeEditor>();
 			path = ceditor.GetFilepath();
 		}
 		sizer->Add(m_base_path = new wxTextCtrl(win, wxID_ANY, path,
@@ -80,7 +80,7 @@ void WxCompMaskPanel::InitLayout()
 
 		std::string path;
 		if (auto node = m_cmask.GetMaskNode()) {
-			auto& ceditor = node->GetComponent<ee0::CompNodeEditor>();
+			auto& ceditor = node->GetUniqueComp<ee0::CompNodeEditor>();
 			path = ceditor.GetFilepath();
 		}
 		sizer->Add(m_mask_path = new wxTextCtrl(win, wxID_ANY, path,
@@ -109,7 +109,7 @@ void WxCompMaskPanel::OnSetBasePath(wxCommandEvent& event)
 
 	m_cmask.SetBaseNode(node);
 
-	auto& ceditor = node->GetComponent<ee0::CompNodeEditor>();
+	auto& ceditor = node->GetUniqueComp<ee0::CompNodeEditor>();
 	m_base_path->SetValue(ceditor.GetFilepath());
 }
 
@@ -122,10 +122,10 @@ void WxCompMaskPanel::OnSetMaskPath(wxCommandEvent& event)
 
 	m_cmask.SetMaskNode(node);
 
-	auto& ceditor = node->GetComponent<ee0::CompNodeEditor>();
+	auto& ceditor = node->GetUniqueComp<ee0::CompNodeEditor>();
 	m_mask_path->SetValue(ceditor.GetFilepath());
 
-	n2::NodeHelper::SetBoundingSize(m_node, node->GetComponent<n2::CompBoundingBox>().GetSize());
+	n2::NodeHelper::SetBoundingSize(m_node, node->GetUniqueComp<n2::CompBoundingBox>().GetSize());
 }
 
 n0::SceneNodePtr WxCompMaskPanel::CreateNodeFromFile()
@@ -143,7 +143,7 @@ n0::SceneNodePtr WxCompMaskPanel::CreateNodeFromFile()
 	}
 
 	// editor
-	auto& ceditor = node->GetComponent<ee0::CompNodeEditor>();
+	auto& ceditor = node->GetUniqueComp<ee0::CompNodeEditor>();
 	ceditor.SetFilepath(filepath);
 
 	return node;

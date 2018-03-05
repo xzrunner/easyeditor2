@@ -31,7 +31,7 @@ void WxCompMeshPanel::RefreshNodeComp()
 {
 	if (auto& mesh = m_cmesh.GetMesh()) {
 		if (auto& base = mesh->GetBaseSymbol()) {
-			auto& ceditor = base->GetComponent<ee0::CompNodeEditor>();
+			auto& ceditor = base->GetUniqueComp<ee0::CompNodeEditor>();
 			m_base_path->SetValue(ceditor.GetFilepath());
 		}
 	}
@@ -52,7 +52,7 @@ void WxCompMeshPanel::InitLayout()
 		std::string path;
 		if (auto& mesh = m_cmesh.GetMesh()) {
 			if (auto& base = mesh->GetBaseSymbol()) {
-				auto& ceditor = base->GetComponent<ee0::CompNodeEditor>();
+				auto& ceditor = base->GetUniqueComp<ee0::CompNodeEditor>();
 				path = ceditor.GetFilepath();
 			}
 		}
@@ -84,7 +84,7 @@ void WxCompMeshPanel::OnSetBasePath(wxCommandEvent& event)
 //	mesh->SetMesh(std::make_unique<pm::TrianglesMesh>);
 	m_cmesh.SetMesh(mesh);
 
-	auto& ceditor = node->GetComponent<ee0::CompNodeEditor>();
+	auto& ceditor = node->GetUniqueComp<ee0::CompNodeEditor>();
 	m_base_path->SetValue(ceditor.GetFilepath());
 }
 
@@ -103,7 +103,7 @@ n0::SceneNodePtr WxCompMeshPanel::CreateNodeFromFile()
 	}
 
 	// editor
-	auto& ceditor = node->GetComponent<ee0::CompNodeEditor>();
+	auto& ceditor = node->GetUniqueComp<ee0::CompNodeEditor>();
 	ceditor.SetFilepath(filepath);
 
 	return node;

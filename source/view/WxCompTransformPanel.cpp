@@ -180,7 +180,7 @@ void WxCompTransformPanel::UpdateTextValue(wxCommandEvent& event)
 	}
 
 	// update bounding
-	auto& cbb = m_node.GetComponent<n2::CompBoundingBox>();
+	auto& cbb = m_node.GetUniqueComp<n2::CompBoundingBox>();
 	cbb.Build(trans.GetSRT());
 
 	m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);

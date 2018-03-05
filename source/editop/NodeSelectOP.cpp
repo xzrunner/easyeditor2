@@ -80,14 +80,14 @@ bool NodeSelectOP::OnDraw() const
 		[](const n0::SceneNodePtr& node)->bool
 		{
 			CU_VEC<sm::vec2> bound;
-			auto& cbb = node->GetComponent<n2::CompBoundingBox>();
+			auto& cbb = node->GetUniqueComp<n2::CompBoundingBox>();
 			cbb.GetBounding().GetBoundPos(bound);
 
 			// todo
 			sm::Matrix2D world_mt;
 			//auto parent = node->GetParent();
 			//while (parent) {
-			//	auto& ctrans = parent->GetComponent<n2::CompTransform>();
+			//	auto& ctrans = parent->GetUniqueComp<n2::CompTransform>();
 			//	world_mt = ctrans.GetTrans().GetMatrix() * world_mt;
 			//	parent = parent->GetParent();
 			//}
@@ -151,17 +151,17 @@ void NodeSelectOP::QueryByRect(const sm::ivec2& p0, const sm::ivec2& p1, bool co
 
 n0::SceneNodePtr NodeSelectOP::QueryByPos(const n0::SceneNodePtr& node, const sm::vec2& pos) const
 {
-	auto& cbounding = node->GetComponent<n2::CompBoundingBox>();
+	auto& cbounding = node->GetUniqueComp<n2::CompBoundingBox>();
 	if (cbounding.GetBounding().IsContain(pos)) {
 		return node;
 	}
 
-	if (node->HasComponent<n0::CompComplex>())
+	if (node->HasSharedComp<n0::CompComplex>())
 	{
-		auto mt = node->GetComponent<n2::CompTransform>().GetTrans().GetMatrix().Inverted();
+		auto mt = node->GetUniqueComp<n2::CompTransform>().GetTrans().GetMatrix().Inverted();
 		sm::vec2 child_pos = mt * pos;
 
-		auto& ccomplex = node->GetComponent<n0::CompComplex>();
+		auto& ccomplex = node->GetSharedComp<n0::CompComplex>();
 		auto& children = ccomplex.GetAllChildren();
 		for (auto& child : children) 
 		{
@@ -178,7 +178,7 @@ n0::SceneNodePtr NodeSelectOP::QueryByPos(const n0::SceneNodePtr& node, const sm
 void NodeSelectOP::QueryByRect(const n0::SceneNodePtr& node, const sm::rect& rect, 
 	                           bool contain, std::vector<n0::SceneNodePtr>& result) const
 {
-	auto& cbounding = node->GetComponent<n2::CompBoundingBox>();
+	auto& cbounding = node->GetUniqueComp<n2::CompBoundingBox>();
 	auto& bb = cbounding.GetBounding();
 	if (contain && sm::is_rect_contain_rect(rect, bb.GetSize())) {
 		result.push_back(node);
@@ -186,12 +186,12 @@ void NodeSelectOP::QueryByRect(const n0::SceneNodePtr& node, const sm::rect& rec
 		result.push_back(node);
 	}
 
-	if (node->HasComponent<n0::CompComplex>())
+	if (node->HasSharedComp<n0::CompComplex>())
 	{
 		// todo
-		//	auto& mt = node->GetComponent<n2::CompTransform>().GetTransformMat();
+		//	auto& mt = node->GetUniqueComp<n2::CompTransform>().GetTransformMat();
 
-		auto& ccomplex = node->GetComponent<n0::CompComplex>();
+		auto& ccomplex = node->GetSharedComp<n0::CompComplex>();
 		auto& children = ccomplex.GetAllChildren();
 		for (auto& child : children) {
 			QueryByRect(child, rect, contain, result);

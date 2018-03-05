@@ -78,11 +78,11 @@ void WxStageDropTarget::InitNodeComp(const n0::SceneNodePtr& node,
 	                                 const std::string& filepath)
 {
 	// transform
-	auto& ctrans = node->GetComponent<n2::CompTransform>();
+	auto& ctrans = node->GetUniqueComp<n2::CompTransform>();
 	// todo
 	//auto parent = node->GetParent();
 	//if (parent) {
-	//	auto p_pos = parent->GetComponent<n2::CompTransform>().GetTrans().GetMatrix() * sm::vec2(0, 0);
+	//	auto p_pos = parent->GetUniqueComp<n2::CompTransform>().GetTrans().GetMatrix() * sm::vec2(0, 0);
 	//	ctrans.GetTrans().SetPosition(pos - p_pos);
 	//} else {
 	//	ctrans.GetTrans().SetPosition(pos);
@@ -90,11 +90,11 @@ void WxStageDropTarget::InitNodeComp(const n0::SceneNodePtr& node,
 	ctrans.GetTrans().SetPosition(pos);
 
 	// bounding box
-	auto& cbounding = node->GetComponent<n2::CompBoundingBox>();
+	auto& cbounding = node->GetUniqueComp<n2::CompBoundingBox>();
 	cbounding.Build(ctrans.GetTrans().GetSRT());
 
 	// editor
-	auto& ceditor = node->GetComponent<ee0::CompNodeEditor>();
+	auto& ceditor = node->GetUniqueComp<ee0::CompNodeEditor>();
 	ceditor.SetFilepath(filepath);
 }
 
