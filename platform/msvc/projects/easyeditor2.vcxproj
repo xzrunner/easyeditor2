@@ -11,11 +11,23 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\include\ee2\ArrangeNodeCfg.h" />
+    <ClInclude Include="..\..\..\include\ee2\ArrangeSpriteImpl.h" />
+    <ClInclude Include="..\..\..\include\ee2\ArrangeSpriteOP.h" />
+    <ClInclude Include="..\..\..\include\ee2\AutoAlign.h" />
     <ClInclude Include="..\..\..\include\ee2\CamControlOP.h" />
     <ClInclude Include="..\..\..\include\ee2\CamTranslateState.h" />
     <ClInclude Include="..\..\..\include\ee2\CamZoomState.h" />
+    <ClInclude Include="..\..\..\include\ee2\CopyPasteNodeState.h" />
     <ClInclude Include="..\..\..\include\ee2\DrawSelectRectState.h" />
+    <ClInclude Include="..\..\..\include\ee2\MoveNodeState.h" />
     <ClInclude Include="..\..\..\include\ee2\NodeSelectOP.h" />
+    <ClInclude Include="..\..\..\include\ee2\OffsetNodeState.h" />
+    <ClInclude Include="..\..\..\include\ee2\RotateNodeState.h" />
+    <ClInclude Include="..\..\..\include\ee2\ScaleNodeState.h" />
+    <ClInclude Include="..\..\..\include\ee2\ShearNodeState.h" />
+    <ClInclude Include="..\..\..\include\ee2\NodeCtrlPoint.h" />
+    <ClInclude Include="..\..\..\include\ee2\TranslateNodeState.h" />
     <ClInclude Include="..\..\..\include\ee2\WxCompColComPanel.h" />
     <ClInclude Include="..\..\..\include\ee2\WxCompColMapPanel.h" />
     <ClInclude Include="..\..\..\include\ee2\WxCompImagePanel.h" />
@@ -29,11 +41,23 @@
     <ClInclude Include="..\..\..\include\ee2\WxStageDropTarget.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\source\editop\ArrangeNodeCfg.cpp" />
+    <ClCompile Include="..\..\..\source\editop\ArrangeSpriteImpl.cpp" />
+    <ClCompile Include="..\..\..\source\editop\ArrangeSpriteOP.cpp" />
+    <ClCompile Include="..\..\..\source\editop\AutoAlign.cpp" />
     <ClCompile Include="..\..\..\source\editop\CamControlOP.cpp" />
     <ClCompile Include="..\..\..\source\editop\CamTranslateState.cpp" />
     <ClCompile Include="..\..\..\source\editop\CamZoomState.cpp" />
+    <ClCompile Include="..\..\..\source\editop\CopyPasteNodeState.cpp" />
     <ClCompile Include="..\..\..\source\editop\DrawSelectRectState.cpp" />
+    <ClCompile Include="..\..\..\source\editop\MoveNodeState.cpp" />
     <ClCompile Include="..\..\..\source\editop\NodeSelectOP.cpp" />
+    <ClCompile Include="..\..\..\source\editop\OffsetNodeState.cpp" />
+    <ClCompile Include="..\..\..\source\editop\RotateNodeState.cpp" />
+    <ClCompile Include="..\..\..\source\editop\ScaleNodeState.cpp" />
+    <ClCompile Include="..\..\..\source\editop\ShearNodeState.cpp" />
+    <ClCompile Include="..\..\..\source\editop\NodeCtrlPoint.cpp" />
+    <ClCompile Include="..\..\..\source\editop\TranslateNodeState.cpp" />
     <ClCompile Include="..\..\..\source\view\WxCompColComPanel.cpp" />
     <ClCompile Include="..\..\..\source\view\WxCompColMapPanel.cpp" />
     <ClCompile Include="..\..\..\source\view\WxCompImagePanel.cpp" />

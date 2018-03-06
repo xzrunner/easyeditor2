@@ -19,9 +19,6 @@
     <Filter Include="editop\node">
       <UniqueIdentifier>{1f4a775d-1f2e-47f3-90e2-1f167a47bade}</UniqueIdentifier>
     </Filter>
-    <Filter Include="editop\node\state">
-      <UniqueIdentifier>{300170f1-c3ff-4b6a-abfc-bce96eec44dd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="view\detail">
       <UniqueIdentifier>{74500f27-1f9e-487e-9dc9-6da4e20f5958}</UniqueIdentifier>
     </Filter>
@@ -34,6 +31,18 @@
     <Filter Include="view\detail\geo">
       <UniqueIdentifier>{3b67399f-8c5d-4f5f-911b-e4cf78e2208f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="editop\node\select">
+      <UniqueIdentifier>{5b31a0eb-16a0-4a51-8b96-69453ac32a3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="editop\node\arrange">
+      <UniqueIdentifier>{cb62d72c-1170-4e06-88a9-8062d23ded61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="editop\node\arrange\state">
+      <UniqueIdentifier>{7379b8d3-ecd7-4b89-862b-5f88bc812364}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="editop\node\arrange\tools">
+      <UniqueIdentifier>{568d0ca7-9b89-4131-a221-44638d2ab752}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\ee2\CamControlOP.h">
@@ -44,12 +53,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\ee2\CamTranslateState.h">
       <Filter>editop\camera\state</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\ee2\NodeSelectOP.h">
-      <Filter>editop\node</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\ee2\DrawSelectRectState.h">
-      <Filter>editop\node\state</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\ee2\WxStageDropTarget.h">
       <Filter>view\stage</Filter>
@@ -84,6 +87,48 @@
     <ClInclude Include="..\..\..\include\ee2\WxCompScale9Panel.h">
       <Filter>view\detail\node</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\DrawSelectRectState.h">
+      <Filter>editop\node\select</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\NodeSelectOP.h">
+      <Filter>editop\node\select</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\TranslateNodeState.h">
+      <Filter>editop\node\arrange\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\ShearNodeState.h">
+      <Filter>editop\node\arrange\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\ScaleNodeState.h">
+      <Filter>editop\node\arrange\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\RotateNodeState.h">
+      <Filter>editop\node\arrange\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\OffsetNodeState.h">
+      <Filter>editop\node\arrange\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\ArrangeSpriteOP.h">
+      <Filter>editop\node\arrange</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\ArrangeSpriteImpl.h">
+      <Filter>editop\node\arrange</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\CopyPasteNodeState.h">
+      <Filter>editop\node\arrange\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\MoveNodeState.h">
+      <Filter>editop\node\arrange\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\NodeCtrlPoint.h">
+      <Filter>editop\node\arrange\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\AutoAlign.h">
+      <Filter>editop\node\arrange\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\ArrangeNodeCfg.h">
+      <Filter>editop\node\arrange</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\editop\CamControlOP.cpp">
@@ -94,12 +139,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\editop\CamTranslateState.cpp">
       <Filter>editop\camera\state</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\editop\NodeSelectOP.cpp">
-      <Filter>editop\node</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\editop\DrawSelectRectState.cpp">
-      <Filter>editop\node\state</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\view\WxStageDropTarget.cpp">
       <Filter>view\stage</Filter>
@@ -133,6 +172,48 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\view\WxCompScale9Panel.cpp">
       <Filter>view\detail\node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\editop\DrawSelectRectState.cpp">
+      <Filter>editop\node\select</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\editop\NodeSelectOP.cpp">
+      <Filter>editop\node\select</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\editop\TranslateNodeState.cpp">
+      <Filter>editop\node\arrange\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\editop\ShearNodeState.cpp">
+      <Filter>editop\node\arrange\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\editop\RotateNodeState.cpp">
+      <Filter>editop\node\arrange\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\editop\ScaleNodeState.cpp">
+      <Filter>editop\node\arrange\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\editop\OffsetNodeState.cpp">
+      <Filter>editop\node\arrange\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\editop\ArrangeSpriteOP.cpp">
+      <Filter>editop\node\arrange</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\editop\ArrangeSpriteImpl.cpp">
+      <Filter>editop\node\arrange</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\editop\CopyPasteNodeState.cpp">
+      <Filter>editop\node\arrange\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\editop\MoveNodeState.cpp">
+      <Filter>editop\node\arrange\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\editop\NodeCtrlPoint.cpp">
+      <Filter>editop\node\arrange\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\editop\AutoAlign.cpp">
+      <Filter>editop\node\arrange\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\editop\ArrangeNodeCfg.cpp">
+      <Filter>editop\node\arrange</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
