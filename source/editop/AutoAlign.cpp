@@ -1,49 +1,49 @@
-#include "AutoAlign.h"
-#include "Symbol.h"
-#include "Sprite.h"
-#include "MultiSpritesImpl.h"
-#include "FetchAllVisitor.h"
+#include "ee2/AutoAlign.h"
 
-#include <sprite2/RVG.h>
-#include <sprite2/Color.h>
-#include <sprite2/BoundingBox.h>
+#include <ee0/NodeContainer.h>
+
+#include <SM_Rect.h>
+#include <node0/SceneNode.h>
+#include <node2/CompBoundingBox.h>
+#include <node2/CompTransform.h>
+#include <painting2/PrimitiveDraw.h>
+#include <painting2/Color.h>
 
 namespace ee2
 {
 
-AutoAlign::AutoAlign(MultiSpritesImpl* sprites_impl)
-	: m_sprites_impl(sprites_impl)
+AutoAlign::AutoAlign(ee0::NodeContainer& nodes)
+	: m_nodes(nodes)
 	, m_open(true)
 {
 }
 
-void AutoAlign::Align(const std::vector<SprPtr>& sprs)
+void AutoAlign::Align(const std::vector<n0::SceneNodePtr>& nodes)
 {
 	m_hor[0].Set(0, 0);
 	m_hor[1].Set(0, 0);
 	m_ver[0].Set(0, 0);
 	m_ver[1].Set(0, 0);
 
-	std::vector<SprPtr> sources;
-	m_sprites_impl->TraverseSprites(FetchAllRefVisitor<Sprite>(sources));
-
-	// not support mul src now
-	if (sprs.size() > 1)
+	// not support multi source node now
+	if (nodes.size() > 1)
 		return;
 
 	const float DIS = 5;
 
-	SprPtr hor_nearest, ver_nearest;
+	n0::SceneNodePtr hor_nearest, ver_nearest;
 	float dis_hor = DIS, dis_ver = DIS;
 	// hor
-	for (size_t i = 0, n = sources.size(); i < n; ++i)
+	m_nodes.Traverse([&](const n0::SceneNodePtr& node)->bool 
 	{
-		auto& dst = sprs[0];
-		auto& src = sources[i];
-		if (src == dst) continue;
+		auto& dst = nodes[0];
+		auto& src = node;
+		if (src == dst) {
+			return false;
+		}
 
-		sm::rect src_rect = src->GetBounding()->GetSize(),
-			     dst_rect = dst->GetBounding()->GetSize();
+		sm::rect src_rect = src->GetUniqueComp<n2::CompBoundingBox>().GetSize(),
+			     dst_rect = dst->GetUniqueComp<n2::CompBoundingBox>().GetSize();
 
 		float src_cy = src_rect.Center().y;
 		float src_down = src_rect.ymin;
@@ -74,17 +74,22 @@ void AutoAlign::Align(const std::vector<SprPtr>& sprs)
 		{
 			dis_hor = dis;
 			hor_nearest = src;
-		}	
-	}
-	// ver
-	for (size_t i = 0, n = sources.size(); i < n; ++i)
-	{
-		auto& dst = sprs[0];
-		auto& src = sources[i];
-		if (src == dst) continue;
+		}
 
-		sm::rect src_rect = src->GetBounding()->GetSize(),
-			     dst_rect = dst->GetBounding()->GetSize();
+		return true;
+	});
+
+	// ver
+	m_nodes.Traverse([&](const n0::SceneNodePtr& node)->bool
+	{
+		auto& dst = nodes[0];
+		auto& src = node;
+		if (src == dst) {
+			return false;
+		}
+
+		sm::rect src_rect = src->GetUniqueComp<n2::CompBoundingBox>().GetSize(),
+			     dst_rect = dst->GetUniqueComp<n2::CompBoundingBox>().GetSize();
 
 		float src_cx = src_rect.Center().x;
 		float src_left = src_rect.xmin;
@@ -116,21 +121,23 @@ void AutoAlign::Align(const std::vector<SprPtr>& sprs)
 			dis_ver = dis;
 			ver_nearest = src;
 		}
-	}
+
+		return true;
+	});
 
 	if (hor_nearest)
-		Align(*hor_nearest, *sprs[0]);
+		Align(*hor_nearest, *nodes[0]);
 	if (ver_nearest && ver_nearest != hor_nearest)
-		Align(*ver_nearest, *sprs[0]);
+		Align(*ver_nearest, *nodes[0]);
 }
 
-void AutoAlign::Align(const Sprite& src, Sprite& dst)
+void AutoAlign::Align(const n0::SceneNode& src, n0::SceneNode& dst)
 {
 	const float DIS = 5;
 	const float LEN = 400;
 
-	sm::rect src_rect = src.GetBounding()->GetSize(),
-		     dst_rect = dst.GetBounding()->GetSize();
+	sm::rect src_rect = src.GetUniqueComp<n2::CompBoundingBox>().GetSize(),
+		     dst_rect = dst.GetUniqueComp<n2::CompBoundingBox>().GetSize();
 
 	float src_left	= src_rect.xmin,
 		  src_right = src_rect.xmax,
@@ -139,13 +146,15 @@ void AutoAlign::Align(const Sprite& src, Sprite& dst)
 	float src_cx	= src_rect.Center().x,
 		  src_cy	= src_rect.Center().y;
 
+	auto& dst_trans = dst.GetUniqueComp<n2::CompTransform>().GetTrans();
+
 	// up
 	float nearest = DIS;
 	if (float dis = fabs(dst_rect.ymax - src_up) < nearest)
 	{
 		float dy = src_up - dst_rect.ymax;
 		nearest = dis;
-		dst.SetPosition(sm::vec2(dst.GetPosition().x, dst.GetPosition().y + dy));
+		dst_trans.SetPosition(sm::vec2(dst_trans.GetPosition().x, dst_trans.GetPosition().y + dy));
 		dst_rect.Translate(sm::vec2(0, dy));
 		m_hor[0].Set(src_cx - LEN, src_up);
 		m_hor[1].Set(src_cx + LEN, src_up);
@@ -154,7 +163,7 @@ void AutoAlign::Align(const Sprite& src, Sprite& dst)
 	{
 		float dy = src_down - dst_rect.ymax;
 		nearest = dis;
-		dst.SetPosition(sm::vec2(dst.GetPosition().x, dst.GetPosition().y + dy));
+		dst_trans.SetPosition(sm::vec2(dst_trans.GetPosition().x, dst_trans.GetPosition().y + dy));
 		dst_rect.Translate(sm::vec2(0, dy));
 		m_hor[0].Set(src_cx - LEN, src_down);
 		m_hor[1].Set(src_cx + LEN, src_down);
@@ -164,7 +173,7 @@ void AutoAlign::Align(const Sprite& src, Sprite& dst)
 	{
 		float dy = src_up - dst_rect.ymin;
 		nearest = dis;
-		dst.SetPosition(sm::vec2(dst.GetPosition().x, dst.GetPosition().y + dy));
+		dst_trans.SetPosition(sm::vec2(dst_trans.GetPosition().x, dst_trans.GetPosition().y + dy));
 		dst_rect.Translate(sm::vec2(0, dy));
 		m_hor[0].Set(src_cx - LEN, src_up);
 		m_hor[1].Set(src_cx + LEN, src_up);
@@ -173,7 +182,7 @@ void AutoAlign::Align(const Sprite& src, Sprite& dst)
 	{
 		float dy = src_down - dst_rect.ymin;
 		nearest = dis;
-		dst.SetPosition(sm::vec2(dst.GetPosition().x, dst.GetPosition().y + dy));
+		dst_trans.SetPosition(sm::vec2(dst_trans.GetPosition().x, dst_trans.GetPosition().y + dy));
 		dst_rect.Translate(sm::vec2(0, dy));
 		m_hor[0].Set(src_cx - LEN, src_down);
 		m_hor[1].Set(src_cx + LEN, src_down);
@@ -184,7 +193,7 @@ void AutoAlign::Align(const Sprite& src, Sprite& dst)
 	{
 		float dx = src_left - dst_rect.xmin;
 		nearest = dis;
-		dst.SetPosition(sm::vec2(dst.GetPosition().x + dx, dst.GetPosition().y));
+		dst_trans.SetPosition(sm::vec2(dst_trans.GetPosition().x + dx, dst_trans.GetPosition().y));
 		dst_rect.Translate(sm::vec2(dx, 0));
 		m_ver[0].Set(src_left, src_cy - LEN);
 		m_ver[1].Set(src_left, src_cy + LEN);
@@ -193,7 +202,7 @@ void AutoAlign::Align(const Sprite& src, Sprite& dst)
 	{
 		float dx = src_right - dst_rect.xmin;
 		nearest = dis;
-		dst.SetPosition(sm::vec2(dst.GetPosition().x + dx, dst.GetPosition().y));
+		dst_trans.SetPosition(sm::vec2(dst_trans.GetPosition().x + dx, dst_trans.GetPosition().y));
 		dst_rect.Translate(sm::vec2(dx, 0));
 		m_ver[0].Set(src_right, src_cy - LEN);
 		m_ver[1].Set(src_right, src_cy + LEN);
@@ -203,7 +212,7 @@ void AutoAlign::Align(const Sprite& src, Sprite& dst)
 	{
 		float dx = src_left - dst_rect.xmax;
 		nearest = dis;
-		dst.SetPosition(sm::vec2(dst.GetPosition().x + dx, dst.GetPosition().y));
+		dst_trans.SetPosition(sm::vec2(dst_trans.GetPosition().x + dx, dst_trans.GetPosition().y));
 		dst_rect.Translate(sm::vec2(dx, 0));
 		m_ver[0].Set(src_left, src_cy - LEN);
 		m_ver[1].Set(src_left, src_cy + LEN);
@@ -212,7 +221,7 @@ void AutoAlign::Align(const Sprite& src, Sprite& dst)
 	{
 		float dx = src_right - dst_rect.xmax;
 		nearest = dis;
-		dst.SetPosition(sm::vec2(dst.GetPosition().x + dx, dst.GetPosition().y));
+		dst_trans.SetPosition(sm::vec2(dst_trans.GetPosition().x + dx, dst_trans.GetPosition().y));
 		dst_rect.Translate(sm::vec2(dx, 0));
 		m_ver[0].Set(src_right, src_cy - LEN);
 		m_ver[1].Set(src_right, src_cy + LEN);
@@ -223,12 +232,12 @@ void AutoAlign::Draw() const
 {
 	if (m_open)
 	{
-		s2::RVG::SetColor(s2::Color(0, 0, 0));
+		pt2::PrimitiveDraw::SetColor(pt2::Color(0, 0, 0));
 		if (m_hor[0] != m_hor[1]) {
-			s2::RVG::DashLine(nullptr, m_hor[0], m_hor[1]);
+			pt2::PrimitiveDraw::DashLine(nullptr, m_hor[0], m_hor[1]);
 		}
 		if (m_ver[0] != m_ver[1]) {
-			s2::RVG::DashLine(nullptr, m_ver[0], m_ver[1]);
+			pt2::PrimitiveDraw::DashLine(nullptr, m_ver[0], m_ver[1]);
 		}
 	}
 }

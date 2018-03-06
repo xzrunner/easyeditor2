@@ -108,12 +108,6 @@
     <ClInclude Include="..\..\..\include\ee2\OffsetNodeState.h">
       <Filter>editop\node\arrange\state</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\ee2\ArrangeSpriteOP.h">
-      <Filter>editop\node\arrange</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\ee2\ArrangeSpriteImpl.h">
-      <Filter>editop\node\arrange</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\ee2\CopyPasteNodeState.h">
       <Filter>editop\node\arrange\state</Filter>
     </ClInclude>
@@ -127,6 +121,12 @@
       <Filter>editop\node\arrange\tools</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\ee2\ArrangeNodeCfg.h">
+      <Filter>editop\node\arrange</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\ArrangeNodeImpl.h">
+      <Filter>editop\node\arrange</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\ArrangeNodeOP.h">
       <Filter>editop\node\arrange</Filter>
     </ClInclude>
   </ItemGroup>
@@ -194,12 +194,6 @@
     <ClCompile Include="..\..\..\source\editop\OffsetNodeState.cpp">
       <Filter>editop\node\arrange\state</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\editop\ArrangeSpriteOP.cpp">
-      <Filter>editop\node\arrange</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\editop\ArrangeSpriteImpl.cpp">
-      <Filter>editop\node\arrange</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\editop\CopyPasteNodeState.cpp">
       <Filter>editop\node\arrange\state</Filter>
     </ClCompile>
@@ -213,6 +207,12 @@
       <Filter>editop\node\arrange\tools</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\editop\ArrangeNodeCfg.cpp">
+      <Filter>editop\node\arrange</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\editop\ArrangeNodeImpl.cpp">
+      <Filter>editop\node\arrange</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\editop\ArrangeNodeOP.cpp">
       <Filter>editop\node\arrange</Filter>
     </ClCompile>
   </ItemGroup>

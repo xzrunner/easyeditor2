@@ -1,55 +1,61 @@
-#include "ScaleNodeState.h"
-#include "Symbol.h"
-#include "Sprite.h"
-#include "CombineAOP.h"
-#include "TranslateSpriteAOP.h"
-#include "ScaleSpriteAOP.h"
-#include "panel_msg.h"
-#include "Math2D.h"
-#include "EditSprMsg.h"
+#include "ee2/ScaleNodeState.h"
+
+#include <ee0/CameraHelper.h>
+#include <ee0/MsgHelper.h>
 
 #include <SM_Calc.h>
+#include <node0/SceneNode.h>
+#include <node2/CompTransform.h>
 
 namespace ee2
 {
 
-ScaleNodeState::ScaleNodeState(const SprPtr& spr, const NodeCtrlPoint::Node& ctrl_node)
-	: m_spr(spr)
-	, m_ctrl_node(ctrl_node)
+ScaleNodeState::ScaleNodeState(pt2::Camera& cam, const n0::SceneNodePtr& node,
+	                           const NodeCtrlPoint::Node& ctrl_point)
+	: m_cam(cam)
+	, m_node(node)
+	, m_ctrl_point(ctrl_point)
 {
-	m_first_pos = m_spr->GetPosition();
-	m_first_scale = m_spr->GetScale();
+	auto& ctrans = node->GetUniqueComp<n2::CompTransform>();
+	m_first_pos = ctrans.GetTrans().GetPosition();
+	m_first_scale = ctrans.GetTrans().GetScale();
 }
 
-void ScaleNodeState::OnMouseRelease(int x, int y)
+bool ScaleNodeState::OnMouseRelease(int x, int y)
 {
-	CombineAOP* comb = new CombineAOP();
+	// todo record
 
-	comb->Insert(new TranslateSpriteAOP(m_spr, m_spr->GetPosition() - m_first_pos));
-	comb->Insert(new ScaleSpriteAOP(m_spr, m_spr->GetScale(), m_first_scale));
+	//CombineAOP* comb = new CombineAOP();
 
-	EditAddRecordSJ::Instance()->Add(comb);
+	//comb->Insert(new TranslateSpriteAOP(m_spr, m_spr->GetPosition() - m_first_pos));
+	//comb->Insert(new ScaleSpriteAOP(m_spr, m_spr->GetScale(), m_first_scale));
 
-	EditSprMsg::SetScale(m_spr.get(), m_spr->GetPosition(), m_spr->GetScale());
+	//EditAddRecordSJ::Instance()->Add(comb);
+
+	//EditSprMsg::SetScale(m_spr.get(), m_spr->GetPosition(), m_spr->GetScale());
+
+	return false;
 }
 
 bool ScaleNodeState::OnMouseDrag(int x, int y)
 {
+	auto pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
 	Scale(pos);
 	return true;
 }
 
 void ScaleNodeState::Scale(const sm::vec2& curr)
 {
-	if (!m_spr) {
+	if (!m_node) {
 		return;
 	}
 
 	sm::vec2 ctrls[8];
-	NodeCtrlPoint::GetNodeCtrlPoints(*m_spr, ctrls);
+	NodeCtrlPoint::GetNodeCtrlPoints(*m_node, ctrls);
 	
-	sm::vec2 ori = ctrls[m_ctrl_node.type];
-	sm::vec2 center = m_spr->GetPosition() + m_spr->GetOffset();
+	sm::vec2 ori = ctrls[m_ctrl_point.type];
+	auto& ctrans = m_node->GetUniqueComp<n2::CompTransform>();
+	sm::vec2 center = ctrans.GetTrans().GetPosition() + ctrans.GetTrans().GetOffset();
 	sm::vec2 fix;
 	sm::get_foot_of_perpendicular(center, ori, curr, &fix);
 
@@ -59,9 +65,9 @@ void ScaleNodeState::Scale(const sm::vec2& curr)
 	}
 
 	sm::vec2 st(1, 1);
-	if (m_ctrl_node.type == NodeCtrlPoint::UP || m_ctrl_node.type == NodeCtrlPoint::DOWN) {
+	if (m_ctrl_point.type == NodeCtrlPoint::UP || m_ctrl_point.type == NodeCtrlPoint::DOWN) {
 		st.y = scale_times;
-	} else if (m_ctrl_node.type == NodeCtrlPoint::LEFT || m_ctrl_node.type == NodeCtrlPoint::RIGHT) {
+	} else if (m_ctrl_point.type == NodeCtrlPoint::LEFT || m_ctrl_point.type == NodeCtrlPoint::RIGHT) {
 		st.x = scale_times;
 	} else {
 		st.Set(scale_times, scale_times);
@@ -71,9 +77,10 @@ void ScaleNodeState::Scale(const sm::vec2& curr)
 
 void ScaleNodeState::SetScaleTimes(const sm::vec2& st)
 {
-	sm::vec2 scale = m_spr->GetScale();
+	auto& ctrans = m_node->GetUniqueComp<n2::CompTransform>();
+	sm::vec2 scale = ctrans.GetTrans().GetScale();
 	scale *= st;
-	m_spr->SetScale(scale);
+	ctrans.GetTrans().SetScale(scale);
 }
 
 }

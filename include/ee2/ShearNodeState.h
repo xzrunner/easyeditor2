@@ -1,9 +1,10 @@
-#ifndef _EASYEDITOR_SHEAR_SPRITE_STATE_H_
-#define _EASYEDITOR_SHEAR_SPRITE_STATE_H_
+#pragma once
 
-#include "ArrangeNodeState.h"
-#include "NodeCtrlPoint.h"
-#include "Sprite.h"
+#include <ee0/EditOpState.h>
+
+#include "ee2/NodeCtrlPoint.h"
+
+namespace pt2 { class Camera; }
 
 namespace ee2
 {
@@ -11,7 +12,8 @@ namespace ee2
 class ShearNodeState : public ee0::EditOpState
 {
 public:
-	ShearNodeState(const SprPtr& spr, const NodeCtrlPoint::Node& ctrl_node);
+	ShearNodeState(pt2::Camera& cam, const n0::SceneNodePtr& node,
+		const NodeCtrlPoint::Node& ctrl_point);
 
 	virtual bool OnMouseRelease(int x, int y) override;
 	virtual	bool OnMouseDrag(int x, int y) override;
@@ -21,14 +23,14 @@ private:
 	void Shear2(const sm::vec2& curr);
 
 private:
-	SprPtr m_spr;
+	pt2::Camera& m_cam;
 
-	NodeCtrlPoint::Node m_ctrl_node;
+	n0::SceneNodePtr m_node;
+
+	NodeCtrlPoint::Node m_ctrl_point;
 
 	sm::vec2 m_first_shear;
 
 }; // ShearNodeState
 
 }
-
-#endif // _EASYEDITOR_SHEAR_SPRITE_STATE_H_

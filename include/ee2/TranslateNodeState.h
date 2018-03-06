@@ -1,20 +1,22 @@
-#ifndef _EASYEDITOR_TRANSLATE_SPRITE_STATE_H_
-#define _EASYEDITOR_TRANSLATE_SPRITE_STATE_H_
+#pragma once
 
-#include "ArrangeNodeState.h"
-#include "Visitor.h"
-#include "Sprite.h"
+#include <ee0/EditOpState.h>
+#include <ee0/SelectionSet.h>
+
+#include <SM_Vector.h>
+#include <node0/typedef.h>
+
+namespace pt2 { class Camera; }
 
 namespace ee2
 {
 
-class SpriteSelection;
-
 class TranslateNodeState : public ee0::EditOpState
 {
 public:
-	TranslateNodeState(SpriteSelection* selection, const sm::vec2& first_pos);
-	virtual ~TranslateNodeState();
+	TranslateNodeState(pt2::Camera& cam, 
+		const ee0::SelectionSet<n0::SceneNode>& selection, 
+		const sm::vec2& first_pos);
 
 	virtual bool OnMousePress(int x, int y) override;
 	virtual bool OnMouseRelease(int x, int y) override;
@@ -22,24 +24,13 @@ public:
 
 	virtual bool OnDirectionKeyDown(int type) override;
 
-protected:
-	virtual void Translate(const sm::vec2& offset);
-
-protected:
-	SpriteSelection* GetSelection() { return m_selection; } 
+private:
+	void Translate(const sm::vec2& offset);
 
 private:
-	class TranslateVisitor : public RefVisitor<Sprite>
-	{
-	public:
-		TranslateVisitor(const sm::vec2& offset) : m_offset(offset) {}
-		virtual void Visit(const SprPtr& spr, bool& next) override;
-	private:
-		sm::vec2 m_offset;
-	}; // TranslateVisitor
+	pt2::Camera& m_cam;
 
-private:
-	SpriteSelection* m_selection;
+	const ee0::SelectionSet<n0::SceneNode>& m_selection;
 
 	sm::vec2 m_first_pos, m_last_pos;
 
@@ -48,5 +39,3 @@ private:
 }; // TranslateState
 
 }
-
-#endif // _EASYEDITOR_TRANSLATE_SPRITE_STATE_H_

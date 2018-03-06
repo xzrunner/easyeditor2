@@ -1,25 +1,22 @@
-#ifndef _EASYEDITOR_AUTO_ALIGN_H_
-#define _EASYEDITOR_AUTO_ALIGN_H_
-
-#include "Sprite.h"
+#pragma once
 
 #include <SM_Vector.h>
+#include <node0/typedef.h>
 
 #include <vector>
+
+namespace ee0 { class NodeContainer; }
 
 namespace ee2
 {
 
-class Sprite;
-class MultiSpritesImpl;
-
 class AutoAlign
 {
 public:
-	AutoAlign(MultiSpritesImpl* sprites_impl);
+	AutoAlign(ee0::NodeContainer& nodes);
 
-	void Align(const std::vector<SprPtr>& sprs);
-	void Align(const Sprite& src, Sprite& dst);
+	void Align(const std::vector<n0::SceneNodePtr>& nodes);
+	void Align(const n0::SceneNode& src, n0::SceneNode& dst);
 
 	void Draw() const;
 
@@ -29,7 +26,7 @@ public:
 	void SetOpen(bool open) { m_open = open; }
 
 private:
-	MultiSpritesImpl* m_sprites_impl;
+	ee0::NodeContainer& m_nodes;
 
 	bool m_open;
 	sm::vec2 m_hor[2], m_ver[2];
@@ -37,5 +34,3 @@ private:
 }; // AutoAlign
 
 }
-
-#endif // _EASYEDITOR_AUTO_ALIGN_H_

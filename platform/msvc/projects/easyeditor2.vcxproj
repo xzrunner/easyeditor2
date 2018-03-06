@@ -12,8 +12,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\ee2\ArrangeNodeCfg.h" />
-    <ClInclude Include="..\..\..\include\ee2\ArrangeSpriteImpl.h" />
-    <ClInclude Include="..\..\..\include\ee2\ArrangeSpriteOP.h" />
+    <ClInclude Include="..\..\..\include\ee2\ArrangeNodeImpl.h" />
+    <ClInclude Include="..\..\..\include\ee2\ArrangeNodeOP.h" />
     <ClInclude Include="..\..\..\include\ee2\AutoAlign.h" />
     <ClInclude Include="..\..\..\include\ee2\CamControlOP.h" />
     <ClInclude Include="..\..\..\include\ee2\CamTranslateState.h" />
@@ -42,8 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\editop\ArrangeNodeCfg.cpp" />
-    <ClCompile Include="..\..\..\source\editop\ArrangeSpriteImpl.cpp" />
-    <ClCompile Include="..\..\..\source\editop\ArrangeSpriteOP.cpp" />
+    <ClCompile Include="..\..\..\source\editop\ArrangeNodeImpl.cpp" />
+    <ClCompile Include="..\..\..\source\editop\ArrangeNodeOP.cpp" />
     <ClCompile Include="..\..\..\source\editop\AutoAlign.cpp" />
     <ClCompile Include="..\..\..\source\editop\CamControlOP.cpp" />
     <ClCompile Include="..\..\..\source\editop\CamTranslateState.cpp" />

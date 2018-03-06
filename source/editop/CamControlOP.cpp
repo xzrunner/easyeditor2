@@ -22,9 +22,9 @@ CamControlOP::CamControlOP(pt2::Camera& cam, ee0::SubjectMgr& sub_mgr, uint32_t 
 	m_op_state = m_zoom_state;
 }
 
-bool CamControlOP::OnKeyDown(int keyCode)
+bool CamControlOP::OnKeyDown(int key_code)
 {
-	switch (keyCode)
+	switch (key_code)
 	{
 	case WXK_SPACE:
 		if (m_flag & LEFT_TAP) {
@@ -40,9 +40,9 @@ bool CamControlOP::OnKeyDown(int keyCode)
 	return false;
 }
 
-bool CamControlOP::OnKeyUp(int keyCode)
+bool CamControlOP::OnKeyUp(int key_code)
 {
-	if ((m_flag & LEFT_TAP) && keyCode == WXK_SPACE) {
+	if ((m_flag & LEFT_TAP) && key_code == WXK_SPACE) {
 		ChangeEditOpState(m_zoom_state);
 	}
 	return false;

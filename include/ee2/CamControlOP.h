@@ -22,8 +22,8 @@ public:
 	CamControlOP(pt2::Camera& cam, ee0::SubjectMgr& sub_mgr, 
 		uint32_t flag = DEFAULT_FLAG);
 
-	virtual bool OnKeyDown(int keyCode) override;
-	virtual bool OnKeyUp(int keyCode) override;
+	virtual bool OnKeyDown(int key_code) override;
+	virtual bool OnKeyUp(int key_code) override;
 	virtual bool OnMouseLeftDown(int x, int y) override;
 	virtual bool OnMouseLeftUp(int x, int y) override;
 	virtual bool OnMouseRightDown(int x, int y) override;
