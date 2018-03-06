@@ -1,10 +1,11 @@
 #include "ee2/WxCompTransformPanel.h"
 
+#include <ee0/SubjectMgr.h>
+
+#include <sm_const.h>
 #include <node0/SceneNode.h>
 #include <node2/CompTransform.h>
 #include <node2/CompBoundingBox.h>
-
-#include <ee0/SubjectMgr.h>
 
 #include <wx/sizer.h>
 #include <wx/stattext.h>
@@ -33,7 +34,7 @@ void WxCompTransformPanel::RefreshNodeComp()
 	m_pos_x->SetValue(std::to_string(trans.GetPosition().x));
 	m_pos_y->SetValue(std::to_string(trans.GetPosition().y));
 
-	m_angle->SetValue(std::to_string(trans.GetAngle()));
+	m_angle->SetValue(std::to_string(trans.GetAngle() * SM_RAD_TO_DEG));
 
 	m_scale_x->SetValue(std::to_string(trans.GetScale().x));
 	m_scale_y->SetValue(std::to_string(trans.GetScale().y));
@@ -75,7 +76,7 @@ void WxCompTransformPanel::InitLayout()
 
 		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("Angle     ")));
 
-		float angle = m_ctrans.GetTrans().GetAngle();
+		float angle = m_ctrans.GetTrans().GetAngle() * SM_RAD_TO_DEG;
 		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("X ")));
 		sizer->Add(m_angle = new wxTextCtrl(win, wxID_ANY, std::to_string(angle), wxDefaultPosition, INPUT_SIZE));
 
@@ -146,7 +147,7 @@ void WxCompTransformPanel::UpdateTextValue(wxCommandEvent& event)
 	{
 		double ang;
 		m_angle->GetValue().ToDouble(&ang);
-		trans.SetAngle(ang);
+		trans.SetAngle(ang * SM_DEG_TO_RAD);
 	}
 	// scale
 	else if (event.GetId() == m_scale_x->GetId())
