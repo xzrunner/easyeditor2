@@ -6,7 +6,7 @@
 #include <ee0/WxStagePage.h>
 
 #include <node0/SceneNode.h>
-#include <node0/CompComplex.h>
+#include <node2/CompComplex.h>
 #include <node2/CompBoundingBox.h>
 #include <node2/CompTransform.h>
 #include <guard/check.h>
@@ -156,12 +156,12 @@ n0::SceneNodePtr NodeSelectOP::QueryByPos(const n0::SceneNodePtr& node, const sm
 		return node;
 	}
 
-	if (node->HasSharedComp<n0::CompComplex>())
+	if (node->HasSharedComp<n2::CompComplex>())
 	{
 		auto mt = node->GetUniqueComp<n2::CompTransform>().GetTrans().GetMatrix().Inverted();
 		sm::vec2 child_pos = mt * pos;
 
-		auto& ccomplex = node->GetSharedComp<n0::CompComplex>();
+		auto& ccomplex = node->GetSharedComp<n2::CompComplex>();
 		auto& children = ccomplex.GetAllChildren();
 		for (auto& child : children) 
 		{
@@ -186,12 +186,12 @@ void NodeSelectOP::QueryByRect(const n0::SceneNodePtr& node, const sm::rect& rec
 		result.push_back(node);
 	}
 
-	if (node->HasSharedComp<n0::CompComplex>())
+	if (node->HasSharedComp<n2::CompComplex>())
 	{
 		// todo
 		//	auto& mt = node->GetUniqueComp<n2::CompTransform>().GetTransformMat();
 
-		auto& ccomplex = node->GetSharedComp<n0::CompComplex>();
+		auto& ccomplex = node->GetSharedComp<n2::CompComplex>();
 		auto& children = ccomplex.GetAllChildren();
 		for (auto& child : children) {
 			QueryByRect(child, rect, contain, result);
