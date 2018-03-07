@@ -21,7 +21,7 @@ public:
 private:
 	pt2::Camera& m_cam;
 
-	const n0::SceneNodePtr& m_node;
+	n0::SceneNodePtr m_node;
 
 	sm::vec2 m_old_offset;
 
