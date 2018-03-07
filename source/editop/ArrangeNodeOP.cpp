@@ -1,7 +1,7 @@
 #include "ee2/ArrangeNodeOP.h"
 #include "ee2/ArrangeNodeImpl.h"
 #include "ee2/WxStageCanvas.h"
-#include "ee2/CamControlOP.h"
+#include "ee2/NodeSelectOP.h"
 
 #include <ee0/WxStagePage.h>
 
@@ -15,22 +15,33 @@ namespace ee2
 
 ArrangeNodeOP::ArrangeNodeOP(ee0::WxStagePage& stage, 
 	                         pt2::Camera& cam,
-	                         const ArrangeNodeCfg& cfg)
+	                         const ArrangeNodeCfg& cfg,
+	                         const std::shared_ptr<ee0::EditOP>& prev_op)
 	: m_cam(cam)
 {
 	m_impl = std::make_unique<ArrangeNodeImpl>(
 		cam, stage.GetSubjectMgr(), stage.GetNodeSelection(), stage, stage.GetImpl().GetKeyState(), cfg);
 
-	SetPrevEditOP(std::make_shared<CamControlOP>(cam, stage.GetSubjectMgr()));
+	if (prev_op) {
+		SetPrevEditOP(prev_op);
+	} else {
+		SetPrevEditOP(std::make_shared<NodeSelectOP>(stage));
+	}
 }
 
-ArrangeNodeOP::ArrangeNodeOP(pt2::Camera& cam, ee0::SubjectMgr& sub_mgr,
-	                             std::unique_ptr<ArrangeNodeImpl>& impl)
+ArrangeNodeOP::ArrangeNodeOP(ee0::WxStagePage& stage,
+	                         pt2::Camera& cam,
+	                         std::unique_ptr<ArrangeNodeImpl>& impl,
+	                         const std::shared_ptr<ee0::EditOP>& prev_op)
 	: m_cam(cam)
 {
 	m_impl = std::move(impl);
 
-	SetPrevEditOP(std::make_shared<CamControlOP>(cam, sub_mgr));
+	if (prev_op) {
+		SetPrevEditOP(prev_op);
+	} else {
+		SetPrevEditOP(std::make_shared<NodeSelectOP>(stage));
+	}
 }
 
 bool ArrangeNodeOP::OnKeyDown(int key_code)

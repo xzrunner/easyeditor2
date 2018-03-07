@@ -17,9 +17,11 @@ class ArrangeNodeOP : public ee0::EditOP
 {
 public:
 	ArrangeNodeOP(ee0::WxStagePage& stage, pt2::Camera& cam,
-		const ArrangeNodeCfg& cfg = ArrangeNodeCfg());
-	ArrangeNodeOP(pt2::Camera& cam, ee0::SubjectMgr& sub_mgr,
-		std::unique_ptr<ArrangeNodeImpl>& impl);
+		const ArrangeNodeCfg& cfg = ArrangeNodeCfg(),
+		const std::shared_ptr<ee0::EditOP>& prev_op = nullptr);
+	ArrangeNodeOP(ee0::WxStagePage& stage, pt2::Camera& cam,
+		std::unique_ptr<ArrangeNodeImpl>& impl,
+		const std::shared_ptr<ee0::EditOP>& prev_op = nullptr);
 
 	virtual bool OnKeyDown(int key_code) override;
 	virtual bool OnKeyUp(int key_code) override;
