@@ -26,12 +26,14 @@ namespace ee2
 {
 
 ArrangeNodeImpl::ArrangeNodeImpl(pt2::Camera& cam, 
+	                             ee0::EditRecord& record,
 	                             ee0::SubjectMgr& sub_mgr,
 	                             ee0::SelectionSet<n0::SceneNode>& selection, 
 	                             ee0::NodeContainer& nodes,
 	                             const ee0::KeysState& key_state,
 	                             const ArrangeNodeCfg& cfg)
 	: m_cam(cam)
+	, m_record(record)
 	, m_sub_mgr(sub_mgr)
 	, m_selection(selection)
 	, m_key_state(key_state)
@@ -217,7 +219,7 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 	//}
 
 	// translate
-	m_op_state = std::make_unique<TranslateNodeState>(m_cam, m_selection, pos);
+	m_op_state = std::make_unique<TranslateNodeState>(m_cam, m_record, m_sub_mgr, m_selection, pos);
 
 	m_op_state->OnMousePress(x, y);
 }
@@ -232,7 +234,7 @@ void ArrangeNodeImpl::OnMouseLeftUp(int x, int y)
 
 	sm::vec2 pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
 	if (!m_selection.IsEmpty()) {
-		m_op_state = std::make_unique<TranslateNodeState>(m_cam, m_selection, pos);
+		m_op_state = std::make_unique<TranslateNodeState>(m_cam, m_record, m_sub_mgr, m_selection, pos);
 	}
 
 	if (m_cfg.is_auto_align_open &&

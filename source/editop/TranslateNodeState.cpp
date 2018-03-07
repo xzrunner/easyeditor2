@@ -1,7 +1,9 @@
 #include "ee2/TranslateNodeState.h"
+#include "ee2/TranslateNodeAO.h"
 
 #include <ee0/CameraHelper.h>
 #include <ee0/KeyType.h>
+#include <ee0/EditRecord.h>
 
 #include <node0/SceneNode.h>
 #include <node2/CompTransform.h>
@@ -10,9 +12,13 @@ namespace ee2
 {
 
 TranslateNodeState::TranslateNodeState(pt2::Camera& cam, 
+	                                   ee0::EditRecord& record,
+	                                   ee0::SubjectMgr& sub_mgr,
 		                               const ee0::SelectionSet<n0::SceneNode>& selection, 
 		                               const sm::vec2& first_pos)
 	: m_cam(cam)
+	, m_record(record)
+	, m_sub_mgr(sub_mgr)
 	, m_selection(selection)
 	, m_dirty(false)
 {
@@ -35,7 +41,12 @@ bool TranslateNodeState::OnMouseRelease(int x, int y)
 
 	m_dirty = false;
 
-	// todo record
+	auto pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
+	if (pos != m_first_pos)
+	{
+		sm::vec2 offset = pos - m_first_pos;
+		m_record.Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, m_selection, offset));
+	}
 
 	return false;
 }

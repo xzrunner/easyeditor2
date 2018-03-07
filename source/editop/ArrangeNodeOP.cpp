@@ -20,7 +20,7 @@ ArrangeNodeOP::ArrangeNodeOP(ee0::WxStagePage& stage,
 	: m_cam(cam)
 {
 	m_impl = std::make_unique<ArrangeNodeImpl>(
-		cam, stage.GetSubjectMgr(), stage.GetNodeSelection(), stage, stage.GetImpl().GetKeyState(), cfg);
+		cam, stage.GetImpl().GetEditRecord(), stage.GetSubjectMgr(), stage.GetNodeSelection(), stage, stage.GetImpl().GetKeyState(), cfg);
 
 	if (prev_op) {
 		SetPrevEditOP(prev_op);

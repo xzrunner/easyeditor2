@@ -6,6 +6,7 @@
 #include <SM_Vector.h>
 #include <node0/typedef.h>
 
+namespace ee0 { class EditRecord; class SubjectMgr; }
 namespace pt2 { class Camera; }
 
 namespace ee2
@@ -14,9 +15,8 @@ namespace ee2
 class TranslateNodeState : public ee0::EditOpState
 {
 public:
-	TranslateNodeState(pt2::Camera& cam, 
-		const ee0::SelectionSet<n0::SceneNode>& selection, 
-		const sm::vec2& first_pos);
+	TranslateNodeState(pt2::Camera& cam, ee0::EditRecord& record, ee0::SubjectMgr& sub_mgr,
+		const ee0::SelectionSet<n0::SceneNode>& selection, const sm::vec2& first_pos);
 
 	virtual bool OnMousePress(int x, int y) override;
 	virtual bool OnMouseRelease(int x, int y) override;
@@ -30,6 +30,8 @@ private:
 private:
 	pt2::Camera& m_cam;
 
+	ee0::EditRecord& m_record;
+	ee0::SubjectMgr& m_sub_mgr;
 	const ee0::SelectionSet<n0::SceneNode>& m_selection;
 
 	sm::vec2 m_first_pos, m_last_pos;

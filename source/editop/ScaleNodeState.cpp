@@ -27,8 +27,8 @@ bool ScaleNodeState::OnMouseRelease(int x, int y)
 
 	//CombineAOP* comb = new CombineAOP();
 
-	//comb->Insert(new TranslateSpriteAOP(m_spr, m_spr->GetPosition() - m_first_pos));
-	//comb->Insert(new ScaleSpriteAOP(m_spr, m_spr->GetScale(), m_first_scale));
+	//comb->Insert(new TranslateNodeAO(m_spr, m_spr->GetPosition() - m_first_pos));
+	//comb->Insert(new ScaleNodeAO(m_spr, m_spr->GetScale(), m_first_scale));
 
 	//EditAddRecordSJ::Instance()->Add(comb);
 

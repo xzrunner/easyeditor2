@@ -8,13 +8,12 @@
 
 #include <wx/menu.h>
 
-namespace ee0 { class EditOpState; class KeysState; class SubjectMgr; }
+namespace ee0 { class EditRecord; class EditOpState; class KeysState; class SubjectMgr; }
 namespace pt2 { class Camera; }
 
 namespace ee2
 {
 
-class EditPanelImpl;
 class MultiSpritesImpl;
 class PropertySettingPanel;
 class ArrangeNodeState;
@@ -24,8 +23,8 @@ class SpriteSelection;
 class ArrangeNodeImpl
 {
 public:
-	ArrangeNodeImpl(pt2::Camera& cam, ee0::SubjectMgr& sub_mgr, 
-		ee0::SelectionSet<n0::SceneNode>& selection,
+	ArrangeNodeImpl(pt2::Camera& cam, ee0::EditRecord& record, 
+		ee0::SubjectMgr& sub_mgr, ee0::SelectionSet<n0::SceneNode>& selection,
 		ee0::NodeContainer& nodes, const ee0::KeysState& key_state,
 		const ArrangeNodeCfg& cfg = ArrangeNodeCfg());
 	virtual ~ArrangeNodeImpl() = default;
@@ -68,7 +67,9 @@ private:
 	bool OnSpriteShortcutKey(int keycode);
 
 private:
-	pt2::Camera&     m_cam;
+	pt2::Camera& m_cam;
+
+	ee0::EditRecord& m_record;
 	ee0::SubjectMgr& m_sub_mgr;
 
 	ee0::SelectionSet<n0::SceneNode>& m_selection;
