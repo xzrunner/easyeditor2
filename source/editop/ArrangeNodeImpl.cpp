@@ -506,10 +506,10 @@ void ArrangeNodeImpl::OnSpaceKeyDown()
 	m_selection.Traverse([&](const n0::SceneNodePtr& node)->bool 
 	{
 		auto& ctrans = node->GetUniqueComp<n2::CompTransform>();
-		ctrans.GetTrans().SetPosition(sm::vec2(0, 0));
-		ctrans.GetTrans().SetAngle(0);
-		ctrans.GetTrans().SetShear(sm::vec2(0, 0));
-		ctrans.GetTrans().SetScale(sm::vec2(1, 1));
+		ctrans.SetPosition(*node, sm::vec2(0, 0));
+		ctrans.SetAngle(*node, 0);
+		ctrans.SetShear(*node, sm::vec2(0, 0));
+		ctrans.SetScale(*node, sm::vec2(1, 1));
 		return true;
 	});
 

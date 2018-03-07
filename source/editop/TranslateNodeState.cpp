@@ -5,7 +5,6 @@
 
 #include <node0/SceneNode.h>
 #include <node2/CompTransform.h>
-#include <node2/NodeFlags.h>
 
 namespace ee2
 {
@@ -96,8 +95,7 @@ void TranslateNodeState::Translate(const sm::vec2& offset)
 	m_selection.Traverse([&](const n0::SceneNodePtr& node)->bool
 	{
 		auto& ctrans = node->GetUniqueComp<n2::CompTransform>();
-		ctrans.GetTrans().SetPosition(ctrans.GetTrans().GetPosition() + offset);
-		node->SetFlag<n2::NodeBoundingDirty>(true);
+		ctrans.SetPosition(*node, ctrans.GetTrans().GetPosition() + offset);
 		return true;
 	});
 }

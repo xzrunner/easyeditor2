@@ -46,7 +46,7 @@ bool RotateNodeState::OnMouseDrag(int x, int y)
 		auto& ctrans = node->GetUniqueComp<n2::CompTransform>();
 		sm::vec2 center = ctrans.GetTrans().GetPosition() + ctrans.GetTrans().GetOffset();
 		float rot = sm::get_angle_in_direction(center, m_last_pos, pos);
-		ctrans.GetTrans().SetAngle(ctrans.GetTrans().GetAngle() + rot);
+		ctrans.SetAngle(*node, ctrans.GetTrans().GetAngle() + rot);
 
 		m_angle += rot;
 

@@ -4,7 +4,6 @@
 #include <node0/SceneNode.h>
 #include <node2/CompBoundingBox.h>
 #include <node2/CompTransform.h>
-#include <node2/NodeHelper.h>
 #include <ns/NodeFactory.h>
 
 #include <wx/sizer.h>
@@ -125,7 +124,8 @@ void WxCompMaskPanel::OnSetMaskPath(wxCommandEvent& event)
 	auto& ceditor = node->GetUniqueComp<ee0::CompNodeEditor>();
 	m_mask_path->SetValue(ceditor.GetFilepath());
 
-	n2::NodeHelper::SetBoundingSize(m_node, node->GetUniqueComp<n2::CompBoundingBox>().GetSize());
+	auto& cbb = m_node.GetUniqueComp<n2::CompBoundingBox>();
+	cbb.SetSize(m_node, node->GetUniqueComp<n2::CompBoundingBox>().GetSize());
 }
 
 n0::SceneNodePtr WxCompMaskPanel::CreateNodeFromFile()

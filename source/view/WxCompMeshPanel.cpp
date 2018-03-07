@@ -4,7 +4,6 @@
 #include <node0/SceneNode.h>
 #include <node2/CompBoundingBox.h>
 #include <node2/CompTransform.h>
-#include <node2/NodeHelper.h>
 #include <ns/NodeFactory.h>
 
 #include <wx/sizer.h>

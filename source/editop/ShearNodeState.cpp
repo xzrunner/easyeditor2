@@ -127,7 +127,7 @@ void ShearNodeState::Shear(const sm::vec2& curr)
 			ky = (pos.y - s*sx*x - kx*s*sx*y - c*sy*y - py) / (c*sy*x);
 	}
 
-	ctrans.GetTrans().SetShear(sm::vec2(kx, ky));
+	ctrans.SetShear(*m_node, sm::vec2(kx, ky));
 }
 
 void ShearNodeState::Shear2(const sm::vec2& curr)
@@ -173,7 +173,7 @@ void ShearNodeState::Shear2(const sm::vec2& curr)
 				kx = -kx;
 			}
 			kx /= sx;
-			ctrans.GetTrans().SetShear(sm::vec2(kx, ky));
+			ctrans.SetShear(*m_node, sm::vec2(kx, ky));
 		}
 		break;
 	case NodeCtrlPoint::LEFT: case NodeCtrlPoint::RIGHT:
@@ -193,7 +193,7 @@ void ShearNodeState::Shear2(const sm::vec2& curr)
 				ky = -ky;
 			}
 			ky /= sy;
-			ctrans.GetTrans().SetShear(sm::vec2(kx, ky));
+			ctrans.SetShear(*m_node, sm::vec2(kx, ky));
 		}
 		break;
 	}

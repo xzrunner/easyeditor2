@@ -49,7 +49,7 @@ bool OffsetNodeState::OnMouseRelease(int x, int y)
 	}
 
 	sm::vec2 new_offset = sm::rotate_vector(fixed - ctrans.GetTrans().GetCenter(), -ctrans.GetTrans().GetAngle());
-	ctrans.GetTrans().SetOffset(new_offset);
+	ctrans.SetOffset(*m_node, new_offset);
 
 	return false;
 }
@@ -62,7 +62,7 @@ bool OffsetNodeState::OnMouseDrag(int x, int y)
 		pos - ctrans.GetTrans().GetCenter(), 
 		-ctrans.GetTrans().GetAngle()
 	);
-	ctrans.GetTrans().SetOffset(offset);
+	ctrans.SetOffset(*m_node, offset);
 	
 	return true;
 }

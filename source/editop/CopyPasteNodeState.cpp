@@ -41,7 +41,7 @@ bool CopyPasteNodeState::OnMouseDrag(int x, int y)
 	for (auto& node : m_nodes) 
 	{
 		auto& ctrans = node->GetUniqueComp<n2::CompTransform>();
-		ctrans.GetTrans().SetPosition(ctrans.GetTrans().GetPosition() + offset);
+		ctrans.SetPosition(*node, ctrans.GetTrans().GetPosition() + offset);
 	}
 	m_last_pos = pos;
 

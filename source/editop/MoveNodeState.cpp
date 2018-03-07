@@ -41,7 +41,7 @@ bool MoveNodeState::OnMouseMove(int x, int y)
 	for (int i = 0, n = m_nodes.size(); i < n; ++i) 
 	{
 		auto& ctrans = m_nodes[i]->GetUniqueComp<n2::CompTransform>();
-		ctrans.GetTrans().SetPosition(pos + m_offset[i]);
+		ctrans.SetPosition(*m_nodes[i], pos + m_offset[i]);
 	}
 	return true;
 }

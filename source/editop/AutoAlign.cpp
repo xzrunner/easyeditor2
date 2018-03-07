@@ -146,7 +146,8 @@ void AutoAlign::Align(const n0::SceneNode& src, n0::SceneNode& dst)
 	float src_cx	= src_rect.Center().x,
 		  src_cy	= src_rect.Center().y;
 
-	auto& dst_trans = dst.GetUniqueComp<n2::CompTransform>().GetTrans();
+	auto& dst_ctrans = dst.GetUniqueComp<n2::CompTransform>();
+	auto& dst_trans = dst_ctrans.GetTrans();
 
 	// up
 	float nearest = DIS;
@@ -154,7 +155,7 @@ void AutoAlign::Align(const n0::SceneNode& src, n0::SceneNode& dst)
 	{
 		float dy = src_up - dst_rect.ymax;
 		nearest = dis;
-		dst_trans.SetPosition(sm::vec2(dst_trans.GetPosition().x, dst_trans.GetPosition().y + dy));
+		dst_ctrans.SetPosition(dst, sm::vec2(dst_trans.GetPosition().x, dst_trans.GetPosition().y + dy));
 		dst_rect.Translate(sm::vec2(0, dy));
 		m_hor[0].Set(src_cx - LEN, src_up);
 		m_hor[1].Set(src_cx + LEN, src_up);
@@ -163,7 +164,7 @@ void AutoAlign::Align(const n0::SceneNode& src, n0::SceneNode& dst)
 	{
 		float dy = src_down - dst_rect.ymax;
 		nearest = dis;
-		dst_trans.SetPosition(sm::vec2(dst_trans.GetPosition().x, dst_trans.GetPosition().y + dy));
+		dst_ctrans.SetPosition(dst, sm::vec2(dst_trans.GetPosition().x, dst_trans.GetPosition().y + dy));
 		dst_rect.Translate(sm::vec2(0, dy));
 		m_hor[0].Set(src_cx - LEN, src_down);
 		m_hor[1].Set(src_cx + LEN, src_down);
@@ -173,7 +174,7 @@ void AutoAlign::Align(const n0::SceneNode& src, n0::SceneNode& dst)
 	{
 		float dy = src_up - dst_rect.ymin;
 		nearest = dis;
-		dst_trans.SetPosition(sm::vec2(dst_trans.GetPosition().x, dst_trans.GetPosition().y + dy));
+		dst_ctrans.SetPosition(dst, sm::vec2(dst_trans.GetPosition().x, dst_trans.GetPosition().y + dy));
 		dst_rect.Translate(sm::vec2(0, dy));
 		m_hor[0].Set(src_cx - LEN, src_up);
 		m_hor[1].Set(src_cx + LEN, src_up);
@@ -182,7 +183,7 @@ void AutoAlign::Align(const n0::SceneNode& src, n0::SceneNode& dst)
 	{
 		float dy = src_down - dst_rect.ymin;
 		nearest = dis;
-		dst_trans.SetPosition(sm::vec2(dst_trans.GetPosition().x, dst_trans.GetPosition().y + dy));
+		dst_ctrans.SetPosition(dst, sm::vec2(dst_trans.GetPosition().x, dst_trans.GetPosition().y + dy));
 		dst_rect.Translate(sm::vec2(0, dy));
 		m_hor[0].Set(src_cx - LEN, src_down);
 		m_hor[1].Set(src_cx + LEN, src_down);
@@ -193,7 +194,7 @@ void AutoAlign::Align(const n0::SceneNode& src, n0::SceneNode& dst)
 	{
 		float dx = src_left - dst_rect.xmin;
 		nearest = dis;
-		dst_trans.SetPosition(sm::vec2(dst_trans.GetPosition().x + dx, dst_trans.GetPosition().y));
+		dst_ctrans.SetPosition(dst, sm::vec2(dst_trans.GetPosition().x + dx, dst_trans.GetPosition().y));
 		dst_rect.Translate(sm::vec2(dx, 0));
 		m_ver[0].Set(src_left, src_cy - LEN);
 		m_ver[1].Set(src_left, src_cy + LEN);
@@ -202,7 +203,7 @@ void AutoAlign::Align(const n0::SceneNode& src, n0::SceneNode& dst)
 	{
 		float dx = src_right - dst_rect.xmin;
 		nearest = dis;
-		dst_trans.SetPosition(sm::vec2(dst_trans.GetPosition().x + dx, dst_trans.GetPosition().y));
+		dst_ctrans.SetPosition(dst, sm::vec2(dst_trans.GetPosition().x + dx, dst_trans.GetPosition().y));
 		dst_rect.Translate(sm::vec2(dx, 0));
 		m_ver[0].Set(src_right, src_cy - LEN);
 		m_ver[1].Set(src_right, src_cy + LEN);
@@ -212,7 +213,7 @@ void AutoAlign::Align(const n0::SceneNode& src, n0::SceneNode& dst)
 	{
 		float dx = src_left - dst_rect.xmax;
 		nearest = dis;
-		dst_trans.SetPosition(sm::vec2(dst_trans.GetPosition().x + dx, dst_trans.GetPosition().y));
+		dst_ctrans.SetPosition(dst, sm::vec2(dst_trans.GetPosition().x + dx, dst_trans.GetPosition().y));
 		dst_rect.Translate(sm::vec2(dx, 0));
 		m_ver[0].Set(src_left, src_cy - LEN);
 		m_ver[1].Set(src_left, src_cy + LEN);
@@ -221,7 +222,7 @@ void AutoAlign::Align(const n0::SceneNode& src, n0::SceneNode& dst)
 	{
 		float dx = src_right - dst_rect.xmax;
 		nearest = dis;
-		dst_trans.SetPosition(sm::vec2(dst_trans.GetPosition().x + dx, dst_trans.GetPosition().y));
+		dst_ctrans.SetPosition(dst, sm::vec2(dst_trans.GetPosition().x + dx, dst_trans.GetPosition().y));
 		dst_rect.Translate(sm::vec2(dx, 0));
 		m_ver[0].Set(src_right, src_cy - LEN);
 		m_ver[1].Set(src_right, src_cy + LEN);

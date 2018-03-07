@@ -80,7 +80,7 @@ void ScaleNodeState::SetScaleTimes(const sm::vec2& st)
 	auto& ctrans = m_node->GetUniqueComp<n2::CompTransform>();
 	sm::vec2 scale = ctrans.GetTrans().GetScale();
 	scale *= st;
-	ctrans.GetTrans().SetScale(scale);
+	ctrans.SetScale(*m_node, scale);
 }
 
 }

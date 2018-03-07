@@ -81,7 +81,7 @@ bool NodeSelectOP::OnDraw() const
 		{
 			CU_VEC<sm::vec2> bound;
 			auto& cbb = node->GetUniqueComp<n2::CompBoundingBox>();
-			cbb.GetBounding().GetBoundPos(bound);
+			cbb.GetBounding(*node).GetBoundPos(bound);
 
 			// todo
 			sm::Matrix2D world_mt;
@@ -151,8 +151,8 @@ void NodeSelectOP::QueryByRect(const sm::ivec2& p0, const sm::ivec2& p1, bool co
 
 n0::SceneNodePtr NodeSelectOP::QueryByPos(const n0::SceneNodePtr& node, const sm::vec2& pos) const
 {
-	auto& cbounding = node->GetUniqueComp<n2::CompBoundingBox>();
-	if (cbounding.GetBounding().IsContain(pos)) {
+	auto& cbb = node->GetUniqueComp<n2::CompBoundingBox>();
+	if (cbb.GetBounding(*node).IsContain(pos)) {
 		return node;
 	}
 
@@ -178,8 +178,8 @@ n0::SceneNodePtr NodeSelectOP::QueryByPos(const n0::SceneNodePtr& node, const sm
 void NodeSelectOP::QueryByRect(const n0::SceneNodePtr& node, const sm::rect& rect, 
 	                           bool contain, std::vector<n0::SceneNodePtr>& result) const
 {
-	auto& cbounding = node->GetUniqueComp<n2::CompBoundingBox>();
-	auto& bb = cbounding.GetBounding();
+	auto& cbb = node->GetUniqueComp<n2::CompBoundingBox>();
+	auto& bb = cbb.GetBounding(*node);
 	if (contain && sm::is_rect_contain_rect(rect, bb.GetSize())) {
 		result.push_back(node);
 	} else if (!contain && bb.IsIntersect(rect)) {

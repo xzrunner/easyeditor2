@@ -14,7 +14,6 @@
 #include <guard/check.h>
 #include <node0/SceneNode.h>
 #include <node2/CompTransform.h>
-#include <node2/CompBoundingBox.h>
 #include <painting2/OrthoCamera.h>
 #include <gum/StringHelper.h>
 #include <ns/NodeFactory.h>
@@ -83,15 +82,11 @@ void WxStageDropTarget::InitNodeComp(const n0::SceneNodePtr& node,
 	//auto parent = node->GetParent();
 	//if (parent) {
 	//	auto p_pos = parent->GetUniqueComp<n2::CompTransform>().GetTrans().GetMatrix() * sm::vec2(0, 0);
-	//	ctrans.GetTrans().SetPosition(pos - p_pos);
+	//	ctrans.SetPosition(node, pos - p_pos);
 	//} else {
-	//	ctrans.GetTrans().SetPosition(pos);
+	//	ctrans.SetPosition(node, pos);
 	//}
-	ctrans.GetTrans().SetPosition(pos);
-
-	// bounding box
-	auto& cbounding = node->GetUniqueComp<n2::CompBoundingBox>();
-	cbounding.Build(ctrans.GetTrans().GetSRT());
+	ctrans.SetPosition(*node, pos);
 
 	// editor
 	auto& ceditor = node->GetUniqueComp<ee0::CompNodeEditor>();
