@@ -49,8 +49,11 @@
     <Filter Include="record\atomic">
       <UniqueIdentifier>{9ee6b483-01ac-4f0f-be49-3a671a5d3e4d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="record\atomic\node">
+    <Filter Include="record\atomic\arrange">
       <UniqueIdentifier>{7c43d6a9-fa5b-48f3-a243-e22ff00aa33f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="record\atomic\others">
+      <UniqueIdentifier>{724ac822-5bb2-4790-9cbc-18abc567b078}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -138,38 +141,41 @@
     <ClInclude Include="..\..\..\include\ee2\ArrangeNodeOP.h">
       <Filter>editop\node\arrange</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\ee2\VisibleNodeAO.h">
-      <Filter>record\atomic\node</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\ee2\TranslateNodeAO.h">
-      <Filter>record\atomic\node</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\ee2\ShearNodeAO.h">
-      <Filter>record\atomic\node</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\ee2\ScaleNodeAO.h">
-      <Filter>record\atomic\node</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\ee2\RotateNodeAO.h">
-      <Filter>record\atomic\node</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\ee2\ReorderNodeAO.h">
-      <Filter>record\atomic\node</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\ee2\OffsetNodeAO.h">
-      <Filter>record\atomic\node</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\ee2\InsertNodeAO.h">
-      <Filter>record\atomic\node</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\ee2\EditableNodeAO.h">
-      <Filter>record\atomic\node</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\ee2\DeleteNodeAO.h">
-      <Filter>record\atomic\node</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\ee2\CombineAO.h">
       <Filter>record\atomic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\DeleteNodeAO.h">
+      <Filter>record\atomic\others</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\EditableNodeAO.h">
+      <Filter>record\atomic\others</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\InsertNodeAO.h">
+      <Filter>record\atomic\others</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\VisibleNodeAO.h">
+      <Filter>record\atomic\others</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\OffsetNodeAO.h">
+      <Filter>record\atomic\arrange</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\ReorderNodeAO.h">
+      <Filter>record\atomic\arrange</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\RotateNodeAO.h">
+      <Filter>record\atomic\arrange</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\ScaleNodeAO.h">
+      <Filter>record\atomic\arrange</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\ShearNodeAO.h">
+      <Filter>record\atomic\arrange</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\TranslateNodeAO.h">
+      <Filter>record\atomic\arrange</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\BuildGroupAO.h">
+      <Filter>record\atomic\others</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -257,38 +263,41 @@
     <ClCompile Include="..\..\..\source\editop\ArrangeNodeOP.cpp">
       <Filter>editop\node\arrange</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\record\TranslateNodeAO.cpp">
-      <Filter>record\atomic\node</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\record\VisibleNodeAO.cpp">
-      <Filter>record\atomic\node</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\record\ShearNodeAO.cpp">
-      <Filter>record\atomic\node</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\record\ScaleNodeAO.cpp">
-      <Filter>record\atomic\node</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\record\ReorderNodeAO.cpp">
-      <Filter>record\atomic\node</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\record\RotateNodeAO.cpp">
-      <Filter>record\atomic\node</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\record\OffsetNodeAO.cpp">
-      <Filter>record\atomic\node</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\record\InsertNodeAO.cpp">
-      <Filter>record\atomic\node</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\record\EditableNodeAO.cpp">
-      <Filter>record\atomic\node</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\record\DeleteNodeAO.cpp">
-      <Filter>record\atomic\node</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\record\CombineAO.cpp">
       <Filter>record\atomic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\record\DeleteNodeAO.cpp">
+      <Filter>record\atomic\others</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\record\EditableNodeAO.cpp">
+      <Filter>record\atomic\others</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\record\InsertNodeAO.cpp">
+      <Filter>record\atomic\others</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\record\VisibleNodeAO.cpp">
+      <Filter>record\atomic\others</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\record\OffsetNodeAO.cpp">
+      <Filter>record\atomic\arrange</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\record\ReorderNodeAO.cpp">
+      <Filter>record\atomic\arrange</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\record\RotateNodeAO.cpp">
+      <Filter>record\atomic\arrange</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\record\ScaleNodeAO.cpp">
+      <Filter>record\atomic\arrange</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\record\ShearNodeAO.cpp">
+      <Filter>record\atomic\arrange</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\record\TranslateNodeAO.cpp">
+      <Filter>record\atomic\arrange</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\record\BuildGroupAO.cpp">
+      <Filter>record\atomic\others</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

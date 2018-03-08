@@ -21,6 +21,7 @@ public:
 	NodeSelectOP(ee0::WxStagePage& stage);
 	virtual ~NodeSelectOP() = default;
 
+	virtual bool OnKeyDown(int key_code) override;
 	virtual bool OnMouseLeftDown(int x, int y) override;
 	virtual bool OnMouseLeftUp(int x, int y) override;
 	virtual bool OnMouseDrag(int x, int y) override;
@@ -35,6 +36,9 @@ private:
 	n0::SceneNodePtr QueryByPos(const n0::SceneNodePtr& node, const sm::vec2& pos) const;
 	void QueryByRect(const n0::SceneNodePtr& node, const sm::rect& rect,
 		bool contain, std::vector<n0::SceneNodePtr>& result) const;
+
+	void BuildGroup();
+	void BreakUpGroup();
 
 private:
 	std::unique_ptr<ee0::EditOpState> m_draw_state = nullptr;

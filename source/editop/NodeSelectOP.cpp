@@ -1,9 +1,11 @@
 #include "ee2/NodeSelectOP.h"
 #include "ee2/WxStageCanvas.h"
 #include "ee2/DrawSelectRectState.h"
+#include "ee2/BuildGroupAO.h"
 
 #include <ee0/CameraHelper.h>
 #include <ee0/WxStagePage.h>
+#include <ee0/MsgHelper.h>
 
 #include <node0/SceneNode.h>
 #include <node2/CompComplex.h>
@@ -26,6 +28,22 @@ NodeSelectOP::NodeSelectOP(ee0::WxStagePage& stage)
 	SetPrevEditOP(std::make_shared<CamControlOP>(*cam, stage.GetSubjectMgr()));
 
 	m_draw_state = std::make_unique<DrawSelectRectState>(*cam, stage.GetSubjectMgr());
+}
+
+bool NodeSelectOP::OnKeyDown(int key_code)
+{
+	if (ee0::NodeSelectOP::OnKeyDown(key_code)) {
+		return true;
+	}
+
+	// group
+	if (m_stage.GetKeyState(WXK_CONTROL) && key_code == 'G') {
+		BuildGroup();
+	}  else if (m_stage.GetKeyState(WXK_CONTROL) && key_code == 'B') {
+		BreakUpGroup();
+	}
+
+	return false;
 }
 
 bool NodeSelectOP::OnMouseLeftDown(int x, int y)
@@ -199,6 +217,19 @@ void NodeSelectOP::QueryByRect(const n0::SceneNodePtr& node, const sm::rect& rec
 	}
 
 	m_draw_state_disable = !result.empty();
+}
+
+void NodeSelectOP::BuildGroup()
+{
+	auto ao = std::make_shared<BuildGroupAO>(m_stage.GetSubjectMgr(), m_stage.GetNodeSelection());
+	ao->Redo();
+	m_stage.GetImpl().GetEditRecord().Add(ao);
+	ee0::MsgHelper::SetEditorDirty(m_stage.GetSubjectMgr(), true);
+}
+
+void NodeSelectOP::BreakUpGroup()
+{
+
 }
 
 }
