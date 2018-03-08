@@ -1,5 +1,6 @@
 #include "ee2/WxStageDropTarget.h"
 #include "ee2/WxStageCanvas.h"
+#include "ee2/InsertNodeAO.h"
 
 #include <ee0/MessageID.h>
 #include <ee0/VariantSet.h>
@@ -70,6 +71,10 @@ void WxStageDropTarget::InsertNode(n0::SceneNodePtr& node)
 {
 	bool succ = ee0::MsgHelper::InsertNode(m_stage->GetSubjectMgr(), node);
 	GD_ASSERT(succ, "no MSG_INSERT_SCENE_NODE");
+
+	m_stage->GetImpl().GetEditRecord().Add(std::make_shared<InsertNodeAO>(
+		m_stage->GetSubjectMgr(), node));
+	ee0::MsgHelper::SetEditorDirty(m_stage->GetSubjectMgr(), true);
 }
 
 void WxStageDropTarget::InitNodeComp(const n0::SceneNodePtr& node, 

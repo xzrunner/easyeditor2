@@ -18,6 +18,7 @@
     <ClInclude Include="..\..\..\include\ee2\CamControlOP.h" />
     <ClInclude Include="..\..\..\include\ee2\CamTranslateState.h" />
     <ClInclude Include="..\..\..\include\ee2\CamZoomState.h" />
+    <ClInclude Include="..\..\..\include\ee2\CombineAO.h" />
     <ClInclude Include="..\..\..\include\ee2\CopyPasteNodeState.h" />
     <ClInclude Include="..\..\..\include\ee2\DeleteNodeAO.h" />
     <ClInclude Include="..\..\..\include\ee2\DrawSelectRectState.h" />
@@ -68,6 +69,7 @@
     <ClCompile Include="..\..\..\source\editop\ShearNodeState.cpp" />
     <ClCompile Include="..\..\..\source\editop\NodeCtrlPoint.cpp" />
     <ClCompile Include="..\..\..\source\editop\TranslateNodeState.cpp" />
+    <ClCompile Include="..\..\..\source\record\CombineAO.cpp" />
     <ClCompile Include="..\..\..\source\record\DeleteNodeAO.cpp" />
     <ClCompile Include="..\..\..\source\record\EditableNodeAO.cpp" />
     <ClCompile Include="..\..\..\source\record\InsertNodeAO.cpp" />

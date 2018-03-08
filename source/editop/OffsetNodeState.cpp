@@ -1,8 +1,11 @@
 #include "ee2/OffsetNodeState.h"
 #include "ee2/NodeCtrlPoint.h"
 #include "ee2/ArrangeNodeCfg.h"
+#include "ee2/OffsetNodeAO.h"
 
 #include <ee0/CameraHelper.h>
+#include <ee0/EditRecord.h>
+#include <ee0/MsgHelper.h>
 
 #include <node0/SceneNode.h>
 #include <node2/CompTransform.h>
@@ -12,8 +15,11 @@
 namespace ee2
 {
 
-OffsetNodeState::OffsetNodeState(pt2::Camera& cam, const n0::SceneNodePtr& node)
+OffsetNodeState::OffsetNodeState(pt2::Camera& cam, ee0::EditRecord& record,
+	                             ee0::SubjectMgr& sub_mgr, const n0::SceneNodePtr& node)
 	: m_cam(cam)
+	, m_record(record)
+	, m_sub_mgr(sub_mgr)
 	, m_node(node)
 {
 	auto& ctrans = node->GetUniqueComp<n2::CompTransform>();
@@ -50,6 +56,10 @@ bool OffsetNodeState::OnMouseRelease(int x, int y)
 
 	sm::vec2 new_offset = sm::rotate_vector(fixed - ctrans.GetTrans().GetCenter(), -ctrans.GetTrans().GetAngle());
 	ctrans.SetOffset(*m_node, new_offset);
+
+	// record
+	m_record.Add(std::make_shared<OffsetNodeAO>(m_sub_mgr, m_node, new_offset, m_old_offset));
+	ee0::MsgHelper::SetEditorDirty(m_sub_mgr, true);
 
 	return false;
 }

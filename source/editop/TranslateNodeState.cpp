@@ -4,6 +4,7 @@
 #include <ee0/CameraHelper.h>
 #include <ee0/KeyType.h>
 #include <ee0/EditRecord.h>
+#include <ee0/MsgHelper.h>
 
 #include <node0/SceneNode.h>
 #include <node2/CompTransform.h>
@@ -41,11 +42,13 @@ bool TranslateNodeState::OnMouseRelease(int x, int y)
 
 	m_dirty = false;
 
+	// record
 	auto pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
 	if (pos != m_first_pos)
 	{
 		sm::vec2 offset = pos - m_first_pos;
 		m_record.Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, m_selection, offset));
+		ee0::MsgHelper::SetEditorDirty(m_sub_mgr, true);
 	}
 
 	return false;

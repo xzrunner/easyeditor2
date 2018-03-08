@@ -8,11 +8,19 @@
 #include "ee2/ShearNodeState.h"
 #include "ee2/TranslateNodeState.h"
 
+#include "ee2/CombineAO.h"
+#include "ee2/TranslateNodeAO.h"
+#include "ee2/RotateNodeAO.h"
+#include "ee2/ShearNodeAO.h"
+#include "ee2/ScaleNodeAO.h"
+#include "ee2/DeleteNodeAO.h"
+
 #include <ee0/KeysState.h>
 #include <ee0/KeyType.h>
 #include <ee0/CameraHelper.h>
 #include <ee0/SubjectMgr.h>
 #include <ee0/MsgHelper.h>
+#include <ee0/EditRecord.h>
 
 #include <guard/check.h>
 #include <SM_Calc.h>
@@ -179,7 +187,7 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 	{
 		sm::vec2 offset = GetNodeOffset(selected);
 		if (sm::dis_pos_to_pos(offset, pos) < m_ctrl_node_radius) {
-			m_op_state = std::make_unique<OffsetNodeState>(m_cam, selected);
+			m_op_state = std::make_unique<OffsetNodeState>(m_cam, m_record, m_sub_mgr, selected);
 			return;
 		}
 	}
@@ -196,7 +204,7 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 				NodeCtrlPoint::Node cn;
 				cn.pos = ctrlNodes[i];
 				cn.type = NodeCtrlPoint::Type(i);
-				m_op_state = std::make_unique<ScaleNodeState>(m_cam, selected, cn);
+				m_op_state = std::make_unique<ScaleNodeState>(m_cam, m_record, m_sub_mgr, selected, cn);
 				return;
 			}
 		}
@@ -299,7 +307,7 @@ void ArrangeNodeImpl::OnMouseRightDown(int x, int y)
 
 	// rotate
 	if (m_cfg.is_rotate_open) {
-		m_op_state = std::make_unique<RotateNodeState>(m_cam, m_sub_mgr, m_selection, pos);
+		m_op_state = std::make_unique<RotateNodeState>(m_cam, m_record, m_sub_mgr, m_selection, pos);
 	}
 }
 
@@ -505,17 +513,30 @@ void ArrangeNodeImpl::OnDirectionKeyDown(int type)
 
 void ArrangeNodeImpl::OnSpaceKeyDown()
 {
+	auto comb = std::make_shared<CombineAO>();
+
 	m_selection.Traverse([&](const n0::SceneNodePtr& node)->bool 
 	{
 		auto& ctrans = node->GetUniqueComp<n2::CompTransform>();
+
+		// record
+		std::vector<n0::SceneNodePtr> nodes;
+		nodes.push_back(node);
+		comb->Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, node, - ctrans.GetTrans().GetPosition()));
+		comb->Add(std::make_shared<RotateNodeAO>(m_sub_mgr, nodes, - ctrans.GetTrans().GetAngle()));
+		comb->Add(std::make_shared<ScaleNodeAO>(m_sub_mgr, node, sm::vec2(1, 1), ctrans.GetTrans().GetScale()));
+		comb->Add(std::make_shared<ShearNodeAO>(m_sub_mgr, node, sm::vec2(0, 0), ctrans.GetTrans().GetShear()));
+
 		ctrans.SetPosition(*node, sm::vec2(0, 0));
 		ctrans.SetAngle(*node, 0);
 		ctrans.SetShear(*node, sm::vec2(0, 0));
 		ctrans.SetScale(*node, sm::vec2(1, 1));
+
 		return true;
 	});
 
-	// todo record
+	m_record.Add(comb);
+	ee0::MsgHelper::SetEditorDirty(m_sub_mgr, true);
 
 	m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
@@ -528,12 +549,17 @@ void ArrangeNodeImpl::SetRightPopupMenu(wxMenu& menu, int x, int y)
 
 void ArrangeNodeImpl::OnDeleteKeyDown()
 {
-	// todo record
-
-	m_selection.Traverse([&](const n0::SceneNodePtr& node)->bool {
+	std::vector<n0::SceneNodePtr> nodes;
+	nodes.reserve(m_selection.Size());
+	m_selection.Traverse([&](const n0::SceneNodePtr& node)->bool 
+	{
+		nodes.push_back(node);
 		ee0::MsgHelper::DeleteNode(m_sub_mgr, node);
 		return true;
 	});
+
+	m_record.Add(std::make_shared<DeleteNodeAO>(m_sub_mgr, nodes));
+	ee0::MsgHelper::SetEditorDirty(m_sub_mgr, true);
 
 	m_sub_mgr.NotifyObservers(ee0::MSG_NODE_SELECTION_CLEAR);
 }

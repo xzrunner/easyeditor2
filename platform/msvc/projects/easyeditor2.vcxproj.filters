@@ -168,6 +168,9 @@
     <ClInclude Include="..\..\..\include\ee2\DeleteNodeAO.h">
       <Filter>record\atomic\node</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\CombineAO.h">
+      <Filter>record\atomic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\editop\CamControlOP.cpp">
@@ -283,6 +286,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\record\DeleteNodeAO.cpp">
       <Filter>record\atomic\node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\record\CombineAO.cpp">
+      <Filter>record\atomic</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

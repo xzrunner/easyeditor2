@@ -1,6 +1,10 @@
 #include "ee2/ScaleNodeState.h"
+#include "ee2/CombineAO.h"
+#include "ee2/TranslateNodeAO.h"
+#include "ee2/ScaleNodeAO.h"
 
 #include <ee0/CameraHelper.h>
+#include <ee0/EditRecord.h>
 #include <ee0/MsgHelper.h>
 
 #include <SM_Calc.h>
@@ -10,9 +14,12 @@
 namespace ee2
 {
 
-ScaleNodeState::ScaleNodeState(pt2::Camera& cam, const n0::SceneNodePtr& node,
+ScaleNodeState::ScaleNodeState(pt2::Camera& cam, ee0::EditRecord& record,
+	                           ee0::SubjectMgr& sub_mgr, const n0::SceneNodePtr& node,
 	                           const NodeCtrlPoint::Node& ctrl_point)
 	: m_cam(cam)
+	, m_record(record)
+	, m_sub_mgr(sub_mgr)
 	, m_node(node)
 	, m_ctrl_point(ctrl_point)
 {
@@ -23,16 +30,16 @@ ScaleNodeState::ScaleNodeState(pt2::Camera& cam, const n0::SceneNodePtr& node,
 
 bool ScaleNodeState::OnMouseRelease(int x, int y)
 {
-	// todo record
+	// record
+	auto comb = std::make_shared<CombineAO>();
 
-	//CombineAOP* comb = new CombineAOP();
+	auto& ctrans = m_node->GetUniqueComp<n2::CompTransform>();
+	comb->Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, m_node, ctrans.GetTrans().GetPosition() - m_first_pos));
+	comb->Add(std::make_shared<ScaleNodeAO>(m_sub_mgr, m_node, ctrans.GetTrans().GetScale(), m_first_scale));
 
-	//comb->Insert(new TranslateNodeAO(m_spr, m_spr->GetPosition() - m_first_pos));
-	//comb->Insert(new ScaleNodeAO(m_spr, m_spr->GetScale(), m_first_scale));
+	m_record.Add(comb);
 
-	//EditAddRecordSJ::Instance()->Add(comb);
-
-	//EditSprMsg::SetScale(m_spr.get(), m_spr->GetPosition(), m_spr->GetScale());
+	ee0::MsgHelper::SetEditorDirty(m_sub_mgr, true);
 
 	return false;
 }

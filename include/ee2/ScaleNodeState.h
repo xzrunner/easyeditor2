@@ -4,6 +4,7 @@
 
 #include "ee2/NodeCtrlPoint.h"
 
+namespace ee0 { class EditRecord; class SubjectMgr; }
 namespace pt2 { class Camera; }
 
 namespace ee2
@@ -12,7 +13,8 @@ namespace ee2
 class ScaleNodeState : public ee0::EditOpState
 {
 public:
-	ScaleNodeState(pt2::Camera& cam, const n0::SceneNodePtr& node,
+	ScaleNodeState(pt2::Camera& cam, ee0::EditRecord& record,
+		ee0::SubjectMgr& sub_mgr, const n0::SceneNodePtr& node,
 		const NodeCtrlPoint::Node& ctrl_point);
 
 	virtual bool OnMouseRelease(int x, int y) override;
@@ -25,6 +27,9 @@ private:
 
 private:
 	pt2::Camera& m_cam;
+
+	ee0::EditRecord& m_record;
+	ee0::SubjectMgr& m_sub_mgr;
 
 	n0::SceneNodePtr m_node;
 
