@@ -4,7 +4,7 @@
 #include <ee0/SelectionSet.h>
 
 #include <SM_Vector.h>
-#include <node0/typedef.h>
+#include <node0/NodeWithPos.h>
 
 #include <vector>
 
@@ -18,7 +18,7 @@ class CopyPasteNodeState : public ee0::EditOpState
 {
 public:
 	CopyPasteNodeState(pt2::Camera& cam, ee0::SubjectMgr& sub_mgr,
-		ee0::SelectionSet<n0::SceneNode>& selection);
+		ee0::SelectionSet<n0::NodeWithPos>& selection);
 
 	virtual bool OnMousePress(int x, int y) override;
 	virtual bool OnMouseDrag(int x, int y) override;
@@ -29,7 +29,7 @@ private:
 
 	sm::vec2 m_last_pos;
 
-	std::vector<n0::SceneNodePtr> m_nodes;
+	std::vector<n0::NodeWithPos> m_nwps;
 	
 }; // CopyPasteNodeState
 

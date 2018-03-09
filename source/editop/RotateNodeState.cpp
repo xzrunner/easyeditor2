@@ -15,7 +15,7 @@ namespace ee2
 
 RotateNodeState::RotateNodeState(pt2::Camera& cam, ee0::EditRecord& record,
 	                             ee0::SubjectMgr& sub_mgr,
-	                             ee0::SelectionSet<n0::SceneNode>& selection, 
+	                             ee0::SelectionSet<n0::NodeWithPos>& selection, 
 	                             const sm::vec2& first_pos)
 	: m_cam(cam)
 	, m_record(record)
@@ -37,8 +37,8 @@ bool RotateNodeState::OnMouseRelease(int x, int y)
 	// record
 	std::vector<n0::SceneNodePtr> nodes;
 	nodes.reserve(m_selection.Size());
-	m_selection.Traverse([&](const n0::SceneNodePtr& node)->bool {
-		nodes.push_back(node);
+	m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
+		nodes.push_back(nwp.node);
 		return true;
 	});
 	m_record.Add(std::make_shared<RotateNodeAO>(m_sub_mgr, nodes, m_angle));
@@ -54,12 +54,12 @@ bool RotateNodeState::OnMouseDrag(int x, int y)
 	}
 
 	auto pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
-	m_selection.Traverse([&](const n0::SceneNodePtr& node)->bool 
+	m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool
 	{
-		auto& ctrans = node->GetUniqueComp<n2::CompTransform>();
+		auto& ctrans = nwp.node->GetUniqueComp<n2::CompTransform>();
 		sm::vec2 center = ctrans.GetTrans().GetPosition() + ctrans.GetTrans().GetOffset();
 		float rot = sm::get_angle_in_direction(center, m_last_pos, pos);
-		ctrans.SetAngle(*node, ctrans.GetTrans().GetAngle() + rot);
+		ctrans.SetAngle(*nwp.node, ctrans.GetTrans().GetAngle() + rot);
 
 		m_angle += rot;
 

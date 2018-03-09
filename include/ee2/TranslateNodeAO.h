@@ -4,7 +4,7 @@
 #include <ee0/SelectionSet.h>
 
 #include <SM_Vector.h>
-#include <node0/typedef.h>
+#include <node0/NodeWithPos.h>
 
 #include <vector>
 
@@ -16,7 +16,7 @@ namespace ee2
 class TranslateNodeAO : public ee0::AtomicOP
 {
 public:
-	TranslateNodeAO(ee0::SubjectMgr& sub_mgr, const ee0::SelectionSet<n0::SceneNode>& selection,
+	TranslateNodeAO(ee0::SubjectMgr& sub_mgr, const ee0::SelectionSet<n0::NodeWithPos>& selection,
 		const sm::vec2& offset);
 	TranslateNodeAO(ee0::SubjectMgr& sub_mgr, const n0::SceneNodePtr& node, 
 		const sm::vec2& offset);

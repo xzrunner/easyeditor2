@@ -36,7 +36,7 @@ namespace ee2
 ArrangeNodeImpl::ArrangeNodeImpl(pt2::Camera& cam, 
 	                             ee0::EditRecord& record,
 	                             ee0::SubjectMgr& sub_mgr,
-	                             ee0::SelectionSet<n0::SceneNode>& selection, 
+	                             ee0::SelectionSet<n0::NodeWithPos>& selection, 
 	                             ee0::NodeContainer& nodes,
 	                             const ee0::KeysState& key_state,
 	                             const ArrangeNodeCfg& cfg)
@@ -170,8 +170,8 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 	n0::SceneNodePtr selected = nullptr;
 	if (m_selection.Size() == 1)
 	{
-		m_selection.Traverse([&](const n0::SceneNodePtr& node)->bool {
-			selected = node;
+		m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
+			selected = nwp.node;
 			return false;
 		});
 	}
@@ -251,8 +251,8 @@ void ArrangeNodeImpl::OnMouseLeftUp(int x, int y)
 		m_left_down_pos != pos)
 	{
 		std::vector<n0::SceneNodePtr> nodes;
-		m_selection.Traverse([&](const n0::SceneNodePtr& node)->bool {
-			nodes.push_back(node);
+		m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
+			nodes.push_back(nwp.node);
 			return false;
 		});
 		m_align.Align(nodes);
@@ -278,8 +278,8 @@ void ArrangeNodeImpl::OnMouseRightDown(int x, int y)
 	n0::SceneNodePtr selected = nullptr;
 	if (m_selection.Size() == 1)
 	{
-		m_selection.Traverse([&](const n0::SceneNodePtr& node)->bool {
-			selected = node;
+		m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
+			selected = nwp.node;
 			return false;
 		});
 	}
@@ -380,8 +380,8 @@ void ArrangeNodeImpl::OnDraw(float cam_scale) const
 	if ((m_cfg.is_deform_open || m_cfg.is_offset_open) && m_selection.Size() == 1)
 	{
 		n0::SceneNodePtr selected = nullptr;
-		m_selection.Traverse([&](const n0::SceneNodePtr& node)->bool {
-			selected = node;
+		m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
+			selected = nwp.node;
 			return false;
 		});
 
@@ -449,8 +449,8 @@ n0::SceneNodePtr ArrangeNodeImpl::QueryEditedNode(const sm::vec2& pos) const
 	n0::SceneNodePtr selected = nullptr;
 	if (m_cfg.is_deform_open && m_selection.Size() == 1)
 	{
-		m_selection.Traverse([&](const n0::SceneNodePtr& node)->bool {
-			selected = node;
+		m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
+			selected = nwp.node;
 			return false;
 		});
 	}
@@ -515,22 +515,22 @@ void ArrangeNodeImpl::OnSpaceKeyDown()
 {
 	auto comb = std::make_shared<CombineAO>();
 
-	m_selection.Traverse([&](const n0::SceneNodePtr& node)->bool 
+	m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool
 	{
-		auto& ctrans = node->GetUniqueComp<n2::CompTransform>();
+		auto& ctrans = nwp.node->GetUniqueComp<n2::CompTransform>();
 
 		// record
 		std::vector<n0::SceneNodePtr> nodes;
-		nodes.push_back(node);
-		comb->Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, node, - ctrans.GetTrans().GetPosition()));
+		nodes.push_back(nwp.node);
+		comb->Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, nwp.node, - ctrans.GetTrans().GetPosition()));
 		comb->Add(std::make_shared<RotateNodeAO>(m_sub_mgr, nodes, - ctrans.GetTrans().GetAngle()));
-		comb->Add(std::make_shared<ScaleNodeAO>(m_sub_mgr, node, sm::vec2(1, 1), ctrans.GetTrans().GetScale()));
-		comb->Add(std::make_shared<ShearNodeAO>(m_sub_mgr, node, sm::vec2(0, 0), ctrans.GetTrans().GetShear()));
+		comb->Add(std::make_shared<ScaleNodeAO>(m_sub_mgr, nwp.node, sm::vec2(1, 1), ctrans.GetTrans().GetScale()));
+		comb->Add(std::make_shared<ShearNodeAO>(m_sub_mgr, nwp.node, sm::vec2(0, 0), ctrans.GetTrans().GetShear()));
 
-		ctrans.SetPosition(*node, sm::vec2(0, 0));
-		ctrans.SetAngle(*node, 0);
-		ctrans.SetShear(*node, sm::vec2(0, 0));
-		ctrans.SetScale(*node, sm::vec2(1, 1));
+		ctrans.SetPosition(*nwp.node, sm::vec2(0, 0));
+		ctrans.SetAngle(*nwp.node, 0);
+		ctrans.SetShear(*nwp.node, sm::vec2(0, 0));
+		ctrans.SetScale(*nwp.node, sm::vec2(1, 1));
 
 		return true;
 	});
@@ -551,10 +551,10 @@ void ArrangeNodeImpl::OnDeleteKeyDown()
 {
 	std::vector<n0::SceneNodePtr> nodes;
 	nodes.reserve(m_selection.Size());
-	m_selection.Traverse([&](const n0::SceneNodePtr& node)->bool 
+	m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool
 	{
-		nodes.push_back(node);
-		ee0::MsgHelper::DeleteNode(m_sub_mgr, node);
+		nodes.push_back(nwp.node);
+		ee0::MsgHelper::DeleteNode(m_sub_mgr, nwp.node);
 		return true;
 	});
 

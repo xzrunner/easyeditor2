@@ -15,7 +15,7 @@ namespace ee2
 TranslateNodeState::TranslateNodeState(pt2::Camera& cam, 
 	                                   ee0::EditRecord& record,
 	                                   ee0::SubjectMgr& sub_mgr,
-		                               const ee0::SelectionSet<n0::SceneNode>& selection, 
+		                               const ee0::SelectionSet<n0::NodeWithPos>& selection, 
 		                               const sm::vec2& first_pos)
 	: m_cam(cam)
 	, m_record(record)
@@ -106,10 +106,10 @@ bool TranslateNodeState::OnDirectionKeyDown(int type)
 
 void TranslateNodeState::Translate(const sm::vec2& offset)
 {
-	m_selection.Traverse([&](const n0::SceneNodePtr& node)->bool
+	m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool
 	{
-		auto& ctrans = node->GetUniqueComp<n2::CompTransform>();
-		ctrans.SetPosition(*node, ctrans.GetTrans().GetPosition() + offset);
+		auto& ctrans = nwp.node->GetUniqueComp<n2::CompTransform>();
+		ctrans.SetPosition(*nwp.node, ctrans.GetTrans().GetPosition() + offset);
 		return true;
 	});
 }

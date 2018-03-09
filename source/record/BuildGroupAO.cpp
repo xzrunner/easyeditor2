@@ -11,7 +11,7 @@
 namespace ee2
 {
 
-BuildGroupAO::BuildGroupAO(ee0::SubjectMgr& sub_mgr, const ee0::SelectionSet<n0::SceneNode>& selection)
+BuildGroupAO::BuildGroupAO(ee0::SubjectMgr& sub_mgr, const ee0::SelectionSet<n0::NodeWithPos>& selection)
 	: m_sub_mgr(sub_mgr)
 	, m_selection(selection)
 {
@@ -37,8 +37,8 @@ void BuildGroupAO::BuildGroup()
 
 	// complex
 	auto& ccomplex = node->AddSharedComp<n2::CompComplex>();
-	m_selection.Traverse([&](const n0::SceneNodePtr& node)->bool {
-		ccomplex.AddChild(node);
+	m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
+		ccomplex.AddChild(nwp.node);
 		return true;
 	});
 

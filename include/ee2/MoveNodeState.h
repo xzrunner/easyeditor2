@@ -4,7 +4,7 @@
 #include <ee0/SelectionSet.h>
 
 #include <SM_Vector.h>
-#include <node0/typedef.h>
+#include <node0/NodeWithPos.h>
 
 #include <vector>
 
@@ -18,7 +18,7 @@ class SpriteSelection;
 class MoveNodeState : public ee0::EditOpState
 {
 public:
-	MoveNodeState(pt2::Camera& cam, ee0::SelectionSet<n0::SceneNode>& selection);
+	MoveNodeState(pt2::Camera& cam, ee0::SelectionSet<n0::NodeWithPos>& selection);
 
 	virtual bool OnMouseMove(int x, int y) override;
 

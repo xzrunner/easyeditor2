@@ -1,10 +1,12 @@
 #pragma once
 
-#include <ee0/SelectionSet.h>
-
 #include "ee2/ArrangeNodeCfg.h"
 #include "ee2/AutoAlign.h"
 #include "ee2/NodeCtrlPoint.h"
+
+#include <ee0/SelectionSet.h>
+
+#include <node0/NodeWithPos.h>
 
 #include <wx/menu.h>
 
@@ -24,7 +26,7 @@ class ArrangeNodeImpl
 {
 public:
 	ArrangeNodeImpl(pt2::Camera& cam, ee0::EditRecord& record, 
-		ee0::SubjectMgr& sub_mgr, ee0::SelectionSet<n0::SceneNode>& selection,
+		ee0::SubjectMgr& sub_mgr, ee0::SelectionSet<n0::NodeWithPos>& selection,
 		ee0::NodeContainer& nodes, const ee0::KeysState& key_state,
 		const ArrangeNodeCfg& cfg = ArrangeNodeCfg());
 	virtual ~ArrangeNodeImpl() = default;
@@ -72,7 +74,7 @@ private:
 	ee0::EditRecord& m_record;
 	ee0::SubjectMgr& m_sub_mgr;
 
-	ee0::SelectionSet<n0::SceneNode>& m_selection;
+	ee0::SelectionSet<n0::NodeWithPos>& m_selection;
 
 	const ee0::KeysState& m_key_state;
 

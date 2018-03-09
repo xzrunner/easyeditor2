@@ -8,15 +8,15 @@
 namespace ee2
 {
 
-MoveNodeState::MoveNodeState(pt2::Camera& cam, ee0::SelectionSet<n0::SceneNode>& selection)
+MoveNodeState::MoveNodeState(pt2::Camera& cam, ee0::SelectionSet<n0::NodeWithPos>& selection)
 	: m_cam(cam)
 {
 	m_center.Set(0, 0);
 	m_nodes.reserve(selection.Size());
-	selection.Traverse([&](const n0::SceneNodePtr& node)->bool 
+	selection.Traverse([&](const n0::NodeWithPos& nwp)->bool
 	{
-		m_nodes.push_back(node);
-		auto& ctrans = node->GetUniqueComp<n2::CompTransform>();
+		m_nodes.push_back(nwp.node);
+		auto& ctrans = nwp.node->GetUniqueComp<n2::CompTransform>();
 		m_center += ctrans.GetTrans().GetPosition();
 		return true;
 	});
