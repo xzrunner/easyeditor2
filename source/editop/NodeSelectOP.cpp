@@ -8,6 +8,7 @@
 #include <ee0/MsgHelper.h>
 
 #include <node0/SceneNode.h>
+#include <node0/CompAsset.h>
 #include <node2/CompComplex.h>
 #include <node2/CompBoundingBox.h>
 #include <node2/CompTransform.h>
@@ -94,31 +95,57 @@ bool NodeSelectOP::OnDraw() const
 		return true;
 	}
 
-	m_stage.GetNodeSelection().Traverse(
-		[](const n0::SceneNodePtr& node)->bool
+	m_stage.GetNodeSelection().Traverse([](const n0::NodeWithPos& nwp)->bool
+	{
+		CU_VEC<sm::vec2> bound;
+		auto& cbb = nwp.node->GetUniqueComp<n2::CompBoundingBox>();
+		cbb.GetBounding(*nwp.node).GetBoundPos(bound);
+
+		sm::Matrix2D world_mt;
+		if (nwp.root && nwp.node_id != 0)
 		{
-			CU_VEC<sm::vec2> bound;
-			auto& cbb = node->GetUniqueComp<n2::CompBoundingBox>();
-			cbb.GetBounding(*node).GetBoundPos(bound);
-
-			// todo
-			sm::Matrix2D world_mt;
-			//auto parent = node->GetParent();
-			//while (parent) {
-			//	auto& ctrans = parent->GetUniqueComp<n2::CompTransform>();
-			//	world_mt = ctrans.GetTrans().GetMatrix() * world_mt;
-			//	parent = parent->GetParent();
-			//}
-			//for (auto& pos : bound) {
-			//	pos = world_mt * pos;
-			//}
-
-			pt2::PrimitiveDraw::SetColor(pt2::Color(255, 0, 0));
-			pt2::PrimitiveDraw::Polyline(nullptr, bound, true);
-
-			return true;
+			size_t curr_id = 0;
+			auto curr_node = nwp.root;
+			auto& ctrans = curr_node->GetUniqueComp<n2::CompTransform>();
+			world_mt = world_mt * ctrans.GetTrans().GetMatrix();
+			while (curr_id != nwp.node_id)
+			{
+				auto& casset = curr_node->GetSharedComp<n0::CompAsset>();
+				GD_ASSERT(nwp.node_id > curr_id && nwp.node_id < curr_id + casset.GetNodeCount(), "err id");
+				curr_id += 1;
+				casset.Traverse([&](const n0::SceneNodePtr& node)->bool
+				{
+					auto& casset = node->GetSharedComp<n0::CompAsset>();
+					if (nwp.node_id == curr_id)
+					{
+						curr_node = node;
+						return false;
+					}
+					else if (nwp.node_id < curr_id + casset.GetNodeCount()) 
+					{
+						curr_node = node;
+						auto& ctrans = curr_node->GetUniqueComp<n2::CompTransform>();
+						world_mt = world_mt * ctrans.GetTrans().GetMatrix();
+						return false;
+					} 
+					else 
+					{
+						curr_id += casset.GetNodeCount();
+						return true;
+					}
+				});
+			}
 		}
-	);
+
+		for (auto& pos : bound) {
+			pos = world_mt * pos;
+		}
+
+		pt2::PrimitiveDraw::SetColor(pt2::Color(255, 0, 0));
+		pt2::PrimitiveDraw::Polyline(nullptr, bound, true);
+
+		return true;
+	});
 
 	if (!m_draw_state_disable) {
 		m_draw_state->OnDraw();
