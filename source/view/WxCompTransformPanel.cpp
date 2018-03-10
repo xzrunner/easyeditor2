@@ -5,6 +5,8 @@
 #include <sm_const.h>
 #include <node0/SceneNode.h>
 #include <node2/CompTransform.h>
+#include <node2/CompNodePatch.h>
+#include <node2/EditOp.h>
 
 #include <wx/sizer.h>
 #include <wx/stattext.h>
@@ -16,11 +18,11 @@ namespace ee2
 WxCompTransformPanel::WxCompTransformPanel(wxWindow* parent, 
 	                                       n2::CompTransform& trans, 
 	                                       ee0::SubjectMgr& sub_mgr,
-	                                       n0::SceneNode& node)
+	                                       const n0::NodeWithPos& nwp)
 	: ee0::WxCompPanel(parent, "Transform")
 	, m_ctrans(trans)
 	, m_sub_mgr(sub_mgr)
-	, m_node(node)
+	, m_nwp(nwp)
 {
 	InitLayout();
 	Expand();
@@ -132,21 +134,33 @@ void WxCompTransformPanel::UpdateTextValue(wxCommandEvent& event)
 		double x;
 		m_pos_x->GetValue().ToDouble(&x);
 		auto& pos = trans.GetPosition();
-		m_ctrans.SetPosition(m_node, sm::vec2(x, pos.y));
+
+//		m_ctrans.SetPosition(*m_nwp.node, sm::vec2(x, pos.y));
+
+		if (m_nwp.root)
+		{
+			auto& cpatch = m_nwp.root->HasUniqueComp<n2::CompNodePatch>() ?
+				m_nwp.root->GetUniqueComp<n2::CompNodePatch>() : 
+				m_nwp.root->AddUniqueComp<n2::CompNodePatch>();
+			auto new_trans = m_ctrans.GetTrans();
+			new_trans.SetPosition(sm::vec2(x, pos.y));
+			std::unique_ptr<n2::EditOp> op = std::make_unique<n2::SetTransformOp>(new_trans.GetMatrix());
+			cpatch.AddUniqueOp(m_nwp.node_id, op);
+		}
 	}
 	else if (event.GetId() == m_pos_y->GetId()) 
 	{
 		double y;
 		m_pos_y->GetValue().ToDouble(&y);
 		auto& pos = trans.GetPosition();
-		m_ctrans.SetPosition(m_node, sm::vec2(pos.x, y));
+		m_ctrans.SetPosition(*m_nwp.node, sm::vec2(pos.x, y));
 	}
 	// angle
 	else if (event.GetId() == m_angle->GetId())
 	{
 		double ang;
 		m_angle->GetValue().ToDouble(&ang);
-		m_ctrans.SetAngle(m_node, ang * SM_DEG_TO_RAD);
+		m_ctrans.SetAngle(*m_nwp.node, ang * SM_DEG_TO_RAD);
 	}
 	// scale
 	else if (event.GetId() == m_scale_x->GetId())
@@ -154,14 +168,14 @@ void WxCompTransformPanel::UpdateTextValue(wxCommandEvent& event)
 		double x;
 		m_scale_x->GetValue().ToDouble(&x);
 		auto& scale = trans.GetScale();
-		m_ctrans.SetScale(m_node, sm::vec2(x, scale.y));
+		m_ctrans.SetScale(*m_nwp.node, sm::vec2(x, scale.y));
 	}
 	else if (event.GetId() == m_scale_y->GetId())
 	{
 		double y;
 		m_scale_y->GetValue().ToDouble(&y);
 		auto& scale = trans.GetScale();
-		m_ctrans.SetScale(m_node, sm::vec2(scale.x, y));
+		m_ctrans.SetScale(*m_nwp.node, sm::vec2(scale.x, y));
 	}
 	// shear
 	else if (event.GetId() == m_shear_x->GetId())
@@ -169,14 +183,14 @@ void WxCompTransformPanel::UpdateTextValue(wxCommandEvent& event)
 		double x;
 		m_shear_x->GetValue().ToDouble(&x);
 		auto& shear = trans.GetShear();
-		m_ctrans.SetShear(m_node, sm::vec2(x, shear.y));
+		m_ctrans.SetShear(*m_nwp.node, sm::vec2(x, shear.y));
 	}
 	else if (event.GetId() == m_shear_y->GetId())
 	{
 		double y;
 		m_shear_y->GetValue().ToDouble(&y);
 		auto& shear = trans.GetShear();
-		m_ctrans.SetShear(m_node, sm::vec2(shear.x, y));
+		m_ctrans.SetShear(*m_nwp.node, sm::vec2(shear.x, y));
 	}
 
 	m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);

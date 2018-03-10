@@ -9,7 +9,9 @@
 #include <painting2/Blackboard.h>
 #include <painting2/RenderContext.h>
 #include <painting2/WindowContext.h>
+#include <node0/SceneNode.h>
 #include <node2/RenderSystem.h>
+#include <node2/CompNodePatch.h>
 
 namespace ee2
 {
@@ -65,8 +67,14 @@ void WxStageCanvas::DrawBackground() const
 
 void WxStageCanvas::DrawNodes() const
 {
-	m_stage->Traverse([&](const n0::SceneNodePtr& node)->bool {
-		n2::RenderSystem::Draw(node, sm::Matrix2D());
+	m_stage->Traverse([&](const n0::SceneNodePtr& node)->bool 
+	{
+		n2::CompNodePatch* patch = nullptr;
+		if (node->HasUniqueComp<n2::CompNodePatch>()) {
+			patch = &node->GetUniqueComp<n2::CompNodePatch>();
+			patch->Rewind();
+		}
+		n2::RenderSystem::Draw(node, sm::Matrix2D(), patch, 0);
 		return true;
 	});
 }
