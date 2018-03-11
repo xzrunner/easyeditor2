@@ -5,7 +5,7 @@
 #include <sm_const.h>
 #include <node0/SceneNode.h>
 #include <node2/CompTransform.h>
-#include <node2/CompNodePatch.h>
+#include <node2/CompUniquePatch.h>
 #include <node2/EditOp.h>
 
 #include <wx/sizer.h>
@@ -139,9 +139,9 @@ void WxCompTransformPanel::UpdateTextValue(wxCommandEvent& event)
 
 		if (m_nwp.root)
 		{
-			auto& cpatch = m_nwp.root->HasUniqueComp<n2::CompNodePatch>() ?
-				m_nwp.root->GetUniqueComp<n2::CompNodePatch>() : 
-				m_nwp.root->AddUniqueComp<n2::CompNodePatch>();
+			auto& cpatch = m_nwp.root->HasUniqueComp<n2::CompUniquePatch>() ?
+				m_nwp.root->GetUniqueComp<n2::CompUniquePatch>() : 
+				m_nwp.root->AddUniqueComp<n2::CompUniquePatch>();
 			auto new_trans = m_ctrans.GetTrans();
 			new_trans.SetPosition(sm::vec2(x, pos.y));
 			std::unique_ptr<n2::EditOp> op = std::make_unique<n2::SetTransformOp>(new_trans.GetMatrix());

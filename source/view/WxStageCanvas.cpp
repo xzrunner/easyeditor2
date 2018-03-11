@@ -11,7 +11,7 @@
 #include <painting2/WindowContext.h>
 #include <node0/SceneNode.h>
 #include <node2/RenderSystem.h>
-#include <node2/CompNodePatch.h>
+#include <node2/CompUniquePatch.h>
 #include <node2/EditOp.h>
 
 namespace ee2
@@ -70,9 +70,9 @@ void WxStageCanvas::DrawNodes() const
 {
 	m_stage->Traverse([&](const n0::SceneNodePtr& node)->bool 
 	{
-		n2::CompNodePatch* patch = nullptr;
-		if (node->HasUniqueComp<n2::CompNodePatch>()) {
-			patch = &node->GetUniqueComp<n2::CompNodePatch>();
+		n2::CompUniquePatch* patch = nullptr;
+		if (node->HasUniqueComp<n2::CompUniquePatch>()) {
+			patch = &node->GetUniqueComp<n2::CompUniquePatch>();
 			patch->Rewind();
 		}
 		n2::RenderSystem::Draw(node, sm::Matrix2D(), patch, 0);
