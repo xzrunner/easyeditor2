@@ -12,6 +12,7 @@
 #include <node0/SceneNode.h>
 #include <node2/RenderSystem.h>
 #include <node2/CompNodePatch.h>
+#include <node2/EditOp.h>
 
 namespace ee2
 {
