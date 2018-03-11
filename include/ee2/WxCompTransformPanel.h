@@ -25,6 +25,9 @@ private:
 
 	void UpdateTextValue(wxCommandEvent& event);
 
+	void UpdateSharedValue(wxCommandEvent& event);
+	void UpdateUniqueValue(wxCommandEvent& event);
+
 private:
 	n2::CompTransform& m_ctrans;
 	ee0::SubjectMgr&   m_sub_mgr;

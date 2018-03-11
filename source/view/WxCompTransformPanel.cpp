@@ -1,6 +1,7 @@
 #include "ee2/WxCompTransformPanel.h"
 
 #include <ee0/SubjectMgr.h>
+#include <ee0/SettingCfg.h>
 
 #include <sm_const.h>
 #include <node0/SceneNode.h>
@@ -126,6 +127,19 @@ void WxCompTransformPanel::InitLayout()
 
 void WxCompTransformPanel::UpdateTextValue(wxCommandEvent& event)
 {
+	switch (ee0::SettingCfg::Instance()->GetEditOpType())
+	{
+	case ee0::EditOpType::EDIT_SHARED:
+		UpdateSharedValue(event);
+		break;
+	case ee0::EditOpType::EDIT_UNIQUE:
+		UpdateUniqueValue(event);
+		break;
+	}
+}
+
+void WxCompTransformPanel::UpdateSharedValue(wxCommandEvent& event)
+{
 	auto& trans = m_ctrans.GetTrans();
 
 	// pos
@@ -134,19 +148,7 @@ void WxCompTransformPanel::UpdateTextValue(wxCommandEvent& event)
 		double x;
 		m_pos_x->GetValue().ToDouble(&x);
 		auto& pos = trans.GetPosition();
-
-//		m_ctrans.SetPosition(*m_nwp.node, sm::vec2(x, pos.y));
-
-		if (m_nwp.root)
-		{
-			auto& cpatch = m_nwp.root->HasUniqueComp<n2::CompUniquePatch>() ?
-				m_nwp.root->GetUniqueComp<n2::CompUniquePatch>() : 
-				m_nwp.root->AddUniqueComp<n2::CompUniquePatch>();
-			auto new_trans = m_ctrans.GetTrans();
-			new_trans.SetPosition(sm::vec2(x, pos.y));
-			std::unique_ptr<n2::EditOp> op = std::make_unique<n2::SetTransformOp>(new_trans.GetMatrix());
-			cpatch.AddUniqueOp(m_nwp.node_id, op);
-		}
+		m_ctrans.SetPosition(*m_nwp.node, sm::vec2(x, pos.y));
 	}
 	else if (event.GetId() == m_pos_y->GetId()) 
 	{
@@ -192,6 +194,77 @@ void WxCompTransformPanel::UpdateTextValue(wxCommandEvent& event)
 		auto& shear = trans.GetShear();
 		m_ctrans.SetShear(*m_nwp.node, sm::vec2(shear.x, y));
 	}
+
+	m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+}
+
+void WxCompTransformPanel::UpdateUniqueValue(wxCommandEvent& event)
+{
+	if (!m_nwp.root) {
+		return;
+	}
+
+	auto& old_trans = m_ctrans.GetTrans();
+	auto new_trans = old_trans;
+
+	// pos
+	if (event.GetId() == m_pos_x->GetId())
+	{
+		double x;
+		m_pos_x->GetValue().ToDouble(&x);
+		auto& pos = old_trans.GetPosition();
+		new_trans.SetPosition(sm::vec2(x, pos.y));
+	}
+	else if (event.GetId() == m_pos_y->GetId())
+	{
+		double y;
+		m_pos_y->GetValue().ToDouble(&y);
+		auto& pos = old_trans.GetPosition();
+		new_trans.SetPosition(sm::vec2(pos.x, y));
+	}
+	// angle
+	else if (event.GetId() == m_angle->GetId())
+	{
+		double ang;
+		m_angle->GetValue().ToDouble(&ang);
+		new_trans.SetAngle(ang * SM_DEG_TO_RAD);
+	}
+	// scale
+	else if (event.GetId() == m_scale_x->GetId())
+	{
+		double x;
+		m_scale_x->GetValue().ToDouble(&x);
+		auto& scale = old_trans.GetScale();
+		new_trans.SetScale(sm::vec2(x, scale.y));
+	}
+	else if (event.GetId() == m_scale_y->GetId())
+	{
+		double y;
+		m_scale_y->GetValue().ToDouble(&y);
+		auto& scale = old_trans.GetScale();
+		new_trans.SetScale(sm::vec2(scale.x, y));
+	}
+	// shear
+	else if (event.GetId() == m_shear_x->GetId())
+	{
+		double x;
+		m_shear_x->GetValue().ToDouble(&x);
+		auto& shear = old_trans.GetShear();
+		new_trans.SetShear(sm::vec2(x, shear.y));
+	}
+	else if (event.GetId() == m_shear_y->GetId())
+	{
+		double y;
+		m_shear_y->GetValue().ToDouble(&y);
+		auto& shear = old_trans.GetShear();
+		new_trans.SetShear(sm::vec2(shear.x, y));
+	}
+
+	auto& cpatch = m_nwp.root->HasUniqueComp<n2::CompUniquePatch>() ?
+		           m_nwp.root->GetUniqueComp<n2::CompUniquePatch>() :
+		           m_nwp.root->AddUniqueComp<n2::CompUniquePatch>();
+	std::unique_ptr<n2::EditOp> op = std::make_unique<n2::SetTransformOp>(new_trans.GetMatrix());
+	cpatch.AddUniqueOp(m_nwp.node_id, op);
 
 	m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
