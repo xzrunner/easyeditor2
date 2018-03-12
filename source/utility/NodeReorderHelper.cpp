@@ -37,6 +37,8 @@ void NodeReorderHelper::UpOneLayer(ee0::SubjectMgr& sub_mgr,
 
 		sub_mgr.NotifyObservers(ee0::MSG_REORDER_SCENE_NODE, vars);
 	}
+
+	sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
 
 void NodeReorderHelper::DownOneLayer(ee0::SubjectMgr& sub_mgr, 
@@ -64,7 +66,8 @@ void NodeReorderHelper::DownOneLayer(ee0::SubjectMgr& sub_mgr,
 
 		return true;
 	});
-}
 
+	sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+}
 
 }
