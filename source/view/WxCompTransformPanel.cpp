@@ -7,6 +7,7 @@
 #include <node0/SceneNode.h>
 #include <node2/CompTransform.h>
 #include <node2/CompUniquePatch.h>
+#include <node2/CompSharedPatch.h>
 #include <node2/EditOp.h>
 
 #include <wx/sizer.h>
@@ -132,6 +133,9 @@ void WxCompTransformPanel::UpdateTextValue(wxCommandEvent& event)
 	case ee0::EditOpType::EDIT_SHARED:
 		UpdateSharedValue(event);
 		break;
+	case ee0::EditOpType::EDIT_SHARED_PATCH:
+		UpdateSharedPatchValue(event);
+		break;
 	case ee0::EditOpType::EDIT_UNIQUE:
 		UpdateUniqueValue(event);
 		break;
@@ -193,6 +197,101 @@ void WxCompTransformPanel::UpdateSharedValue(wxCommandEvent& event)
 		m_shear_y->GetValue().ToDouble(&y);
 		auto& shear = trans.GetShear();
 		m_ctrans.SetShear(*m_nwp.node, sm::vec2(shear.x, y));
+	}
+
+	m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+}
+
+void WxCompTransformPanel::UpdateSharedPatchValue(wxCommandEvent& event)
+{
+	if (!m_nwp.root) {
+		return;
+	}
+
+	auto& trans = m_ctrans.GetTrans();
+	auto& cpatch = m_nwp.root->HasUniqueComp<n2::CompSharedPatch>() ?
+					m_nwp.root->GetUniqueComp<n2::CompSharedPatch>() :
+					m_nwp.root->AddUniqueComp<n2::CompSharedPatch>();
+	// pos
+	if (event.GetId() == m_pos_x->GetId()) 
+	{
+		double x;
+		m_pos_x->GetValue().ToDouble(&x);
+		sm::vec2 new_pos(x, trans.GetPosition().y);
+
+		m_ctrans.SetPosition(*m_nwp.node, new_pos);
+
+		std::unique_ptr<n2::EditOp> op = std::make_unique<n2::SetPositionOp>(new_pos);
+		cpatch.AddEditOp(m_nwp.node_id, op);
+	}
+	else if (event.GetId() == m_pos_y->GetId()) 
+	{
+		double y;
+		m_pos_y->GetValue().ToDouble(&y);
+		sm::vec2 new_pos(trans.GetPosition().x, y);
+
+		m_ctrans.SetPosition(*m_nwp.node, new_pos);
+
+		std::unique_ptr<n2::EditOp> op = std::make_unique<n2::SetPositionOp>(new_pos);
+		cpatch.AddEditOp(m_nwp.node_id, op);
+	}
+	// angle
+	else if (event.GetId() == m_angle->GetId())
+	{
+		double ang;
+		m_angle->GetValue().ToDouble(&ang);
+		float new_angle(ang * SM_DEG_TO_RAD);
+
+		m_ctrans.SetAngle(*m_nwp.node, new_angle);
+
+		std::unique_ptr<n2::EditOp> op = std::make_unique<n2::SetAngleOp>(new_angle);
+		cpatch.AddEditOp(m_nwp.node_id, op);
+	}
+	// scale
+	else if (event.GetId() == m_scale_x->GetId())
+	{
+		double x;
+		m_scale_x->GetValue().ToDouble(&x);
+		sm::vec2 new_scale(x, trans.GetScale().y);
+
+		m_ctrans.SetScale(*m_nwp.node, new_scale);
+
+		std::unique_ptr<n2::EditOp> op = std::make_unique<n2::SetScaleOp>(new_scale);
+		cpatch.AddEditOp(m_nwp.node_id, op);
+	}
+	else if (event.GetId() == m_scale_y->GetId())
+	{
+		double y;
+		m_scale_y->GetValue().ToDouble(&y);
+		sm::vec2 new_scale(trans.GetScale().x, y);
+
+		m_ctrans.SetScale(*m_nwp.node, new_scale);
+
+		std::unique_ptr<n2::EditOp> op = std::make_unique<n2::SetScaleOp>(new_scale);
+		cpatch.AddEditOp(m_nwp.node_id, op);
+	}
+	// shear
+	else if (event.GetId() == m_shear_x->GetId())
+	{
+		double x;
+		m_shear_x->GetValue().ToDouble(&x);
+		sm::vec2 new_shear(x, trans.GetShear().y);
+
+		m_ctrans.SetShear(*m_nwp.node, new_shear);
+
+		std::unique_ptr<n2::EditOp> op = std::make_unique<n2::SetShearOp>(new_shear);
+		cpatch.AddEditOp(m_nwp.node_id, op);
+	}
+	else if (event.GetId() == m_shear_y->GetId())
+	{
+		double y;
+		m_shear_y->GetValue().ToDouble(&y);
+		sm::vec2 new_shear(trans.GetShear().x, y);
+
+		m_ctrans.SetShear(*m_nwp.node, new_shear);
+
+		std::unique_ptr<n2::EditOp> op = std::make_unique<n2::SetShearOp>(new_shear);
+		cpatch.AddEditOp(m_nwp.node_id, op);
 	}
 
 	m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
@@ -263,8 +362,8 @@ void WxCompTransformPanel::UpdateUniqueValue(wxCommandEvent& event)
 	auto& cpatch = m_nwp.root->HasUniqueComp<n2::CompUniquePatch>() ?
 		           m_nwp.root->GetUniqueComp<n2::CompUniquePatch>() :
 		           m_nwp.root->AddUniqueComp<n2::CompUniquePatch>();
-	std::unique_ptr<n2::EditOp> op = std::make_unique<n2::SetTransformOp>(new_trans.GetMatrix());
-	cpatch.AddUniqueOp(m_nwp.node_id, op);
+	std::unique_ptr<n2::EditOp> op = std::make_unique<n2::SetTransformMatOp>(new_trans.GetMatrix());
+	cpatch.AddEditOp(m_nwp.node_id, op);
 
 	m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }

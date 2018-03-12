@@ -26,6 +26,7 @@ private:
 	void UpdateTextValue(wxCommandEvent& event);
 
 	void UpdateSharedValue(wxCommandEvent& event);
+	void UpdateSharedPatchValue(wxCommandEvent& event);
 	void UpdateUniqueValue(wxCommandEvent& event);
 
 private:
