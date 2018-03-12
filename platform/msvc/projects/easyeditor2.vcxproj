@@ -15,6 +15,7 @@
     <ClInclude Include="..\..\..\include\ee2\ArrangeNodeImpl.h" />
     <ClInclude Include="..\..\..\include\ee2\ArrangeNodeOP.h" />
     <ClInclude Include="..\..\..\include\ee2\AutoAlign.h" />
+    <ClInclude Include="..\..\..\include\ee2\BreakUpAO.h" />
     <ClInclude Include="..\..\..\include\ee2\BuildGroupAO.h" />
     <ClInclude Include="..\..\..\include\ee2\CamControlOP.h" />
     <ClInclude Include="..\..\..\include\ee2\CamTranslateState.h" />
@@ -26,10 +27,12 @@
     <ClInclude Include="..\..\..\include\ee2\EditableNodeAO.h" />
     <ClInclude Include="..\..\..\include\ee2\InsertNodeAO.h" />
     <ClInclude Include="..\..\..\include\ee2\MoveNodeState.h" />
+    <ClInclude Include="..\..\..\include\ee2\NodeGroupHelper.h" />
+    <ClInclude Include="..\..\..\include\ee2\NodeReorderHelper.h" />
     <ClInclude Include="..\..\..\include\ee2\NodeSelectOP.h" />
     <ClInclude Include="..\..\..\include\ee2\OffsetNodeAO.h" />
     <ClInclude Include="..\..\..\include\ee2\OffsetNodeState.h" />
-    <ClInclude Include="..\..\..\include\ee2\ReorderNodeAO.h" />
+    <ClInclude Include="..\..\..\include\ee2\DownLayerNodeAO.h" />
     <ClInclude Include="..\..\..\include\ee2\RotateNodeAO.h" />
     <ClInclude Include="..\..\..\include\ee2\RotateNodeState.h" />
     <ClInclude Include="..\..\..\include\ee2\ScaleNodeAO.h" />
@@ -39,6 +42,7 @@
     <ClInclude Include="..\..\..\include\ee2\NodeCtrlPoint.h" />
     <ClInclude Include="..\..\..\include\ee2\TranslateNodeAO.h" />
     <ClInclude Include="..\..\..\include\ee2\TranslateNodeState.h" />
+    <ClInclude Include="..\..\..\include\ee2\UpLayerNodeAO.h" />
     <ClInclude Include="..\..\..\include\ee2\VisibleNodeAO.h" />
     <ClInclude Include="..\..\..\include\ee2\WxCompColComPanel.h" />
     <ClInclude Include="..\..\..\include\ee2\WxCompColMapPanel.h" />
@@ -76,12 +80,16 @@
     <ClCompile Include="..\..\..\source\record\EditableNodeAO.cpp" />
     <ClCompile Include="..\..\..\source\record\InsertNodeAO.cpp" />
     <ClCompile Include="..\..\..\source\record\OffsetNodeAO.cpp" />
-    <ClCompile Include="..\..\..\source\record\ReorderNodeAO.cpp" />
+    <ClCompile Include="..\..\..\source\record\DownLayerNodeAO.cpp" />
     <ClCompile Include="..\..\..\source\record\RotateNodeAO.cpp" />
     <ClCompile Include="..\..\..\source\record\ScaleNodeAO.cpp" />
     <ClCompile Include="..\..\..\source\record\ShearNodeAO.cpp" />
     <ClCompile Include="..\..\..\source\record\TranslateNodeAO.cpp" />
+    <ClCompile Include="..\..\..\source\record\UpLayerNodeAO.cpp" />
     <ClCompile Include="..\..\..\source\record\VisibleNodeAO.cpp" />
+    <ClCompile Include="..\..\..\source\utility\BreakUpAO.cpp" />
+    <ClCompile Include="..\..\..\source\utility\NodeGroupHelper.cpp" />
+    <ClCompile Include="..\..\..\source\utility\NodeReorderHelper.cpp" />
     <ClCompile Include="..\..\..\source\view\WxCompColComPanel.cpp" />
     <ClCompile Include="..\..\..\source\view\WxCompColMapPanel.cpp" />
     <ClCompile Include="..\..\..\source\view\WxCompImagePanel.cpp" />

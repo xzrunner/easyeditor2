@@ -14,6 +14,8 @@
 #include "ee2/ShearNodeAO.h"
 #include "ee2/ScaleNodeAO.h"
 #include "ee2/DeleteNodeAO.h"
+#include "ee2/DownLayerNodeAO.h"
+#include "ee2/UpLayerNodeAO.h"
 
 #include <ee0/KeysState.h>
 #include <ee0/KeyType.h>
@@ -513,6 +515,10 @@ void ArrangeNodeImpl::OnDirectionKeyDown(int type)
 
 void ArrangeNodeImpl::OnSpaceKeyDown()
 {
+	if (m_selection.IsEmpty()) {
+		return;
+	}
+
 	auto comb = std::make_shared<CombineAO>();
 
 	m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool
@@ -549,6 +555,10 @@ void ArrangeNodeImpl::SetRightPopupMenu(wxMenu& menu, int x, int y)
 
 void ArrangeNodeImpl::OnDeleteKeyDown()
 {
+	if (m_selection.IsEmpty()) {
+		return;
+	}
+
 	std::vector<n0::SceneNodePtr> nodes;
 	nodes.reserve(m_selection.Size());
 	m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool
@@ -566,12 +576,18 @@ void ArrangeNodeImpl::OnDeleteKeyDown()
 
 void ArrangeNodeImpl::UpOneLayer()
 {
-	// todo
+	auto ao = std::make_shared<UpLayerNodeAO>(m_sub_mgr, m_selection);
+	ao->Redo();
+	m_record.Add(ao);
+	ee0::MsgHelper::SetEditorDirty(m_sub_mgr, true);
 }
 
 void ArrangeNodeImpl::DownOneLayer()
 {
-	// todo
+	auto ao = std::make_shared<DownLayerNodeAO>(m_sub_mgr, m_selection);
+	ao->Redo();
+	m_record.Add(ao);
+	ee0::MsgHelper::SetEditorDirty(m_sub_mgr, true);
 }
 
 sm::vec2 ArrangeNodeImpl::GetNodeOffset(const n0::SceneNodePtr& node) const
