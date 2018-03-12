@@ -175,7 +175,7 @@ n0::SceneNodePtr NodeSelectOP::QueryByPos(int screen_x, int screen_y) const
 		{
 			return true;
 		}
-	});
+	}, ee0::VariantSet(), true);
 
 	return ret;
 }
