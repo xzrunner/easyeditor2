@@ -2,6 +2,7 @@
 #include "ee2/WxStageCanvas.h"
 #include "ee2/DrawSelectRectState.h"
 #include "ee2/BuildGroupAO.h"
+#include "ee2/BreakUpAO.h"
 
 #include <ee0/CameraHelper.h>
 #include <ee0/WxStagePage.h>
@@ -256,7 +257,10 @@ void NodeSelectOP::BuildGroup()
 
 void NodeSelectOP::BreakUpGroup()
 {
-
+	auto ao = std::make_shared<BreakUpAO>(m_stage.GetSubjectMgr(), m_stage.GetNodeSelection());
+	ao->Redo();
+	m_stage.GetImpl().GetEditRecord().Add(ao);
+	ee0::MsgHelper::SetEditorDirty(m_stage.GetSubjectMgr(), true);
 }
 
 }

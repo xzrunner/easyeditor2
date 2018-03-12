@@ -10,10 +10,11 @@ namespace ee0 { class SubjectMgr; }
 namespace ee2
 {
 
-class BuildGroupAO : public ee0::AtomicOP
+class BreakUpAO : public ee0::AtomicOP
 {
 public:
-	BuildGroupAO(ee0::SubjectMgr& sub_mgr, const ee0::SelectionSet<n0::NodeWithPos>& selection);
+	BreakUpAO(ee0::SubjectMgr& sub_mgr, 
+		const ee0::SelectionSet<n0::NodeWithPos>& selection);
 
 	virtual void Undo() override;
 	virtual void Redo() override;
@@ -23,6 +24,6 @@ private:
 
 	const ee0::SelectionSet<n0::NodeWithPos>& m_selection;
 
-}; // BuildGroupAO
+}; // BreakUpAO
 
 }
