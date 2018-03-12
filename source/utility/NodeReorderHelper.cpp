@@ -2,6 +2,7 @@
 
 #include <ee0/VariantSet.h>
 #include <ee0/SubjectMgr.h>
+#include <ee0/MsgHelper.h>
 
 namespace ee2
 {
@@ -38,6 +39,9 @@ void NodeReorderHelper::UpOneLayer(ee0::SubjectMgr& sub_mgr,
 		sub_mgr.NotifyObservers(ee0::MSG_REORDER_SCENE_NODE, vars);
 	}
 
+	sub_mgr.NotifyObservers(ee0::MSG_NODE_SELECTION_CLEAR);
+	ee0::MsgHelper::InsertNodeSelection(sub_mgr, nodes);
+
 	sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
 
@@ -47,6 +51,14 @@ void NodeReorderHelper::DownOneLayer(ee0::SubjectMgr& sub_mgr,
 	if (selection.IsEmpty()) {
 		return;
 	}
+
+	std::vector<n0::SceneNodePtr> nodes;
+	nodes.reserve(selection.Size());
+	selection.Traverse([&](const n0::NodeWithPos& nwp)->bool
+	{
+		nodes.push_back(nwp.node);
+		return true;
+	});
 
 	selection.Traverse([&](const n0::NodeWithPos& nwp)->bool
 	{
@@ -66,6 +78,9 @@ void NodeReorderHelper::DownOneLayer(ee0::SubjectMgr& sub_mgr,
 
 		return true;
 	});
+
+	sub_mgr.NotifyObservers(ee0::MSG_NODE_SELECTION_CLEAR);
+	ee0::MsgHelper::InsertNodeSelection(sub_mgr, nodes);
 
 	sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
