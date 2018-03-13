@@ -14,11 +14,11 @@ void NodeReorderHelper::UpOneLayer(ee0::SubjectMgr& sub_mgr,
 		return;
 	}
 
-	std::vector<n0::SceneNodePtr> nodes;
+	std::vector<n0::NodeWithPos> nodes;
 	nodes.reserve(selection.Size());
 	selection.Traverse([&](const n0::NodeWithPos& nwp)->bool
 	{
-		nodes.push_back(nwp.node);
+		nodes.push_back(nwp);
 		return true;
 	});
 	
@@ -28,7 +28,7 @@ void NodeReorderHelper::UpOneLayer(ee0::SubjectMgr& sub_mgr,
 
 		ee0::Variant var_node;
 		var_node.m_type = ee0::VT_PVOID;
-		var_node.m_val.pv = &(*itr);
+		var_node.m_val.pv = &itr->node;
 		vars.SetVariant("node", var_node);
 
 		ee0::Variant var_up;
@@ -52,11 +52,11 @@ void NodeReorderHelper::DownOneLayer(ee0::SubjectMgr& sub_mgr,
 		return;
 	}
 
-	std::vector<n0::SceneNodePtr> nodes;
+	std::vector<n0::NodeWithPos> nodes;
 	nodes.reserve(selection.Size());
 	selection.Traverse([&](const n0::NodeWithPos& nwp)->bool
 	{
-		nodes.push_back(nwp.node);
+		nodes.push_back(nwp);
 		return true;
 	});
 
