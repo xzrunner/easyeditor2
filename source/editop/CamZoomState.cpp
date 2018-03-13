@@ -41,7 +41,7 @@ bool CamZoomState::OnMouseWheelRotation(int x, int y, int direction)
 			const float cx = static_cast<float>(x),
 				        cy = static_cast<float>(h - y);
 			auto& cam = dynamic_cast<pt2::OrthoCamera&>(m_cam);
-			cam.Scale(scale, cx, cy, w, h);
+			cam.Scale(scale, static_cast<int>(cx), static_cast<int>(cy), w, h);
 		}
 		break;
 	case pt2::CAM_PSEUDO3D:
