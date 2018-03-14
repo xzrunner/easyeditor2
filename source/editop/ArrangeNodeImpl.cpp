@@ -122,16 +122,16 @@ void ArrangeNodeImpl::OnChar(int keycode)
 {
 	switch (keycode)
 	{
-	case 'a':
+	case 'a': case WXK_LEFT:
 		OnDirectionKeyDown(ee0::KEY_LEFT);
 		break;
-	case 'd':
+	case 'd': case WXK_RIGHT:
 		OnDirectionKeyDown(ee0::KEY_RIGHT);
 		break;
-	case 's':
+	case 's': case WXK_DOWN:
 		OnDirectionKeyDown(ee0::KEY_DOWN);
 		break;
-	case 'w':
+	case 'w': case WXK_UP:
 		OnDirectionKeyDown(ee0::KEY_UP);
 		break;
 	case 'A':
