@@ -12,12 +12,33 @@ BreakUpAO::BreakUpAO(ee0::SubjectMgr& sub_mgr, const ee0::SelectionSet<n0::NodeW
 
 void BreakUpAO::Undo()
 {
-	NodeGroupHelper::BuildGroup(m_sub_mgr, m_selection);
+	// copy, will change selection
+	std::vector<n0::NodeWithPos> nodes;
+	CopyFromSelection(nodes);
+
+	NodeGroupHelper::BuildGroup(m_sub_mgr, nodes);
 }
 
 void BreakUpAO::Redo()
 {
-	NodeGroupHelper::BreakUp(m_sub_mgr, m_selection);
+	// copy, will change selection
+	std::vector<n0::NodeWithPos> nodes;
+	CopyFromSelection(nodes);
+
+	printf("BreakUpAO::Redo count %d\n", nodes.size());
+
+	for (auto& node : nodes) {
+		NodeGroupHelper::BreakUp(m_sub_mgr, node);
+	}
+}
+
+void BreakUpAO::CopyFromSelection(std::vector<n0::NodeWithPos>& nodes) const
+{
+	nodes.reserve(m_selection.Size());
+	m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
+		nodes.push_back(nwp);
+		return true;
+	});
 }
 
 }
