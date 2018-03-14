@@ -112,8 +112,8 @@ bool NodeSelectOP::OnDraw() const
 			while (curr_id != nwp.node_id)
 			{
 				auto& casset = curr_node->GetSharedComp<n0::CompAsset>();
-				curr_id += 1;
 				GD_ASSERT(nwp.node_id >= curr_id && nwp.node_id < curr_id + casset.GetNodeCount(), "err id");
+				curr_id += 1;
 				casset.Traverse([&](const n0::SceneNodePtr& node)->bool
 				{
 					auto& casset = node->GetSharedComp<n0::CompAsset>();
