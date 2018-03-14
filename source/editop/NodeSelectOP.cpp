@@ -9,7 +9,7 @@
 #include <ee0/MsgHelper.h>
 
 #include <node0/SceneNode.h>
-#include <node0/SceneTree.h>
+#include <node0/SceneTreeHelper.h>
 #include <node2/CompComplex.h>
 #include <node2/CompBoundingBox.h>
 #include <node2/CompTransform.h>
@@ -104,7 +104,7 @@ bool NodeSelectOP::OnDraw() const
 
 		sm::Matrix2D world_mt;
 		std::vector<n0::SceneNodePtr> path;
-		n0::SceneTree::GetPathToRoot(nwp.GetRoot(), nwp.GetNodeID(), path);
+		n0::SceneTreeHelper::GetPathToRoot(nwp.GetRoot(), nwp.GetNodeID(), path);
 		path.pop_back();
 		for (auto& node : path) {
 			auto& ctrans = node->GetUniqueComp<n2::CompTransform>();
