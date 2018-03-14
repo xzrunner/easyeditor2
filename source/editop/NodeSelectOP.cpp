@@ -99,12 +99,12 @@ bool NodeSelectOP::OnDraw() const
 	m_stage.GetNodeSelection().Traverse([](const n0::NodeWithPos& nwp)->bool
 	{
 		CU_VEC<sm::vec2> bound;
-		auto& cbb = nwp.node->GetUniqueComp<n2::CompBoundingBox>();
-		cbb.GetBounding(*nwp.node).GetBoundPos(bound);
+		auto& cbb = nwp.GetNode()->GetUniqueComp<n2::CompBoundingBox>();
+		cbb.GetBounding(*nwp.GetNode()).GetBoundPos(bound);
 
 		sm::Matrix2D world_mt;
 		std::vector<n0::SceneNodePtr> path;
-		n0::SceneTree::GetPathToRoot(nwp.root, nwp.node_id, path);
+		n0::SceneTree::GetPathToRoot(nwp.GetRoot(), nwp.GetNodeID(), path);
 		path.pop_back();
 		for (auto& node : path) {
 			auto& ctrans = node->GetUniqueComp<n2::CompTransform>();

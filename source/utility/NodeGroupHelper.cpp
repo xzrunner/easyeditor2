@@ -24,7 +24,7 @@ void NodeGroupHelper::BuildGroup(ee0::SubjectMgr& sub_mgr,
 	// complex
 	auto& ccomplex = node->AddSharedComp<n2::CompComplex>();
 	for (auto& node : nodes) {
-		ccomplex.AddChild(node.node);
+		ccomplex.AddChild(node.GetNode());
 	}
 
 	// aabb
@@ -57,17 +57,17 @@ void NodeGroupHelper::BuildGroup(ee0::SubjectMgr& sub_mgr,
 
 void NodeGroupHelper::BreakUp(ee0::SubjectMgr& sub_mgr, const n0::NodeWithPos& node)
 {
-	if (!node.node->HasSharedComp<n2::CompComplex>()) {
+	if (!node.GetNode()->HasSharedComp<n2::CompComplex>()) {
 		return;
 	}
 
-	auto& ccomplex = node.node->GetSharedComp<n2::CompComplex>();
+	auto& ccomplex = node.GetNode()->GetSharedComp<n2::CompComplex>();
 
 	// children
 	auto children = ccomplex.GetAllChildren();
 
 	// transform
-	auto& psrt = node.node->GetUniqueComp<n2::CompTransform>().GetTrans().GetSRT();
+	auto& psrt = node.GetNode()->GetUniqueComp<n2::CompTransform>().GetTrans().GetSRT();
 	for (auto& child : children)
 	{
 		auto& ctrans = child->GetUniqueComp<n2::CompTransform>();
@@ -80,7 +80,7 @@ void NodeGroupHelper::BreakUp(ee0::SubjectMgr& sub_mgr, const n0::NodeWithPos& n
 	for (auto& child : children) {
 		ee0::MsgHelper::InsertNode(sub_mgr, child, true);
 	}
-	ee0::MsgHelper::DeleteNode(sub_mgr, node.node);
+	ee0::MsgHelper::DeleteNode(sub_mgr, node.GetNode());
 }
 
 }

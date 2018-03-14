@@ -173,7 +173,7 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 	if (m_selection.Size() == 1)
 	{
 		m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
-			selected = nwp.node;
+			selected = nwp.GetNode();
 			return false;
 		});
 	}
@@ -254,7 +254,7 @@ void ArrangeNodeImpl::OnMouseLeftUp(int x, int y)
 	{
 		std::vector<n0::SceneNodePtr> nodes;
 		m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
-			nodes.push_back(nwp.node);
+			nodes.push_back(nwp.GetNode());
 			return false;
 		});
 		m_align.Align(nodes);
@@ -281,7 +281,7 @@ void ArrangeNodeImpl::OnMouseRightDown(int x, int y)
 	if (m_selection.Size() == 1)
 	{
 		m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
-			selected = nwp.node;
+			selected = nwp.GetNode();
 			return false;
 		});
 	}
@@ -383,7 +383,7 @@ void ArrangeNodeImpl::OnDraw(float cam_scale) const
 	{
 		n0::SceneNodePtr selected = nullptr;
 		m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
-			selected = nwp.node;
+			selected = nwp.GetNode();
 			return false;
 		});
 
@@ -452,7 +452,7 @@ n0::SceneNodePtr ArrangeNodeImpl::QueryEditedNode(const sm::vec2& pos) const
 	if (m_cfg.is_deform_open && m_selection.Size() == 1)
 	{
 		m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
-			selected = nwp.node;
+			selected = nwp.GetNode();
 			return false;
 		});
 	}
@@ -523,20 +523,21 @@ void ArrangeNodeImpl::OnSpaceKeyDown()
 
 	m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool
 	{
-		auto& ctrans = nwp.node->GetUniqueComp<n2::CompTransform>();
+		auto& node = nwp.GetNode();
+		auto& ctrans = node->GetUniqueComp<n2::CompTransform>();
 
 		// record
 		std::vector<n0::SceneNodePtr> nodes;
-		nodes.push_back(nwp.node);
-		comb->Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, nwp.node, - ctrans.GetTrans().GetPosition()));
+		nodes.push_back(node);
+		comb->Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, node, - ctrans.GetTrans().GetPosition()));
 		comb->Add(std::make_shared<RotateNodeAO>(m_sub_mgr, nodes, - ctrans.GetTrans().GetAngle()));
-		comb->Add(std::make_shared<ScaleNodeAO>(m_sub_mgr, nwp.node, sm::vec2(1, 1), ctrans.GetTrans().GetScale()));
-		comb->Add(std::make_shared<ShearNodeAO>(m_sub_mgr, nwp.node, sm::vec2(0, 0), ctrans.GetTrans().GetShear()));
+		comb->Add(std::make_shared<ScaleNodeAO>(m_sub_mgr, node, sm::vec2(1, 1), ctrans.GetTrans().GetScale()));
+		comb->Add(std::make_shared<ShearNodeAO>(m_sub_mgr, node, sm::vec2(0, 0), ctrans.GetTrans().GetShear()));
 
-		ctrans.SetPosition(*nwp.node, sm::vec2(0, 0));
-		ctrans.SetAngle(*nwp.node, 0);
-		ctrans.SetShear(*nwp.node, sm::vec2(0, 0));
-		ctrans.SetScale(*nwp.node, sm::vec2(1, 1));
+		ctrans.SetPosition(*node, sm::vec2(0, 0));
+		ctrans.SetAngle(*node, 0);
+		ctrans.SetShear(*node, sm::vec2(0, 0));
+		ctrans.SetScale(*node, sm::vec2(1, 1));
 
 		return true;
 	});
@@ -563,8 +564,8 @@ void ArrangeNodeImpl::OnDeleteKeyDown()
 	nodes.reserve(m_selection.Size());
 	m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool
 	{
-		nodes.push_back(nwp.node);
-		ee0::MsgHelper::DeleteNode(m_sub_mgr, nwp.node);
+		nodes.push_back(nwp.GetNode());
+		ee0::MsgHelper::DeleteNode(m_sub_mgr, nwp.GetNode());
 		return true;
 	});
 

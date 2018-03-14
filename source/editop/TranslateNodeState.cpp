@@ -108,8 +108,8 @@ void TranslateNodeState::Translate(const sm::vec2& offset)
 {
 	m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool
 	{
-		auto& ctrans = nwp.node->GetUniqueComp<n2::CompTransform>();
-		ctrans.SetPosition(*nwp.node, ctrans.GetTrans().GetPosition() + offset);
+		auto& ctrans = nwp.GetNode()->GetUniqueComp<n2::CompTransform>();
+		ctrans.SetPosition(*nwp.GetNode(), ctrans.GetTrans().GetPosition() + offset);
 		return true;
 	});
 }

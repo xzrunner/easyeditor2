@@ -15,8 +15,8 @@ MoveNodeState::MoveNodeState(pt2::Camera& cam, ee0::SelectionSet<n0::NodeWithPos
 	m_nodes.reserve(selection.Size());
 	selection.Traverse([&](const n0::NodeWithPos& nwp)->bool
 	{
-		m_nodes.push_back(nwp.node);
-		auto& ctrans = nwp.node->GetUniqueComp<n2::CompTransform>();
+		m_nodes.push_back(nwp.GetNode());
+		auto& ctrans = nwp.GetNode()->GetUniqueComp<n2::CompTransform>();
 		m_center += ctrans.GetTrans().GetPosition();
 		return true;
 	});

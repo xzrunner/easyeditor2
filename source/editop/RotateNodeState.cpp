@@ -38,7 +38,7 @@ bool RotateNodeState::OnMouseRelease(int x, int y)
 	std::vector<n0::SceneNodePtr> nodes;
 	nodes.reserve(m_selection.Size());
 	m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
-		nodes.push_back(nwp.node);
+		nodes.push_back(nwp.GetNode());
 		return true;
 	});
 	m_record.Add(std::make_shared<RotateNodeAO>(m_sub_mgr, nodes, m_angle));
@@ -56,10 +56,10 @@ bool RotateNodeState::OnMouseDrag(int x, int y)
 	auto pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
 	m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool
 	{
-		auto& ctrans = nwp.node->GetUniqueComp<n2::CompTransform>();
+		auto& ctrans = nwp.GetNode()->GetUniqueComp<n2::CompTransform>();
 		sm::vec2 center = ctrans.GetTrans().GetPosition() + ctrans.GetTrans().GetOffset();
 		float rot = sm::get_angle_in_direction(center, m_last_pos, pos);
-		ctrans.SetAngle(*nwp.node, ctrans.GetTrans().GetAngle() + rot);
+		ctrans.SetAngle(*nwp.GetNode(), ctrans.GetTrans().GetAngle() + rot);
 
 		m_angle += rot;
 

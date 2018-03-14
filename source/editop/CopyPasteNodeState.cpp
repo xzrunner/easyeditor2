@@ -17,11 +17,7 @@ CopyPasteNodeState::CopyPasteNodeState(pt2::Camera& cam, ee0::SubjectMgr& sub_mg
 	m_nwps.reserve(selection.Size());
 	selection.Traverse([&](const n0::NodeWithPos& nwp)->bool 
 	{
-		n0::NodeWithPos new_nwp;
-		new_nwp.node = nwp.node->Clone();
-		new_nwp.root = nwp.root;
-		new_nwp.node_id = 0;
-		m_nwps.push_back(nwp);
+		m_nwps.push_back(n0::NodeWithPos(nwp.GetNode()->Clone(), nwp.GetRoot(), 0));
 		return true;
 	});
 
@@ -29,7 +25,8 @@ CopyPasteNodeState::CopyPasteNodeState(pt2::Camera& cam, ee0::SubjectMgr& sub_mg
 	for (auto& nwp : m_nwps) 
 	{
 		selection.Add(nwp);
-		ee0::MsgHelper::InsertNode(m_sub_mgr, nwp.node);
+		ee0::MsgHelper::InsertNode(m_sub_mgr, 
+			std::const_pointer_cast<n0::SceneNode>(nwp.GetNode()));
 	}
 }
 
@@ -46,8 +43,8 @@ bool CopyPasteNodeState::OnMouseDrag(int x, int y)
 	sm::vec2 offset = pos - m_last_pos;
 	for (auto& nwp : m_nwps) 
 	{
-		auto& ctrans = nwp.node->GetUniqueComp<n2::CompTransform>();
-		ctrans.SetPosition(*nwp.node, ctrans.GetTrans().GetPosition() + offset);
+		auto& ctrans = nwp.GetNode()->GetUniqueComp<n2::CompTransform>();
+		ctrans.SetPosition(*nwp.GetNode(), ctrans.GetTrans().GetPosition() + offset);
 	}
 	m_last_pos = pos;
 

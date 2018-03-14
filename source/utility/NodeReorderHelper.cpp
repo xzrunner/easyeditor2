@@ -28,7 +28,7 @@ void NodeReorderHelper::UpOneLayer(ee0::SubjectMgr& sub_mgr,
 
 		ee0::Variant var_node;
 		var_node.m_type = ee0::VT_PVOID;
-		var_node.m_val.pv = &itr->node;
+		var_node.m_val.pv = &std::const_pointer_cast<n0::SceneNode>(itr->GetNode());
 		vars.SetVariant("node", var_node);
 
 		ee0::Variant var_up;
@@ -66,7 +66,7 @@ void NodeReorderHelper::DownOneLayer(ee0::SubjectMgr& sub_mgr,
 
 		ee0::Variant var_node;
 		var_node.m_type = ee0::VT_PVOID;
-		var_node.m_val.pv = &std::const_pointer_cast<n0::SceneNode>(nwp.node);
+		var_node.m_val.pv = &std::const_pointer_cast<n0::SceneNode>(nwp.GetNode());
 		vars.SetVariant("node", var_node);
 
 		ee0::Variant var_up;

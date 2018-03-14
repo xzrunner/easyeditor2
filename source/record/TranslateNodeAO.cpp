@@ -17,7 +17,7 @@ TranslateNodeAO::TranslateNodeAO(ee0::SubjectMgr& sub_mgr,
 {
 	m_nodes.reserve(selection.Size());
 	selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
-		m_nodes.push_back(nwp.node);
+		m_nodes.push_back(nwp.GetNode());
 		return true;
 	});
 }
