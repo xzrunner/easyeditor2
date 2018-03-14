@@ -22,7 +22,7 @@ public:
 private:
 	void InitLayout();
 
-	void UpdateTextValue(wxCommandEvent& event);
+	void EnterTextValue(wxCommandEvent& event);
 
 private:
 	n2::CompText&    m_ctext;

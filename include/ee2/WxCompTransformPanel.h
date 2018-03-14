@@ -23,7 +23,7 @@ public:
 private:
 	void InitLayout();
 
-	void UpdateTextValue(wxCommandEvent& event);
+	void EnterTextValue(wxCommandEvent& event);
 
 	void UpdateSharedValue(wxCommandEvent& event);
 	void UpdateSharedPatchValue(wxCommandEvent& event);

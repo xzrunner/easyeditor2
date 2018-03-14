@@ -53,9 +53,9 @@ void WxCompTextPanel::InitLayout()
 		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("Text ")));
 
 		sizer->Add(m_text = new wxTextCtrl(win, wxID_ANY, text.text, 
-			wxDefaultPosition, wxSize(200, 19)));
-		Connect(m_text->GetId(), wxEVT_COMMAND_TEXT_UPDATED, 
-			wxCommandEventHandler(WxCompTextPanel::UpdateTextValue));
+			wxDefaultPosition, wxSize(200, 19), wxTE_PROCESS_ENTER));
+		Connect(m_text->GetId(), wxEVT_COMMAND_TEXT_ENTER, 
+			wxCommandEventHandler(WxCompTextPanel::EnterTextValue));
 
 		pane_sizer->Add(sizer);
 	}
@@ -65,15 +65,15 @@ void WxCompTextPanel::InitLayout()
 
 		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("Width ")));
 		sizer->Add(m_width = new wxTextCtrl(win, wxID_ANY, std::to_string(text.tb.width),
-			wxDefaultPosition, INPUT_SIZE));
-		Connect(m_width->GetId(), wxEVT_COMMAND_TEXT_UPDATED,
-			wxCommandEventHandler(WxCompTextPanel::UpdateTextValue));
+			wxDefaultPosition, INPUT_SIZE, wxTE_PROCESS_ENTER));
+		Connect(m_width->GetId(), wxEVT_COMMAND_TEXT_ENTER,
+			wxCommandEventHandler(WxCompTextPanel::EnterTextValue));
 
 		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("  Height ")));
 		sizer->Add(m_height = new wxTextCtrl(win, wxID_ANY, std::to_string(text.tb.height),
-			wxDefaultPosition, INPUT_SIZE));
-		Connect(m_height->GetId(), wxEVT_COMMAND_TEXT_UPDATED,
-			wxCommandEventHandler(WxCompTextPanel::UpdateTextValue));
+			wxDefaultPosition, INPUT_SIZE, wxTE_PROCESS_ENTER));
+		Connect(m_height->GetId(), wxEVT_COMMAND_TEXT_ENTER,
+			wxCommandEventHandler(WxCompTextPanel::EnterTextValue));
 
 		pane_sizer->Add(sizer);
 	}
@@ -83,15 +83,15 @@ void WxCompTextPanel::InitLayout()
 
 		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("Align Hori")));
 		sizer->Add(m_align_h = new wxTextCtrl(win, wxID_ANY, std::to_string(text.tb.align_hori),
-			wxDefaultPosition, INPUT_SIZE));
-		Connect(m_align_h->GetId(), wxEVT_COMMAND_TEXT_UPDATED,
-			wxCommandEventHandler(WxCompTextPanel::UpdateTextValue));
+			wxDefaultPosition, INPUT_SIZE, wxTE_PROCESS_ENTER));
+		Connect(m_align_h->GetId(), wxEVT_COMMAND_TEXT_ENTER,
+			wxCommandEventHandler(WxCompTextPanel::EnterTextValue));
 
 		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("  Align Vert ")));
 		sizer->Add(m_align_v = new wxTextCtrl(win, wxID_ANY, std::to_string(text.tb.align_vert),
-			wxDefaultPosition, INPUT_SIZE));
-		Connect(m_align_v->GetId(), wxEVT_COMMAND_TEXT_UPDATED,
-			wxCommandEventHandler(WxCompTextPanel::UpdateTextValue));
+			wxDefaultPosition, INPUT_SIZE, wxTE_PROCESS_ENTER));
+		Connect(m_align_v->GetId(), wxEVT_COMMAND_TEXT_ENTER,
+			wxCommandEventHandler(WxCompTextPanel::EnterTextValue));
 
 		pane_sizer->Add(sizer);
 	}
@@ -101,15 +101,15 @@ void WxCompTextPanel::InitLayout()
 
 		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("Space Hori")));
 		sizer->Add(m_space_h = new wxTextCtrl(win, wxID_ANY, std::to_string(text.tb.space_hori),
-			wxDefaultPosition, INPUT_SIZE));
-		Connect(m_space_h->GetId(), wxEVT_COMMAND_TEXT_UPDATED,
-			wxCommandEventHandler(WxCompTextPanel::UpdateTextValue));
+			wxDefaultPosition, INPUT_SIZE, wxTE_PROCESS_ENTER));
+		Connect(m_space_h->GetId(), wxEVT_COMMAND_TEXT_ENTER,
+			wxCommandEventHandler(WxCompTextPanel::EnterTextValue));
 
 		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("  Space Vert ")));
 		sizer->Add(m_space_v = new wxTextCtrl(win, wxID_ANY, std::to_string(text.tb.space_vert),
-			wxDefaultPosition, INPUT_SIZE));
-		Connect(m_space_v->GetId(), wxEVT_COMMAND_TEXT_UPDATED,
-			wxCommandEventHandler(WxCompTextPanel::UpdateTextValue));
+			wxDefaultPosition, INPUT_SIZE, wxTE_PROCESS_ENTER));
+		Connect(m_space_v->GetId(), wxEVT_COMMAND_TEXT_ENTER,
+			wxCommandEventHandler(WxCompTextPanel::EnterTextValue));
 
 		pane_sizer->Add(sizer);
 	}
@@ -126,7 +126,7 @@ void WxCompTextPanel::InitLayout()
 	pane_sizer->SetSizeHints(win);
 }
 
-void WxCompTextPanel::UpdateTextValue(wxCommandEvent& event)
+void WxCompTextPanel::EnterTextValue(wxCommandEvent& event)
 {
 	pt2::Text& text = m_ctext.GetText();
 	auto& tb = text.tb;
