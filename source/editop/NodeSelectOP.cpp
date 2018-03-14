@@ -231,19 +231,6 @@ void NodeSelectOP::QueryByRect(const n0::SceneNodePtr& node, const sm::rect& rec
 	} else if (!contain && bb.IsIntersect(rect)) {
 		result.push_back(node);
 	}
-
-	if (node->HasSharedComp<n2::CompComplex>())
-	{
-		// todo
-		//	auto& mt = node->GetUniqueComp<n2::CompTransform>().GetTransformMat();
-
-		auto& ccomplex = node->GetSharedComp<n2::CompComplex>();
-		auto& children = ccomplex.GetAllChildren();
-		for (auto& child : children) {
-			QueryByRect(child, rect, contain, result);
-		}
-	}
-
 	m_draw_state_disable = !result.empty();
 }
 
