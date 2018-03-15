@@ -50,6 +50,7 @@
     <ClInclude Include="..\..\..\include\ee2\WxCompMaskPanel.h" />
     <ClInclude Include="..\..\..\include\ee2\WxCompMeshPanel.h" />
     <ClInclude Include="..\..\..\include\ee2\WxCompScale9Panel.h" />
+    <ClInclude Include="..\..\..\include\ee2\WxCompScissorPanel.h" />
     <ClInclude Include="..\..\..\include\ee2\WxCompSprite2Panel.h" />
     <ClInclude Include="..\..\..\include\ee2\WxCompTextPanel.h" />
     <ClInclude Include="..\..\..\include\ee2\WxCompTransformPanel.h" />
@@ -96,6 +97,7 @@
     <ClCompile Include="..\..\..\source\view\WxCompMaskPanel.cpp" />
     <ClCompile Include="..\..\..\source\view\WxCompMeshPanel.cpp" />
     <ClCompile Include="..\..\..\source\view\WxCompScale9Panel.cpp" />
+    <ClCompile Include="..\..\..\source\view\WxCompScissorPanel.cpp" />
     <ClCompile Include="..\..\..\source\view\WxCompSprite2Panel.cpp" />
     <ClCompile Include="..\..\..\source\view\WxCompTextPanel.cpp" />
     <ClCompile Include="..\..\..\source\view\WxCompTransformPanel.cpp" />

@@ -25,9 +25,6 @@
     <Filter Include="view\detail\color">
       <UniqueIdentifier>{69313306-4756-4045-abaf-2de0cf350b6a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="view\detail\node">
-      <UniqueIdentifier>{8107ecf2-9dbf-4eea-95ce-abc7c63ece8a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="view\detail\geo">
       <UniqueIdentifier>{3b67399f-8c5d-4f5f-911b-e4cf78e2208f}</UniqueIdentifier>
     </Filter>
@@ -70,6 +67,12 @@
     <Filter Include="record\atomic\arrange\order">
       <UniqueIdentifier>{33e436ed-0e6e-42b2-91bb-4bdb47dce685}</UniqueIdentifier>
     </Filter>
+    <Filter Include="view\detail\asset">
+      <UniqueIdentifier>{8107ecf2-9dbf-4eea-95ce-abc7c63ece8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="view\detail\render">
+      <UniqueIdentifier>{aff2b4a6-990e-4c35-9d4b-bb682214c42b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\ee2\CamControlOP.h">
@@ -94,25 +97,25 @@
       <Filter>view\detail\color</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\ee2\WxCompImagePanel.h">
-      <Filter>view\detail\node</Filter>
+      <Filter>view\detail\asset</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\ee2\WxCompTextPanel.h">
-      <Filter>view\detail\node</Filter>
+      <Filter>view\detail\asset</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\ee2\WxCompTransformPanel.h">
       <Filter>view\detail\geo</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\ee2\WxCompSprite2Panel.h">
-      <Filter>view\detail\node</Filter>
+      <Filter>view\detail\asset</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\ee2\WxCompMaskPanel.h">
-      <Filter>view\detail\node</Filter>
+      <Filter>view\detail\asset</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\ee2\WxCompMeshPanel.h">
-      <Filter>view\detail\node</Filter>
+      <Filter>view\detail\asset</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\ee2\WxCompScale9Panel.h">
-      <Filter>view\detail\node</Filter>
+      <Filter>view\detail\asset</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\ee2\DrawSelectRectState.h">
       <Filter>editop\node\select</Filter>
@@ -204,6 +207,9 @@
     <ClInclude Include="..\..\..\include\ee2\UpLayerNodeAO.h">
       <Filter>record\atomic\arrange\order</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\WxCompScissorPanel.h">
+      <Filter>view\detail\render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\editop\CamControlOP.cpp">
@@ -228,25 +234,25 @@
       <Filter>view\detail\color</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\view\WxCompImagePanel.cpp">
-      <Filter>view\detail\node</Filter>
+      <Filter>view\detail\asset</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\view\WxCompTextPanel.cpp">
-      <Filter>view\detail\node</Filter>
+      <Filter>view\detail\asset</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\view\WxCompTransformPanel.cpp">
       <Filter>view\detail\geo</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\view\WxCompSprite2Panel.cpp">
-      <Filter>view\detail\node</Filter>
+      <Filter>view\detail\asset</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\view\WxCompMaskPanel.cpp">
-      <Filter>view\detail\node</Filter>
+      <Filter>view\detail\asset</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\view\WxCompMeshPanel.cpp">
-      <Filter>view\detail\node</Filter>
+      <Filter>view\detail\asset</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\view\WxCompScale9Panel.cpp">
-      <Filter>view\detail\node</Filter>
+      <Filter>view\detail\asset</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\editop\DrawSelectRectState.cpp">
       <Filter>editop\node\select</Filter>
@@ -337,6 +343,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\record\UpLayerNodeAO.cpp">
       <Filter>record\atomic\arrange\order</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\view\WxCompScissorPanel.cpp">
+      <Filter>view\detail\render</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
