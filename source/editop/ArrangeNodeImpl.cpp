@@ -165,7 +165,7 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 	}
 
 	// copy & paste
-	if (m_key_state.GetKeyState(WXK_ALT)) {
+	if (wxGetKeyState(WXK_ALT)) {
 		m_op_state = std::make_unique<CopyPasteNodeState>(m_cam, m_sub_mgr, m_selection);
 	}
 
