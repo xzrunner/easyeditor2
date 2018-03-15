@@ -70,12 +70,16 @@ void WxStageCanvas::DrawNodes() const
 {
 	m_stage->Traverse([&](const n0::SceneNodePtr& node)->bool 
 	{
-		n2::CompUniquePatch* patch = nullptr;
-		if (node->HasUniqueComp<n2::CompUniquePatch>()) {
-			patch = &node->GetUniqueComp<n2::CompUniquePatch>();
+		n2::RenderParams rp;
+		if (node->HasUniqueComp<n2::CompUniquePatch>()) 
+		{
+			auto patch = &node->GetUniqueComp<n2::CompUniquePatch>();
 			patch->Rewind();
+			rp.SetPatch(patch);
 		}
-		n2::RenderSystem::Draw(node, sm::Matrix2D(), patch, 0);
+
+		n2::RenderSystem::Draw(node, rp);
+
 		return true;
 	});
 }
