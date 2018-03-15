@@ -16,7 +16,7 @@ namespace ee2
 {
 
 OffsetNodeState::OffsetNodeState(pt2::Camera& cam, ee0::EditRecord& record,
-	                             ee0::SubjectMgr& sub_mgr, const n0::SceneNodePtr& node)
+	                             const ee0::SubjectMgrPtr& sub_mgr, const n0::SceneNodePtr& node)
 	: m_cam(cam)
 	, m_record(record)
 	, m_sub_mgr(sub_mgr)
@@ -59,7 +59,7 @@ bool OffsetNodeState::OnMouseRelease(int x, int y)
 
 	// record
 	m_record.Add(std::make_shared<OffsetNodeAO>(m_sub_mgr, m_node, new_offset, m_old_offset));
-	ee0::MsgHelper::SetEditorDirty(m_sub_mgr, true);
+	ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 
 	return false;
 }

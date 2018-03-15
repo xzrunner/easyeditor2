@@ -212,7 +212,7 @@ void NodeSelectOP::BuildGroup()
 	auto ao = std::make_shared<BuildGroupAO>(m_stage.GetSubjectMgr(), m_stage.GetNodeSelection());
 	ao->Redo();
 	m_stage.GetImpl().GetEditRecord().Add(ao);
-	ee0::MsgHelper::SetEditorDirty(m_stage.GetSubjectMgr(), true);
+	ee0::MsgHelper::SetEditorDirty(*m_stage.GetSubjectMgr(), true);
 }
 
 void NodeSelectOP::BreakUpGroup()
@@ -220,7 +220,7 @@ void NodeSelectOP::BreakUpGroup()
 	auto ao = std::make_shared<BreakUpAO>(m_stage.GetSubjectMgr(), m_stage.GetNodeSelection());
 	ao->Redo();
 	m_stage.GetImpl().GetEditRecord().Add(ao);
-	ee0::MsgHelper::SetEditorDirty(m_stage.GetSubjectMgr(), true);
+	ee0::MsgHelper::SetEditorDirty(*m_stage.GetSubjectMgr(), true);
 }
 
 }

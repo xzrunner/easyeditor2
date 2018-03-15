@@ -9,7 +9,7 @@
 namespace ee2
 {
 
-CopyPasteNodeState::CopyPasteNodeState(pt2::Camera& cam, ee0::SubjectMgr& sub_mgr,
+CopyPasteNodeState::CopyPasteNodeState(pt2::Camera& cam, const ee0::SubjectMgrPtr& sub_mgr,
 	                                   ee0::SelectionSet<n0::NodeWithPos>& selection)
 	: m_cam(cam)
 	, m_sub_mgr(sub_mgr)
@@ -25,7 +25,7 @@ CopyPasteNodeState::CopyPasteNodeState(pt2::Camera& cam, ee0::SubjectMgr& sub_mg
 	for (auto& nwp : m_nwps) 
 	{
 		selection.Add(nwp);
-		ee0::MsgHelper::InsertNode(m_sub_mgr, 
+		ee0::MsgHelper::InsertNode(*m_sub_mgr, 
 			std::const_pointer_cast<n0::SceneNode>(nwp.GetNode()));
 	}
 }

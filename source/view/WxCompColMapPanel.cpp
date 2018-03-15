@@ -9,7 +9,7 @@ namespace ee2
 
 WxCompColMapPanel::WxCompColMapPanel(wxWindow* parent, 
 	                                 n2::CompColorMap& col, 
-	                                 ee0::SubjectMgr& sub_mgr)
+	                                 const ee0::SubjectMgrPtr& sub_mgr)
 	: ee0::WxCompPanel(parent, "ColorMap")
 	, m_ccol(col)
 {
@@ -24,7 +24,7 @@ void WxCompColMapPanel::RefreshNodeComp()
 	m_bmap_ctrl->Refresh();
 }
 
-void WxCompColMapPanel::InitLayout(ee0::SubjectMgr& sub_mgr)
+void WxCompColMapPanel::InitLayout(const ee0::SubjectMgrPtr& sub_mgr)
 {
 	wxWindow* win = GetPane();
 

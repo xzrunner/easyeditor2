@@ -9,7 +9,7 @@
 namespace ee2
 {
 
-TranslateNodeAO::TranslateNodeAO(ee0::SubjectMgr& sub_mgr, 
+TranslateNodeAO::TranslateNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
 	                             const ee0::SelectionSet<n0::NodeWithPos>& selection, 
 	                             const sm::vec2& offset)
 	: m_sub_mgr(sub_mgr)
@@ -22,7 +22,7 @@ TranslateNodeAO::TranslateNodeAO(ee0::SubjectMgr& sub_mgr,
 	});
 }
 
-TranslateNodeAO::TranslateNodeAO(ee0::SubjectMgr& sub_mgr, 
+TranslateNodeAO::TranslateNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
 	                             const n0::SceneNodePtr& node, 
 	                             const sm::vec2& offset)
 	: m_sub_mgr(sub_mgr)
@@ -31,7 +31,7 @@ TranslateNodeAO::TranslateNodeAO(ee0::SubjectMgr& sub_mgr,
 	m_nodes.push_back(node);
 }
 
-TranslateNodeAO::TranslateNodeAO(ee0::SubjectMgr& sub_mgr, 
+TranslateNodeAO::TranslateNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
 	                             const std::vector<n0::SceneNodePtr>& nodes,
 	                             const sm::vec2& offset)
 	: m_sub_mgr(sub_mgr)
@@ -46,7 +46,7 @@ void TranslateNodeAO::Undo()
 	{
 		auto& ctrans = node->GetUniqueComp<n2::CompTransform>();
 		ctrans.SetPosition(*node, ctrans.GetTrans().GetPosition() - m_offset);
-		m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+		m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 	}
 }
 
@@ -56,7 +56,7 @@ void TranslateNodeAO::Redo()
 	{
 		auto& ctrans = node->GetUniqueComp<n2::CompTransform>();
 		ctrans.SetPosition(*node, ctrans.GetTrans().GetPosition() + m_offset);
-		m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+		m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 	}
 }
 

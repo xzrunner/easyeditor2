@@ -9,7 +9,7 @@
 namespace ee2
 {
 
-EditableNodeAO::EditableNodeAO(ee0::SubjectMgr& sub_mgr, const std::vector<n0::SceneNodePtr>& nodes)
+EditableNodeAO::EditableNodeAO(const ee0::SubjectMgrPtr& sub_mgr, const std::vector<n0::SceneNodePtr>& nodes)
 	: m_sub_mgr(sub_mgr)
 	, m_nodes(nodes)
 {
@@ -21,7 +21,7 @@ void EditableNodeAO::Undo()
 		auto& ceditor = node->GetUniqueComp<ee0::CompNodeEditor>();
 		ceditor.SetEditable(!ceditor.IsEditable());
 	}
-	m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
 
 void EditableNodeAO::Redo()
@@ -30,7 +30,7 @@ void EditableNodeAO::Redo()
 		auto& ceditor = node->GetUniqueComp<ee0::CompNodeEditor>();
 		ceditor.SetEditable(!ceditor.IsEditable());
 	}
-	m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
 
 }

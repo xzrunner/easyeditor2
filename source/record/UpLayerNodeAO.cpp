@@ -4,7 +4,7 @@
 namespace ee2
 {
 
-UpLayerNodeAO::UpLayerNodeAO(ee0::SubjectMgr& sub_mgr,
+UpLayerNodeAO::UpLayerNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
 	                         const ee0::SelectionSet<n0::NodeWithPos>& selection)
 	: m_sub_mgr(sub_mgr)
 	, m_selection(selection)
@@ -13,12 +13,12 @@ UpLayerNodeAO::UpLayerNodeAO(ee0::SubjectMgr& sub_mgr,
 
 void UpLayerNodeAO::Undo()
 {
-	NodeReorderHelper::DownOneLayer(m_sub_mgr, m_selection);
+	NodeReorderHelper::DownOneLayer(*m_sub_mgr, m_selection);
 }
 
 void UpLayerNodeAO::Redo()
 {
-	NodeReorderHelper::UpOneLayer(m_sub_mgr, m_selection);
+	NodeReorderHelper::UpOneLayer(*m_sub_mgr, m_selection);
 }
 
 }

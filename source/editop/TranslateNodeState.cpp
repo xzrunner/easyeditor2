@@ -14,7 +14,7 @@ namespace ee2
 
 TranslateNodeState::TranslateNodeState(pt2::Camera& cam, 
 	                                   ee0::EditRecord& record,
-	                                   ee0::SubjectMgr& sub_mgr,
+	                                   const ee0::SubjectMgrPtr& sub_mgr,
 		                               const ee0::SelectionSet<n0::NodeWithPos>& selection, 
 		                               const sm::vec2& first_pos)
 	: m_cam(cam)
@@ -48,7 +48,7 @@ bool TranslateNodeState::OnMouseRelease(int x, int y)
 	{
 		sm::vec2 offset = pos - m_first_pos;
 		m_record.Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, m_selection, offset));
-		ee0::MsgHelper::SetEditorDirty(m_sub_mgr, true);
+		ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 	}
 
 	return false;

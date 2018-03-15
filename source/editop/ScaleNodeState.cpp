@@ -14,8 +14,10 @@
 namespace ee2
 {
 
-ScaleNodeState::ScaleNodeState(pt2::Camera& cam, ee0::EditRecord& record,
-	                           ee0::SubjectMgr& sub_mgr, const n0::SceneNodePtr& node,
+ScaleNodeState::ScaleNodeState(pt2::Camera& cam, 
+	                           ee0::EditRecord& record,
+	                           const ee0::SubjectMgrPtr& sub_mgr, 
+	                           const n0::SceneNodePtr& node,
 	                           const NodeCtrlPoint::Node& ctrl_point)
 	: m_cam(cam)
 	, m_record(record)
@@ -39,7 +41,7 @@ bool ScaleNodeState::OnMouseRelease(int x, int y)
 
 	m_record.Add(comb);
 
-	ee0::MsgHelper::SetEditorDirty(m_sub_mgr, true);
+	ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 
 	return false;
 }

@@ -4,7 +4,7 @@
 namespace ee2
 {
 
-BreakUpAO::BreakUpAO(ee0::SubjectMgr& sub_mgr, const ee0::SelectionSet<n0::NodeWithPos>& selection)
+BreakUpAO::BreakUpAO(const ee0::SubjectMgrPtr& sub_mgr, const ee0::SelectionSet<n0::NodeWithPos>& selection)
 	: m_sub_mgr(sub_mgr)
 	, m_selection(selection)
 {
@@ -16,7 +16,7 @@ void BreakUpAO::Undo()
 	std::vector<n0::NodeWithPos> nodes;
 	CopyFromSelection(nodes);
 
-	NodeGroupHelper::BuildGroup(m_sub_mgr, nodes);
+	NodeGroupHelper::BuildGroup(*m_sub_mgr, nodes);
 }
 
 void BreakUpAO::Redo()
@@ -28,7 +28,7 @@ void BreakUpAO::Redo()
 	printf("BreakUpAO::Redo count %d\n", nodes.size());
 
 	for (auto& node : nodes) {
-		NodeGroupHelper::BreakUp(m_sub_mgr, node);
+		NodeGroupHelper::BreakUp(*m_sub_mgr, node);
 	}
 }
 

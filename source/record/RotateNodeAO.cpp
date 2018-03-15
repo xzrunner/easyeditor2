@@ -10,7 +10,7 @@
 namespace ee2
 {
 
-RotateNodeAO::RotateNodeAO(ee0::SubjectMgr& sub_mgr, 
+RotateNodeAO::RotateNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
 	                       const std::vector<n0::SceneNodePtr>& nodes, 
 	                       const sm::vec2& start, 
 	                       const sm::vec2& end)
@@ -23,7 +23,7 @@ RotateNodeAO::RotateNodeAO(ee0::SubjectMgr& sub_mgr,
 {
 }
 
-RotateNodeAO::RotateNodeAO(ee0::SubjectMgr& sub_mgr, 
+RotateNodeAO::RotateNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
 	                       const std::vector<n0::SceneNodePtr>& nodes, 
 	                       float angle)
 	: m_sub_mgr(sub_mgr)
@@ -52,7 +52,7 @@ void RotateNodeAO::Undo()
 			ctrans.SetAngle(*node, ctrans.GetTrans().GetAngle() - m_angle);
 		}
 	}
-	m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
 
 void RotateNodeAO::Redo()
@@ -74,7 +74,7 @@ void RotateNodeAO::Redo()
 			ctrans.SetAngle(*node, ctrans.GetTrans().GetAngle() + m_angle);
 		}
 	}
-	m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
 
 }

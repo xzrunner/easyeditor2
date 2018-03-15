@@ -13,8 +13,9 @@
 namespace ee2
 {
 
-RotateNodeState::RotateNodeState(pt2::Camera& cam, ee0::EditRecord& record,
-	                             ee0::SubjectMgr& sub_mgr,
+RotateNodeState::RotateNodeState(pt2::Camera& cam, 
+	                             ee0::EditRecord& record,
+	                             const ee0::SubjectMgrPtr& sub_mgr,
 	                             ee0::SelectionSet<n0::NodeWithPos>& selection, 
 	                             const sm::vec2& first_pos)
 	: m_cam(cam)
@@ -42,7 +43,7 @@ bool RotateNodeState::OnMouseRelease(int x, int y)
 		return true;
 	});
 	m_record.Add(std::make_shared<RotateNodeAO>(m_sub_mgr, nodes, m_angle));
-	ee0::MsgHelper::SetEditorDirty(m_sub_mgr, true);
+	ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 
 	return false;
 }

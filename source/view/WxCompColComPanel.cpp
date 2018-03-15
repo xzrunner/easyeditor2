@@ -9,7 +9,7 @@ namespace ee2
 
 WxCompColComPanel::WxCompColComPanel(wxWindow* parent, 
 	                                 n2::CompColorCommon& col, 
-	                                 ee0::SubjectMgr& sub_mgr)
+	                                 const ee0::SubjectMgrPtr& sub_mgr)
 	: ee0::WxCompPanel(parent, "ColorCommon")
 	, m_ccol(col)
 {
@@ -23,7 +23,7 @@ void WxCompColComPanel::RefreshNodeComp()
 	m_add_ctrl->Refresh();
 }
 
-void WxCompColComPanel::InitLayout(ee0::SubjectMgr& sub_mgr)
+void WxCompColComPanel::InitLayout(const ee0::SubjectMgrPtr& sub_mgr)
 {
 	wxWindow* win = GetPane();
 

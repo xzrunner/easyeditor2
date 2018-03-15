@@ -3,6 +3,7 @@
 #include <ee0/WxStagePage.h>
 #include <ee0/color_config.h>
 #include <ee0/EditOP.h>
+#include <ee0/SubjectMgr.h>
 
 #include <painting2/OrthoCamera.h>
 #include <painting2/PrimitiveDraw.h>
@@ -23,7 +24,7 @@ WxStageCanvas::WxStageCanvas(ee0::WxStagePage* stage, const ee0::RenderContext* 
 {
 	m_cam = std::make_shared<pt2::OrthoCamera>();
 
-	stage->GetSubjectMgr().RegisterObserver(ee0::MSG_SET_CANVAS_DIRTY, this);
+	stage->GetSubjectMgr()->RegisterObserver(ee0::MSG_SET_CANVAS_DIRTY, this);
 }
 
 void WxStageCanvas::OnNotify(ee0::MessageID msg, const ee0::VariantSet& variants)

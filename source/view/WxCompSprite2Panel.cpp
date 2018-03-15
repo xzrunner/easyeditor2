@@ -10,11 +10,9 @@
 namespace ee2
 {
 
-WxCompSprite2Panel::WxCompSprite2Panel(wxWindow* parent, n2::CompSprite2& csprite2,
-	                                   ee0::SubjectMgr& sub_mgr)
+WxCompSprite2Panel::WxCompSprite2Panel(wxWindow* parent, n2::CompSprite2& csprite2)
 	: ee0::WxCompPanel(parent, "Sprite2")
 	, m_csprite2(csprite2)
-	, m_sub_mgr(sub_mgr)
 {
 	InitLayout();
 	Expand();

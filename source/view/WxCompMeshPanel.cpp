@@ -16,10 +16,9 @@ namespace ee2
 {
 
 WxCompMeshPanel::WxCompMeshPanel(wxWindow* parent, n2::CompMesh& cmask, 
-	                             ee0::SubjectMgr& sub_mgr, n0::SceneNode& node)
+	                             n0::SceneNode& node)
 	: ee0::WxCompPanel(parent, "Mesh")
 	, m_cmesh(cmask)
-	, m_sub_mgr(sub_mgr)
 	, m_node(node)
 {
 	InitLayout();

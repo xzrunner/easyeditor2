@@ -19,7 +19,7 @@ namespace ee2
 
 WxCompTransformPanel::WxCompTransformPanel(wxWindow* parent, 
 	                                       n2::CompTransform& trans, 
-	                                       ee0::SubjectMgr& sub_mgr,
+	                                       const ee0::SubjectMgrPtr& sub_mgr,
 	                                       const n0::NodeWithPos& nwp)
 	: ee0::WxCompPanel(parent, "Transform")
 	, m_ctrans(trans)
@@ -211,7 +211,7 @@ void WxCompTransformPanel::UpdateSharedValue(wxCommandEvent& event)
 		m_ctrans.SetShear(*m_nwp.GetNode(), sm::vec2(shear.x, y));
 	}
 
-	m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
 
 void WxCompTransformPanel::UpdateSharedPatchValue(wxCommandEvent& event)
@@ -306,7 +306,7 @@ void WxCompTransformPanel::UpdateSharedPatchValue(wxCommandEvent& event)
 		cpatch.AddEditOp(m_nwp.GetNodeID(), op);
 	}
 
-	m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
 
 void WxCompTransformPanel::UpdateUniqueValue(wxCommandEvent& event)
@@ -377,7 +377,7 @@ void WxCompTransformPanel::UpdateUniqueValue(wxCommandEvent& event)
 	std::unique_ptr<n2::EditOp> op = std::make_unique<n2::SetTransformMatOp>(new_trans.GetMatrix());
 	cpatch.AddEditOp(m_nwp.GetNodeID(), op);
 
-	m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
 
 }

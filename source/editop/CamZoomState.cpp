@@ -13,7 +13,7 @@
 namespace ee2
 {
 
-CamZoomState::CamZoomState(pt2::Camera& cam, ee0::SubjectMgr& sub_mgr)
+CamZoomState::CamZoomState(pt2::Camera& cam, const ee0::SubjectMgrPtr& sub_mgr)
 	: m_cam(cam)
 	, m_sub_mgr(sub_mgr)
 {
@@ -54,7 +54,7 @@ bool CamZoomState::OnMouseWheelRotation(int x, int y, int direction)
 		break;
 	}
 
-	m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 
 	return false;
 }

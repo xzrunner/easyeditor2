@@ -8,11 +8,9 @@
 namespace ee2
 {
 
-WxCompScale9Panel::WxCompScale9Panel(wxWindow* parent, n2::CompScale9& cscale9,
-	                                 ee0::SubjectMgr& sub_mgr)
+WxCompScale9Panel::WxCompScale9Panel(wxWindow* parent, n2::CompScale9& cscale9)
 	: ee0::WxCompPanel(parent, "Scale9")
 	, m_cscale9(cscale9)
-	, m_sub_mgr(sub_mgr)
 {
 	InitLayout();
 	Expand();

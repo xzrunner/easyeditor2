@@ -11,7 +11,7 @@
 namespace ee2
 {
 
-CamControlOP::CamControlOP(pt2::Camera& cam, ee0::SubjectMgr& sub_mgr, uint32_t flag)
+CamControlOP::CamControlOP(pt2::Camera& cam, const ee0::SubjectMgrPtr& sub_mgr, uint32_t flag)
 	: m_cam(cam)
 	, m_sub_mgr(sub_mgr)
 	, m_flag(flag)
@@ -33,7 +33,7 @@ bool CamControlOP::OnKeyDown(int key_code)
 		break;
 	case WXK_ESCAPE:
 		m_cam.Reset();
-		m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+		m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 		break;
 	}
 

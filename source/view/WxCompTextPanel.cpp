@@ -10,7 +10,7 @@ namespace ee2
 {
 
 WxCompTextPanel::WxCompTextPanel(wxWindow* parent, n2::CompText& ctext,
-	                         ee0::SubjectMgr& sub_mgr)
+	                             const ee0::SubjectMgrPtr& sub_mgr)
 	: ee0::WxCompPanel(parent, "Text")
 	, m_ctext(ctext)
 	, m_sub_mgr(sub_mgr)
@@ -150,7 +150,7 @@ void WxCompTextPanel::EnterTextValue(wxCommandEvent& event)
 		tb.space_vert = std::stof(m_space_v->GetValue().ToStdString());
 	}
 
-	m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
 
 }

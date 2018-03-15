@@ -9,7 +9,7 @@
 namespace ee2
 {
 
-DrawSelectRectState::DrawSelectRectState(pt2::Camera& cam, ee0::SubjectMgr& sub_mgr)
+DrawSelectRectState::DrawSelectRectState(pt2::Camera& cam, const ee0::SubjectMgrPtr& sub_mgr)
 	: m_cam(cam)
 	, m_sub_mgr(sub_mgr)
 {
@@ -29,7 +29,7 @@ bool DrawSelectRectState::OnMouseRelease(int x, int y)
 	m_first_pos.MakeInvalid();
 	m_last_pos.MakeInvalid();
 
-	m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 
 	return false;
 }
@@ -39,7 +39,7 @@ bool DrawSelectRectState::OnMouseDrag(int x, int y)
 	if (m_first_pos.IsValid())
 	{
 		m_last_pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
-		m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+		m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 	}
 
 	return false;

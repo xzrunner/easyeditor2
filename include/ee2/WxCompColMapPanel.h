@@ -1,10 +1,11 @@
 #pragma once
 
 #include <ee0/WxCompPanel.h>
+#include <ee0/typedef.h>
 
 #include <node2/CompColorMap.h>
 
-namespace ee0 { class SubjectMgr; class WxColorSpinCtrl; }
+namespace ee0 { class WxColorSpinCtrl; }
 
 namespace ee2
 {
@@ -13,12 +14,12 @@ class WxCompColMapPanel : public ee0::WxCompPanel
 {
 public:
 	WxCompColMapPanel(wxWindow* parent, n2::CompColorMap& col,
-		ee0::SubjectMgr& sub_mgr);
+		const ee0::SubjectMgrPtr& sub_mgr);
 
 	virtual void RefreshNodeComp() override;
 
 private:
-	void InitLayout(ee0::SubjectMgr& sub_mgr);
+	void InitLayout(const ee0::SubjectMgrPtr& sub_mgr);
 
 private:
 	n2::CompColorMap& m_ccol;

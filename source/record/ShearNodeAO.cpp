@@ -9,7 +9,7 @@
 namespace ee2
 {
 
-ShearNodeAO::ShearNodeAO(ee0::SubjectMgr& sub_mgr, 
+ShearNodeAO::ShearNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
 	                     const n0::SceneNodePtr& node,
 	                     const sm::vec2& new_shear, 
 	                     const sm::vec2& old_shear)
@@ -24,14 +24,14 @@ void ShearNodeAO::Undo()
 {
 	auto& ctrans = m_node->GetUniqueComp<n2::CompTransform>();
 	ctrans.SetShear(*m_node, m_old_shear);
-	m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
 
 void ShearNodeAO::Redo()
 {
 	auto& ctrans = m_node->GetUniqueComp<n2::CompTransform>();
 	ctrans.SetShear(*m_node, m_new_shear);
-	m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
 
 }

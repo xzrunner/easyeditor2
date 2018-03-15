@@ -12,11 +12,9 @@
 namespace ee2
 {
 
-WxCompImagePanel::WxCompImagePanel(wxWindow* parent, n2::CompImage& cimage, 
-	                               ee0::SubjectMgr& sub_mgr)
+WxCompImagePanel::WxCompImagePanel(wxWindow* parent, n2::CompImage& cimage)
 	: ee0::WxCompPanel(parent, "Image")
 	, m_cimage(cimage)
-	, m_sub_mgr(sub_mgr)
 {
 	InitLayout();
 	Expand();

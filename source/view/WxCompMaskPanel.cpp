@@ -16,10 +16,9 @@ namespace ee2
 {
 
 WxCompMaskPanel::WxCompMaskPanel(wxWindow* parent, n2::CompMask& cmask, 
-	                             ee0::SubjectMgr& sub_mgr, n0::SceneNode& node)
+	                             n0::SceneNode& node)
 	: ee0::WxCompPanel(parent, "Mask")
 	, m_cmask(cmask)
-	, m_sub_mgr(sub_mgr)
 	, m_node(node)
 {
 	InitLayout();

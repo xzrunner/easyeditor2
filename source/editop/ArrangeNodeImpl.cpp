@@ -37,7 +37,7 @@ namespace ee2
 
 ArrangeNodeImpl::ArrangeNodeImpl(pt2::Camera& cam, 
 	                             ee0::EditRecord& record,
-	                             ee0::SubjectMgr& sub_mgr,
+	                             const ee0::SubjectMgrPtr& sub_mgr,
 	                             ee0::SelectionSet<n0::NodeWithPos>& selection, 
 	                             ee0::NodeContainer& nodes,
 	                             const ee0::KeysState& key_state,
@@ -259,7 +259,7 @@ void ArrangeNodeImpl::OnMouseLeftUp(int x, int y)
 		});
 		m_align.Align(nodes);
 
-		m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+		m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 	}
 
 	// todo update panel
@@ -362,7 +362,7 @@ void ArrangeNodeImpl::OnMouseDrag(int x, int y)
 
 	if (m_op_state && m_op_state->OnMouseDrag(x, y))
 	{
-		m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+		m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 		// todo update panel
 		//if (m_property_panel) {
 		//	m_property_panel->EnablePropertyGrid(false);
@@ -505,7 +505,7 @@ void ArrangeNodeImpl::OnDirectionKeyDown(int type)
 	bool dirty = m_op_state->OnDirectionKeyDown(type);
 	if (dirty)
 	{
-		m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+		m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 		// todo update panel
 		//if (m_property_panel) {
 		//	m_property_panel->EnablePropertyGrid(false);
@@ -543,9 +543,9 @@ void ArrangeNodeImpl::OnSpaceKeyDown()
 	});
 
 	m_record.Add(comb);
-	ee0::MsgHelper::SetEditorDirty(m_sub_mgr, true);
+	ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 
-	m_sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
 
 void ArrangeNodeImpl::SetRightPopupMenu(wxMenu& menu, int x, int y)
@@ -565,14 +565,14 @@ void ArrangeNodeImpl::OnDeleteKeyDown()
 	m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool
 	{
 		nodes.push_back(nwp.GetNode());
-		ee0::MsgHelper::DeleteNode(m_sub_mgr, nwp.GetNode());
+		ee0::MsgHelper::DeleteNode(*m_sub_mgr, nwp.GetNode());
 		return true;
 	});
 
 	m_record.Add(std::make_shared<DeleteNodeAO>(m_sub_mgr, nodes));
-	ee0::MsgHelper::SetEditorDirty(m_sub_mgr, true);
+	ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 
-	m_sub_mgr.NotifyObservers(ee0::MSG_NODE_SELECTION_CLEAR);
+	m_sub_mgr->NotifyObservers(ee0::MSG_NODE_SELECTION_CLEAR);
 }
 
 void ArrangeNodeImpl::UpOneLayer()
@@ -580,7 +580,7 @@ void ArrangeNodeImpl::UpOneLayer()
 	auto ao = std::make_shared<UpLayerNodeAO>(m_sub_mgr, m_selection);
 	ao->Redo();
 	m_record.Add(ao);
-	ee0::MsgHelper::SetEditorDirty(m_sub_mgr, true);
+	ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 }
 
 void ArrangeNodeImpl::DownOneLayer()
@@ -588,7 +588,7 @@ void ArrangeNodeImpl::DownOneLayer()
 	auto ao = std::make_shared<DownLayerNodeAO>(m_sub_mgr, m_selection);
 	ao->Redo();
 	m_record.Add(ao);
-	ee0::MsgHelper::SetEditorDirty(m_sub_mgr, true);
+	ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 }
 
 sm::vec2 ArrangeNodeImpl::GetNodeOffset(const n0::SceneNodePtr& node) const
