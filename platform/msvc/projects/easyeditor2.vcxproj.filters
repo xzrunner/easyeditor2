@@ -73,6 +73,9 @@
     <Filter Include="view\detail\render">
       <UniqueIdentifier>{aff2b4a6-990e-4c35-9d4b-bb682214c42b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="view\detail\script">
+      <UniqueIdentifier>{cb8f55fa-b12b-466d-aafa-65c48770f0be}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\ee2\CamControlOP.h">
@@ -210,6 +213,9 @@
     <ClInclude Include="..\..\..\include\ee2\WxCompScissorPanel.h">
       <Filter>view\detail\render</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\WxCompScriptPanel.h">
+      <Filter>view\detail\script</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\editop\CamControlOP.cpp">
@@ -346,6 +352,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\view\WxCompScissorPanel.cpp">
       <Filter>view\detail\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\view\WxCompScriptPanel.cpp">
+      <Filter>view\detail\script</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
