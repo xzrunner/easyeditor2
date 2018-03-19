@@ -1,5 +1,7 @@
 #include "ee2/WxCompScriptPanel.h"
 
+#include <ee0/SubjectMgr.h>
+
 #include <node2/CompScript.h>
 
 #include <wx/sizer.h>
@@ -10,9 +12,13 @@
 namespace ee2
 {
 
-WxCompScriptPanel::WxCompScriptPanel(wxWindow* parent, n2::CompScript& cscript)
+WxCompScriptPanel::WxCompScriptPanel(wxWindow* parent, n2::CompScript& cscript,
+	                                 const ee0::SubjectMgrPtr& sub_mgr,
+	                                 const n0::SceneNodePtr& node)
 	: ee0::WxCompPanel(parent, "Script")
 	, m_cscript(cscript)
+	, m_sub_mgr(sub_mgr)
+	, m_node(node)
 {
 	InitLayout();
 	Expand();
@@ -45,6 +51,14 @@ void WxCompScriptPanel::InitLayout()
 
 		pane_sizer->Add(sizer);
 	}
+	// reload
+	{
+		wxButton* btn = new wxButton(win, wxID_ANY, wxT("reload"), wxDefaultPosition, wxSize(60, 25));
+		Connect(btn->GetId(), wxEVT_COMMAND_BUTTON_CLICKED,
+			wxCommandEventHandler(WxCompScriptPanel::OnReloadScript));
+
+		pane_sizer->Add(btn, 0, wxALIGN_CENTER_HORIZONTAL);
+	}
 	
 	win->SetSizer(pane_sizer);
 	pane_sizer->SetSizeHints(win);
@@ -57,9 +71,14 @@ void WxCompScriptPanel::OnSetFilepath(wxCommandEvent& event)
 	if (dlg.ShowModal() == wxID_OK)
 	{
 		auto& path = dlg.GetPath();
-		m_cscript.SetFilepath(path.ToStdString());
+		m_cscript.SetFilepath(path.ToStdString(), m_node);
 	}
 }
 
+void WxCompScriptPanel::OnReloadScript(wxCommandEvent& event)
+{
+	m_cscript.Reload(m_node);
+	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+}
 
 }

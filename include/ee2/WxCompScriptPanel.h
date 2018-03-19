@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ee0/WxCompPanel.h>
+#include <ee0/typedef.h>
 
 #include <node0/typedef.h>
 
@@ -15,7 +16,7 @@ class WxCompScriptPanel : public ee0::WxCompPanel
 {
 public:
 	WxCompScriptPanel(wxWindow* parent, n2::CompScript& cscript,
-		const n0::SceneNodePtr& node);
+		const ee0::SubjectMgrPtr& sub_mgr, const n0::SceneNodePtr& node);
 
 	virtual void RefreshNodeComp() override;
 
@@ -23,10 +24,12 @@ private:
 	void InitLayout();
 
 	void OnSetFilepath(wxCommandEvent& event);
+	void OnReloadScript(wxCommandEvent& event);
 
 private:
-	n2::CompScript&  m_cscript;
-	n0::SceneNodePtr m_node;
+	n2::CompScript&    m_cscript;
+	ee0::SubjectMgrPtr m_sub_mgr;
+	n0::SceneNodePtr   m_node;
 
 	wxTextCtrl* m_filepath;
 
