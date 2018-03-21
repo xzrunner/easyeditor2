@@ -6,6 +6,10 @@
 #include <node2/CompText.h>
 
 class wxTextCtrl;
+class wxChoice;
+class wxCheckBox;
+class wxColourPickerEvent;
+class wxColourPickerCtrl;
 
 namespace ee2
 {
@@ -21,16 +25,33 @@ public:
 private:
 	void InitLayout();
 
-	void EnterTextValue(wxCommandEvent& event);
+	void CommandEventHandler(wxCommandEvent& event);
+	void SpinEventHandler(wxSpinEvent& event);
+	void ColourPickerEventHandler(wxColourPickerEvent& event);
+
+	static wxColour ToWxColor(const pt2::Color& col);
 
 private:
 	n2::CompText&      m_ctext;
 	ee0::SubjectMgrPtr m_sub_mgr;
 
 	wxTextCtrl* m_text;
-	wxTextCtrl *m_width, *m_height;
+
+	wxSpinCtrl *m_width, *m_height;
+
+	wxChoice*           m_font_type;
+	wxSpinCtrl*         m_font_size;
+	wxColourPickerCtrl* m_font_color;
+
+	wxCheckBox*         m_has_edge;
+	wxTextCtrl*         m_edge_size;
+	wxColourPickerCtrl* m_edge_color;
+
 	wxTextCtrl *m_align_h, *m_align_v;
+
 	wxTextCtrl *m_space_h, *m_space_v;
+
+	wxCheckBox *m_overflow, *m_richtext;
 
 }; // WxCompTextPanel
 
