@@ -1,6 +1,7 @@
 #include "ee2/WxCompTextPanel.h"
 
 #include <ee0/SubjectMgr.h>
+#include <ee0/WxColorGradientDlg.h>
 
 #include <wx/sizer.h>
 #include <wx/stattext.h>
@@ -115,6 +116,10 @@ void WxCompTextPanel::InitLayout()
 		Connect(m_font_color->GetId(), wxEVT_COLOURPICKER_CHANGED,
 			wxColourPickerEventHandler(WxCompTextPanel::ColourPickerEventHandler));
 
+		sizer->Add(m_font_color_gradient = new wxButton(win, wxID_ANY, "gradient..."));
+		Connect(m_font_color_gradient->GetId(), wxEVT_COMMAND_BUTTON_CLICKED,
+			wxCommandEventHandler(WxCompTextPanel::CommandEventHandler));
+
 		pane_sizer->Add(sizer);
 	}
 	// edge
@@ -206,7 +211,14 @@ void WxCompTextPanel::CommandEventHandler(wxCommandEvent& event)
 		text.text = m_text->GetValue().ToStdString();
 	} else if (id == m_font_type->GetId()) {
 		tb.font_type = m_font_type->GetSelection();
-	} else if (id == m_has_edge->GetId()) {
+	}
+	else if (id == m_font_color_gradient->GetId()) {
+		ee0::WxColorGradientDlg dlg(this, m_ctext.GetText().tb.font_color_gradient);
+		if (dlg.ShowModal() == wxID_OK) {
+			tb.font_color_gradient = dlg.GetColor();
+		}
+	}
+	else if (id == m_has_edge->GetId()) {
 		tb.has_edge = m_has_edge->GetValue();
 	} else if (id == m_edge_size->GetId()) {
 		tb.edge_size = std::stof(m_edge_size->GetValue().ToStdString());
