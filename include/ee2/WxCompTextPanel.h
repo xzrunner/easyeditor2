@@ -47,6 +47,7 @@ private:
 	wxCheckBox*         m_has_edge;
 	wxTextCtrl*         m_edge_size;
 	wxColourPickerCtrl* m_edge_color;
+	wxButton*           m_edge_color_gradient;
 
 	wxTextCtrl *m_align_h, *m_align_v;
 

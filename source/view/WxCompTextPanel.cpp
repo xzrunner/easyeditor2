@@ -37,11 +37,15 @@ void WxCompTextPanel::RefreshNodeComp()
 
 	m_font_type->SetSelection(tb.font_type);
 	m_font_size->SetValue(tb.font_size);
-	m_font_color->SetColour(ToWxColor(text.tb.font_color));
+	if (text.tb.font_color.items.size() == 1) {
+		m_font_color->SetColour(ToWxColor(text.tb.font_color.items[0].col));
+	}
 
 	m_has_edge->SetValue(tb.has_edge);
 	m_edge_size->SetValue(std::to_string(tb.edge_size));
-	m_edge_color->SetColour(ToWxColor(text.tb.edge_color));
+	if (text.tb.edge_color.items.size() == 1) {
+		m_edge_color->SetColour(ToWxColor(text.tb.edge_color.items[0].col));
+	}
 
 	m_align_h->SetValue(std::to_string(tb.align_hori));
 	m_align_v->SetValue(std::to_string(tb.align_vert));
@@ -97,51 +101,73 @@ void WxCompTextPanel::InitLayout()
 	// font
 	{
 		wxStaticBox* bounding = new wxStaticBox(win, wxID_ANY, "Font");
-		wxSizer* sizer = new wxStaticBoxSizer(bounding, wxHORIZONTAL);
+		wxSizer* vert_sizer = new wxStaticBoxSizer(bounding, wxVERTICAL);
+		{
+			wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
 
-		wxArrayString choices;
-		choices.Add("todo");
-		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("  Type ")));
-		sizer->Add(m_font_type = new wxChoice(win, wxID_ANY, wxDefaultPosition, wxDefaultSize, choices));
-		Connect(m_font_type->GetId(), wxEVT_COMMAND_CHOICE_SELECTED,
-			wxCommandEventHandler(WxCompTextPanel::CommandEventHandler));
+			wxArrayString choices;
+			choices.Add("todo");
+			sizer->Add(new wxStaticText(win, wxID_ANY, wxT("  Type ")));
+			sizer->Add(m_font_type = new wxChoice(win, wxID_ANY, wxDefaultPosition, wxDefaultSize, choices));
+			Connect(m_font_type->GetId(), wxEVT_COMMAND_CHOICE_SELECTED,
+				wxCommandEventHandler(WxCompTextPanel::CommandEventHandler));
 
-		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("  Size ")));
-		sizer->Add(m_font_size = new wxSpinCtrl(win, wxID_ANY, std::to_string(text.tb.font_size),
-			wxDefaultPosition, INPUT_SIZE, wxSP_ARROW_KEYS, 1, 128, text.tb.font_size));
-		Connect(m_font_size->GetId(), wxEVT_COMMAND_SPINCTRL_UPDATED,
-			wxSpinEventHandler(WxCompTextPanel::SpinEventHandler));
+			sizer->Add(new wxStaticText(win, wxID_ANY, wxT("  Size ")));
+			sizer->Add(m_font_size = new wxSpinCtrl(win, wxID_ANY, std::to_string(text.tb.font_size),
+				wxDefaultPosition, INPUT_SIZE, wxSP_ARROW_KEYS, 1, 128, text.tb.font_size));
+			Connect(m_font_size->GetId(), wxEVT_COMMAND_SPINCTRL_UPDATED,
+				wxSpinEventHandler(WxCompTextPanel::SpinEventHandler));
 
-		sizer->Add(m_font_color = new wxColourPickerCtrl(win, wxID_ANY, ToWxColor(text.tb.font_color)));
-		Connect(m_font_color->GetId(), wxEVT_COLOURPICKER_CHANGED,
-			wxColourPickerEventHandler(WxCompTextPanel::ColourPickerEventHandler));
+			vert_sizer->Add(sizer);
+		}
+		{
+			wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
 
-		sizer->Add(m_font_color_gradient = new wxButton(win, wxID_ANY, "gradient..."));
-		Connect(m_font_color_gradient->GetId(), wxEVT_COMMAND_BUTTON_CLICKED,
-			wxCommandEventHandler(WxCompTextPanel::CommandEventHandler));
+			sizer->Add(m_font_color = new wxColourPickerCtrl(win, wxID_ANY, ToWxColor(text.tb.font_color.items[0].col)));
+			Connect(m_font_color->GetId(), wxEVT_COLOURPICKER_CHANGED,
+				wxColourPickerEventHandler(WxCompTextPanel::ColourPickerEventHandler));
 
-		pane_sizer->Add(sizer);
+			sizer->Add(m_font_color_gradient = new wxButton(win, wxID_ANY, "gradient..."));
+			Connect(m_font_color_gradient->GetId(), wxEVT_COMMAND_BUTTON_CLICKED,
+				wxCommandEventHandler(WxCompTextPanel::CommandEventHandler));
+
+			vert_sizer->Add(sizer);
+		}
+		pane_sizer->Add(vert_sizer);
 	}
 	// edge
 	{
 		wxStaticBox* bounding = new wxStaticBox(win, wxID_ANY, "Edge");
-		wxSizer* sizer = new wxStaticBoxSizer(bounding, wxHORIZONTAL);
+		wxSizer* vert_sizer = new wxStaticBoxSizer(bounding, wxVERTICAL);
+		{
+			wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
 
-		sizer->Add(m_has_edge = new wxCheckBox(win, wxID_ANY, "Edge"));
-		Connect(m_has_edge->GetId(), wxEVT_COMMAND_CHECKBOX_CLICKED,
-			wxCommandEventHandler(WxCompTextPanel::CommandEventHandler));
+			sizer->Add(m_has_edge = new wxCheckBox(win, wxID_ANY, "Edge"));
+			Connect(m_has_edge->GetId(), wxEVT_COMMAND_CHECKBOX_CLICKED,
+				wxCommandEventHandler(WxCompTextPanel::CommandEventHandler));
 
-		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("Size ")));
-		sizer->Add(m_edge_size = new wxTextCtrl(win, wxID_ANY, std::to_string(text.tb.edge_size),
-			wxDefaultPosition, INPUT_SIZE, wxTE_PROCESS_ENTER));
-		Connect(m_edge_size->GetId(), wxEVT_COMMAND_TEXT_ENTER,
-			wxCommandEventHandler(WxCompTextPanel::CommandEventHandler));
+			sizer->Add(new wxStaticText(win, wxID_ANY, wxT("Size ")));
+			sizer->Add(m_edge_size = new wxTextCtrl(win, wxID_ANY, std::to_string(text.tb.edge_size),
+				wxDefaultPosition, INPUT_SIZE, wxTE_PROCESS_ENTER));
+			Connect(m_edge_size->GetId(), wxEVT_COMMAND_TEXT_ENTER,
+				wxCommandEventHandler(WxCompTextPanel::CommandEventHandler));
 
-		sizer->Add(m_edge_color = new wxColourPickerCtrl(win, wxID_ANY, ToWxColor(text.tb.edge_color)));
-		Connect(m_edge_color->GetId(), wxEVT_COLOURPICKER_CHANGED,
-			wxColourPickerEventHandler(WxCompTextPanel::ColourPickerEventHandler));
+			vert_sizer->Add(sizer);
+		}
+		{
+			wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
 
-		pane_sizer->Add(sizer);
+			sizer->Add(m_edge_color = new wxColourPickerCtrl(win, wxID_ANY, ToWxColor(text.tb.edge_color.items[0].col)));
+			Connect(m_edge_color->GetId(), wxEVT_COLOURPICKER_CHANGED,
+				wxColourPickerEventHandler(WxCompTextPanel::ColourPickerEventHandler));
+
+			sizer->Add(m_edge_color_gradient = new wxButton(win, wxID_ANY, "gradient..."));
+			Connect(m_edge_color_gradient->GetId(), wxEVT_COMMAND_BUTTON_CLICKED,
+				wxCommandEventHandler(WxCompTextPanel::CommandEventHandler));
+
+			vert_sizer->Add(sizer);
+		}
+		pane_sizer->Add(vert_sizer);
 	}
 	// align
 	{
@@ -211,17 +237,20 @@ void WxCompTextPanel::CommandEventHandler(wxCommandEvent& event)
 		text.text = m_text->GetValue().ToStdString();
 	} else if (id == m_font_type->GetId()) {
 		tb.font_type = m_font_type->GetSelection();
-	}
-	else if (id == m_font_color_gradient->GetId()) {
-		ee0::WxColorGradientDlg dlg(this, m_ctext.GetText().tb.font_color_gradient);
+	} else if (id == m_font_color_gradient->GetId()) {
+		ee0::WxColorGradientDlg dlg(this, m_ctext.GetText().tb.font_color);
 		if (dlg.ShowModal() == wxID_OK) {
-			tb.font_color_gradient = dlg.GetColor();
+			tb.font_color = dlg.GetColor();
 		}
-	}
-	else if (id == m_has_edge->GetId()) {
+	} else if (id == m_has_edge->GetId()) {
 		tb.has_edge = m_has_edge->GetValue();
 	} else if (id == m_edge_size->GetId()) {
 		tb.edge_size = std::stof(m_edge_size->GetValue().ToStdString());
+	}  else if (id == m_edge_color_gradient->GetId()) {
+		ee0::WxColorGradientDlg dlg(this, m_ctext.GetText().tb.edge_color);
+		if (dlg.ShowModal() == wxID_OK) {
+			tb.edge_color = dlg.GetColor();
+		}
 	} else if (id == m_align_h->GetId()) {
 		tb.align_hori = static_cast<pt2::Textbox::HoriAlign>(
 			std::stoi(m_align_h->GetValue().ToStdString()));
@@ -264,12 +293,17 @@ void WxCompTextPanel::ColourPickerEventHandler(wxColourPickerEvent& event)
 	auto& tb = text.tb;
 
 	int id = event.GetId();
-	if (id == m_font_color->GetId()) {
+	if (id == m_font_color->GetId()) 
+	{
 		auto col = m_font_color->GetColour();
-		tb.font_color.FromABGR(col.GetRGBA());
-	} else if (id == m_edge_color->GetId()) {
+		tb.font_color.items.resize(1);
+		tb.font_color.items[0].col.FromABGR(col.GetRGBA());
+	} 
+	else if (id == m_edge_color->GetId()) 
+	{
 		auto col = m_edge_color->GetColour();
-		tb.edge_color.FromABGR(col.GetRGBA());
+		tb.edge_color.items.resize(1);
+		tb.edge_color.items[0].col.FromABGR(col.GetRGBA());
 	}
 }
 
