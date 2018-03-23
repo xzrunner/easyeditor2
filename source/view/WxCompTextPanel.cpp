@@ -114,9 +114,11 @@ void WxCompTextPanel::InitLayout()
 
 			sizer->Add(new wxStaticText(win, wxID_ANY, wxT("  Size ")));
 			sizer->Add(m_font_size = new wxSpinCtrl(win, wxID_ANY, std::to_string(text.tb.font_size),
-				wxDefaultPosition, INPUT_SIZE, wxSP_ARROW_KEYS, 1, 128, text.tb.font_size));
+				wxDefaultPosition, INPUT_SIZE, wxSP_ARROW_KEYS | wxTE_PROCESS_ENTER, 1, 128, text.tb.font_size));
 			Connect(m_font_size->GetId(), wxEVT_COMMAND_SPINCTRL_UPDATED,
 				wxSpinEventHandler(WxCompTextPanel::SpinEventHandler));
+			Connect(m_font_size->GetId(), wxEVT_COMMAND_TEXT_ENTER,
+				wxCommandEventHandler(WxCompTextPanel::CommandEventHandler));
 
 			vert_sizer->Add(sizer);
 		}
@@ -237,6 +239,8 @@ void WxCompTextPanel::CommandEventHandler(wxCommandEvent& event)
 		text.text = m_text->GetValue().ToStdString();
 	} else if (id == m_font_type->GetId()) {
 		tb.font_type = m_font_type->GetSelection();
+	} else if (id == m_font_size->GetId()) {
+		tb.font_size = m_font_size->GetValue();
 	} else if (id == m_font_color_gradient->GetId()) {
 		ee0::WxColorGradientDlg dlg(this, m_ctext.GetText().tb.font_color);
 		if (dlg.ShowModal() == wxID_OK) {
