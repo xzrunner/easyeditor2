@@ -3,6 +3,7 @@
 #include <ee0/CompNodeEditor.h>
 #include <ee0/MsgHelper.h>
 #include <ee0/SubjectMgr.h>
+#include <ee0/MessageID.h>
 
 #include <node0/SceneNode.h>
 #include <node2/CompComplex.h>

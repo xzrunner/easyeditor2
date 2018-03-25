@@ -1,6 +1,7 @@
 #include "ee2/CamTranslateState.h"
 
 #include <ee0/SubjectMgr.h>
+#include <ee0/MessageID.h>
 
 #include <painting2/OrthoCamera.h>
 #include <painting2/Pseudo3DCamera.h>

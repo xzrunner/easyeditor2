@@ -17,7 +17,7 @@ public:
 	WxStageCanvas(ee0::WxStagePage* stage, const ee0::RenderContext* rc = nullptr, 
 		const ee0::WindowContext* wc = nullptr);
 
-	virtual void OnNotify(ee0::MessageID msg, const ee0::VariantSet& variants) override;
+	virtual void OnNotify(uint32_t msg, const ee0::VariantSet& variants) override;
 
 	std::shared_ptr<pt2::Camera>& GetCamera() { return m_cam; }
 	const std::shared_ptr<pt2::Camera>& GetCamera() const { return m_cam; }

@@ -2,6 +2,7 @@
 
 #include <ee0/SubjectMgr.h>
 #include <ee0/SettingCfg.h>
+#include <ee0/MessageID.h>
 
 #include <sm_const.h>
 #include <node0/SceneNode.h>

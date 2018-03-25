@@ -1,6 +1,7 @@
 #include "ee2/DrawSelectRectState.h"
 
 #include <ee0/SubjectMgr.h>
+#include <ee0/MessageID.h>
 #include <ee0/CameraHelper.h>
 #include <ee0/color_config.h>
 

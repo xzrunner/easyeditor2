@@ -2,6 +2,7 @@
 
 #include <ee0/VariantSet.h>
 #include <ee0/SubjectMgr.h>
+#include <ee0/MessageID.h>
 #include <ee0/MsgHelper.h>
 
 namespace ee2

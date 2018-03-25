@@ -21,6 +21,7 @@
 #include <ee0/KeyType.h>
 #include <ee0/CameraHelper.h>
 #include <ee0/SubjectMgr.h>
+#include <ee0/MessageID.h>
 #include <ee0/MsgHelper.h>
 #include <ee0/EditRecord.h>
 

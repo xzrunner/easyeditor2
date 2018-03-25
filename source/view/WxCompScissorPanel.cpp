@@ -1,6 +1,7 @@
 #include "ee2/WxCompScissorPanel.h"
 
 #include <ee0/SubjectMgr.h>
+#include <ee0/MessageID.h>
 
 #include <node2/CompScissor.h>
 
