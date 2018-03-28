@@ -14,6 +14,16 @@
 #include <node2/RenderSystem.h>
 #include <node2/CompUniquePatch.h>
 
+namespace
+{
+
+const uint32_t MESSAGES[] =
+{
+	ee0::MSG_SET_CANVAS_DIRTY,
+};
+
+}
+
 namespace ee2
 {
 
@@ -24,7 +34,16 @@ WxStageCanvas::WxStageCanvas(ee0::WxStagePage* stage, const ee0::RenderContext* 
 {
 	m_cam = std::make_shared<pt2::OrthoCamera>();
 
-	stage->GetSubjectMgr()->RegisterObserver(ee0::MSG_SET_CANVAS_DIRTY, this);
+	for (auto& msg : MESSAGES) {
+		stage->GetSubjectMgr()->RegisterObserver(msg, this);
+	}
+}
+
+WxStageCanvas::~WxStageCanvas()
+{
+	for (auto& msg : MESSAGES) {
+		m_stage->GetSubjectMgr()->UnregisterObserver(msg, this);
+	}
 }
 
 void WxStageCanvas::OnNotify(uint32_t msg, const ee0::VariantSet& variants)
