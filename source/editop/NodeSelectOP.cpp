@@ -134,6 +134,12 @@ n0::SceneNodePtr NodeSelectOP::QueryByPos(int screen_x, int screen_y) const
 	GD_ASSERT(cam, "null cam");
 	auto pos = ee0::CameraHelper::TransPosScreenToProject(*cam, screen_x, screen_y);
 
+	ee0::VariantSet vars;
+	ee0::Variant var;
+	var.m_type = ee0::VT_LONG;
+	var.m_val.l = ee0::WxStagePage::TRAV_QUERY;
+	vars.SetVariant("type", var);
+
 	n0::SceneNodePtr ret = nullptr;
 	m_stage.Traverse([&](const n0::SceneNodePtr& node)->bool
 	{
@@ -148,7 +154,7 @@ n0::SceneNodePtr NodeSelectOP::QueryByPos(int screen_x, int screen_y) const
 		{
 			return true;
 		}
-	}, ee0::VariantSet(), true);
+	}, vars, true);
 
 	return ret;
 }
@@ -162,10 +168,16 @@ void NodeSelectOP::QueryByRect(const sm::ivec2& p0, const sm::ivec2& p1, bool co
 	auto pos1 = ee0::CameraHelper::TransPosScreenToProject(*cam, p1.x, p1.y);
 	sm::rect rect(pos0, pos1);
 
+	ee0::VariantSet vars;
+	ee0::Variant var;
+	var.m_type = ee0::VT_LONG;
+	var.m_val.l = ee0::WxStagePage::TRAV_QUERY;
+	vars.SetVariant("type", var);
+
 	m_stage.Traverse([&](const n0::SceneNodePtr& node)->bool {
 		QueryByRect(node, rect, contain, result);
 		return true;
-	});
+	}, vars);
 }
 
 n0::SceneNodePtr NodeSelectOP::QueryByPos(const n0::SceneNodePtr& node, const sm::vec2& pos) const
