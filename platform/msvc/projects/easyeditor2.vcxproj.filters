@@ -108,9 +108,6 @@
     <ClInclude Include="..\..\..\include\ee2\WxCompTransformPanel.h">
       <Filter>view\detail\geo</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\ee2\WxCompSprite2Panel.h">
-      <Filter>view\detail\asset</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\ee2\WxCompMaskPanel.h">
       <Filter>view\detail\asset</Filter>
     </ClInclude>
@@ -247,9 +244,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\view\WxCompTransformPanel.cpp">
       <Filter>view\detail\geo</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\view\WxCompSprite2Panel.cpp">
-      <Filter>view\detail\asset</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\view\WxCompMaskPanel.cpp">
       <Filter>view\detail\asset</Filter>

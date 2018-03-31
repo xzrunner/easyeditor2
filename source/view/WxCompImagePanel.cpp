@@ -1,8 +1,8 @@
 #include "ee2/WxCompImagePanel.h"
 
-#include <gum/ResPool.h>
-#include <gum/Image.h>
-#include <gum/Texture.h>
+#include <facade/ResPool.h>
+#include <facade/Image.h>
+#include <facade/Texture.h>
 
 #include <wx/sizer.h>
 #include <wx/textctrl.h>
@@ -59,7 +59,7 @@ void WxCompImagePanel::OnSetFilepath(wxCommandEvent& event)
 	if (dlg.ShowModal() == wxID_OK)
 	{
 		auto& path = dlg.GetPath();
-		auto img = gum::ResPool::Instance().Fetch<gum::Image>(path.ToStdString());
+		auto img = facade::ResPool::Instance().Fetch<facade::Image>(path.ToStdString());
 		m_cimage.SetFilepath(path.ToStdString());
 		m_cimage.SetTexture(img->GetTexture());
 	}
