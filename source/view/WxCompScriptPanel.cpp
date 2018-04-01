@@ -72,7 +72,8 @@ void WxCompScriptPanel::OnSetFilepath(wxCommandEvent& event)
 	if (dlg.ShowModal() == wxID_OK)
 	{
 		auto& path = dlg.GetPath();
-		m_cscript.SetFilepath(path.ToStdString(), m_node);
+		m_cscript.SetFilepath(path.ToStdString());
+		m_cscript.Reload(m_node);
 	}
 }
 
