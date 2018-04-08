@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ee0/WxCompPanel.h>
+#include <ee0/GameObj.h>
 
 #include <node2/CompMask.h>
 
@@ -13,7 +14,7 @@ class WxCompMaskPanel : public ee0::WxCompPanel
 {
 public:
 	WxCompMaskPanel(wxWindow* parent, n2::CompMask& cmask,
-		n0::SceneNode& node);
+		n0::SceneNode& obj);
 
 	virtual void RefreshNodeComp() override;
 
@@ -24,11 +25,11 @@ private:
 	void OnSetMaskPath(wxCommandEvent& event);
 
 private:
-	n0::SceneNodePtr CreateNodeFromFile();
+	ee0::GameObj CreateNodeFromFile();
 
 private:
 	n2::CompMask&  m_cmask;
-	n0::SceneNode& m_node;
+	n0::SceneNode& m_obj;
 
 	wxTextCtrl *m_base_path, *m_mask_path;
 

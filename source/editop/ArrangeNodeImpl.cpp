@@ -40,7 +40,7 @@ ArrangeNodeImpl::ArrangeNodeImpl(pt2::Camera& cam,
 	                             ee0::EditRecord& record,
 	                             const ee0::SubjectMgrPtr& sub_mgr,
 	                             ee0::SelectionSet<n0::NodeWithPos>& selection, 
-	                             ee0::NodeContainer& nodes,
+	                             ee0::NodeContainer& objs,
 	                             const ee0::KeysState& key_state,
 	                             const ArrangeNodeCfg& cfg)
 	: m_cam(cam)
@@ -49,7 +49,7 @@ ArrangeNodeImpl::ArrangeNodeImpl(pt2::Camera& cam,
 	, m_selection(selection)
 	, m_key_state(key_state)
 	, m_cfg(cfg)
-	, m_align(nodes)
+	, m_align(objs)
 	, m_ctrl_node_radius(ArrangeNodeCfg::CTRL_NODE_RADIUS)
 //	, m_popup(wnd, stage, sprites_impl, sprites_impl->GetSpriteSelection())
 {
@@ -170,7 +170,7 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 		m_op_state = std::make_unique<CopyPasteNodeState>(m_cam, m_sub_mgr, m_selection);
 	}
 
-	n0::SceneNodePtr selected = nullptr;
+	ee0::GameObj selected = nullptr;
 	if (m_selection.Size() == 1)
 	{
 		m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
@@ -253,12 +253,12 @@ void ArrangeNodeImpl::OnMouseLeftUp(int x, int y)
 		!m_selection.IsEmpty() &&
 		m_left_down_pos != pos)
 	{
-		std::vector<n0::SceneNodePtr> nodes;
+		std::vector<ee0::GameObj> objs;
 		m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
-			nodes.push_back(nwp.GetNode());
+			objs.push_back(nwp.GetNode());
 			return false;
 		});
-		m_align.Align(nodes);
+		m_align.Align(objs);
 
 		m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 	}
@@ -278,7 +278,7 @@ void ArrangeNodeImpl::OnMouseRightDown(int x, int y)
 	sm::vec2 pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
 	m_right_down_pos = pos;
 
-	n0::SceneNodePtr selected = nullptr;
+	ee0::GameObj selected = nullptr;
 	if (m_selection.Size() == 1)
 	{
 		m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
@@ -382,7 +382,7 @@ void ArrangeNodeImpl::OnDraw(float cam_scale) const
 	m_ctrl_node_radius = ArrangeNodeCfg::CTRL_NODE_RADIUS * cam_scale;
 	if ((m_cfg.is_deform_open || m_cfg.is_offset_open) && m_selection.Size() == 1)
 	{
-		n0::SceneNodePtr selected = nullptr;
+		ee0::GameObj selected = nullptr;
 		m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
 			selected = nwp.GetNode();
 			return false;
@@ -447,9 +447,9 @@ void ArrangeNodeImpl::Clear()
 {
 }
 
-n0::SceneNodePtr ArrangeNodeImpl::QueryEditedNode(const sm::vec2& pos) const
+ee0::GameObj ArrangeNodeImpl::QueryEditedNode(const sm::vec2& pos) const
 {
-	n0::SceneNodePtr selected = nullptr;
+	ee0::GameObj selected = nullptr;
 	if (m_cfg.is_deform_open && m_selection.Size() == 1)
 	{
 		m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
@@ -524,21 +524,21 @@ void ArrangeNodeImpl::OnSpaceKeyDown()
 
 	m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool
 	{
-		auto& node = nwp.GetNode();
-		auto& ctrans = node->GetUniqueComp<n2::CompTransform>();
+		auto& obj = nwp.GetNode();
+		auto& ctrans = obj->GetUniqueComp<n2::CompTransform>();
 
 		// record
-		std::vector<n0::SceneNodePtr> nodes;
-		nodes.push_back(node);
-		comb->Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, node, - ctrans.GetTrans().GetPosition()));
-		comb->Add(std::make_shared<RotateNodeAO>(m_sub_mgr, nodes, - ctrans.GetTrans().GetAngle()));
-		comb->Add(std::make_shared<ScaleNodeAO>(m_sub_mgr, node, sm::vec2(1, 1), ctrans.GetTrans().GetScale()));
-		comb->Add(std::make_shared<ShearNodeAO>(m_sub_mgr, node, sm::vec2(0, 0), ctrans.GetTrans().GetShear()));
+		std::vector<ee0::GameObj> objs;
+		objs.push_back(obj);
+		comb->Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, obj, - ctrans.GetTrans().GetPosition()));
+		comb->Add(std::make_shared<RotateNodeAO>(m_sub_mgr, objs, - ctrans.GetTrans().GetAngle()));
+		comb->Add(std::make_shared<ScaleNodeAO>(m_sub_mgr, obj, sm::vec2(1, 1), ctrans.GetTrans().GetScale()));
+		comb->Add(std::make_shared<ShearNodeAO>(m_sub_mgr, obj, sm::vec2(0, 0), ctrans.GetTrans().GetShear()));
 
-		ctrans.SetPosition(*node, sm::vec2(0, 0));
-		ctrans.SetAngle(*node, 0);
-		ctrans.SetShear(*node, sm::vec2(0, 0));
-		ctrans.SetScale(*node, sm::vec2(1, 1));
+		ctrans.SetPosition(*obj, sm::vec2(0, 0));
+		ctrans.SetAngle(*obj, 0);
+		ctrans.SetShear(*obj, sm::vec2(0, 0));
+		ctrans.SetScale(*obj, sm::vec2(1, 1));
 
 		return true;
 	});
@@ -561,16 +561,16 @@ void ArrangeNodeImpl::OnDeleteKeyDown()
 		return;
 	}
 
-	std::vector<n0::SceneNodePtr> nodes;
-	nodes.reserve(m_selection.Size());
+	std::vector<ee0::GameObj> objs;
+	objs.reserve(m_selection.Size());
 	m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool
 	{
-		nodes.push_back(nwp.GetNode());
+		objs.push_back(nwp.GetNode());
 		ee0::MsgHelper::DeleteNode(*m_sub_mgr, nwp.GetNode());
 		return true;
 	});
 
-	m_record.Add(std::make_shared<DeleteNodeAO>(m_sub_mgr, nodes));
+	m_record.Add(std::make_shared<DeleteNodeAO>(m_sub_mgr, objs));
 	ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 
 	m_sub_mgr->NotifyObservers(ee0::MSG_NODE_SELECTION_CLEAR);
@@ -592,9 +592,9 @@ void ArrangeNodeImpl::DownOneLayer()
 	ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 }
 
-sm::vec2 ArrangeNodeImpl::GetNodeOffset(const n0::SceneNodePtr& node) const
+sm::vec2 ArrangeNodeImpl::GetNodeOffset(const ee0::GameObj& obj) const
 {
-	auto& ctrans = node->GetUniqueComp<n2::CompTransform>();
+	auto& ctrans = obj->GetUniqueComp<n2::CompTransform>();
 	sm::vec2 offset = ctrans.GetTrans().GetPosition() + ctrans.GetTrans().GetOffset();
 	return offset;
 }

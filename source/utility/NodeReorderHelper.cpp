@@ -15,22 +15,22 @@ void NodeReorderHelper::UpOneLayer(ee0::SubjectMgr& sub_mgr,
 		return;
 	}
 
-	std::vector<n0::NodeWithPos> nodes;
-	nodes.reserve(selection.Size());
+	std::vector<n0::NodeWithPos> objs;
+	objs.reserve(selection.Size());
 	selection.Traverse([&](const n0::NodeWithPos& nwp)->bool
 	{
-		nodes.push_back(nwp);
+		objs.push_back(nwp);
 		return true;
 	});
 	
-	for (auto& itr = nodes.rbegin(); itr != nodes.rend(); ++itr)
+	for (auto& itr = objs.rbegin(); itr != objs.rend(); ++itr)
 	{
 		ee0::VariantSet vars;
 
-		ee0::Variant var_node;
-		var_node.m_type = ee0::VT_PVOID;
-		var_node.m_val.pv = &std::const_pointer_cast<n0::SceneNode>(itr->GetNode());
-		vars.SetVariant("node", var_node);
+		ee0::Variant var_obj;
+		var_obj.m_type = ee0::VT_PVOID;
+		var_obj.m_val.pv = &std::const_pointer_cast<n0::SceneNode>(itr->GetNode());
+		vars.SetVariant("obj", var_obj);
 
 		ee0::Variant var_up;
 		var_up.m_type = ee0::VT_BOOL;
@@ -41,7 +41,7 @@ void NodeReorderHelper::UpOneLayer(ee0::SubjectMgr& sub_mgr,
 	}
 
 	sub_mgr.NotifyObservers(ee0::MSG_NODE_SELECTION_CLEAR);
-	ee0::MsgHelper::InsertNodeSelection(sub_mgr, nodes);
+	ee0::MsgHelper::InsertNodeSelection(sub_mgr, objs);
 
 	sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
@@ -53,11 +53,11 @@ void NodeReorderHelper::DownOneLayer(ee0::SubjectMgr& sub_mgr,
 		return;
 	}
 
-	std::vector<n0::NodeWithPos> nodes;
-	nodes.reserve(selection.Size());
+	std::vector<n0::NodeWithPos> objs;
+	objs.reserve(selection.Size());
 	selection.Traverse([&](const n0::NodeWithPos& nwp)->bool
 	{
-		nodes.push_back(nwp);
+		objs.push_back(nwp);
 		return true;
 	});
 
@@ -65,10 +65,10 @@ void NodeReorderHelper::DownOneLayer(ee0::SubjectMgr& sub_mgr,
 	{
 		ee0::VariantSet vars;
 
-		ee0::Variant var_node;
-		var_node.m_type = ee0::VT_PVOID;
-		var_node.m_val.pv = &std::const_pointer_cast<n0::SceneNode>(nwp.GetNode());
-		vars.SetVariant("node", var_node);
+		ee0::Variant var_obj;
+		var_obj.m_type = ee0::VT_PVOID;
+		var_obj.m_val.pv = &std::const_pointer_cast<n0::SceneNode>(nwp.GetNode());
+		vars.SetVariant("obj", var_obj);
 
 		ee0::Variant var_up;
 		var_up.m_type = ee0::VT_BOOL;
@@ -81,7 +81,7 @@ void NodeReorderHelper::DownOneLayer(ee0::SubjectMgr& sub_mgr,
 	});
 
 	sub_mgr.NotifyObservers(ee0::MSG_NODE_SELECTION_CLEAR);
-	ee0::MsgHelper::InsertNodeSelection(sub_mgr, nodes);
+	ee0::MsgHelper::InsertNodeSelection(sub_mgr, objs);
 
 	sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }

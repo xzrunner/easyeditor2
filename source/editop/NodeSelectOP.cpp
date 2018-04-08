@@ -103,11 +103,11 @@ bool NodeSelectOP::OnDraw() const
 		cbb.GetBounding(*nwp.GetNode()).GetBoundPos(bound);
 
 		sm::Matrix2D world_mt;
-		std::vector<n0::SceneNodePtr> path;
+		std::vector<ee0::GameObj> path;
 		n0::SceneTreeHelper::GetPathToRoot(nwp.GetRoot(), nwp.GetNodeID(), path);
 		path.pop_back();
-		for (auto& node : path) {
-			auto& ctrans = node->GetUniqueComp<n2::CompTransform>();
+		for (auto& obj : path) {
+			auto& ctrans = obj->GetUniqueComp<n2::CompTransform>();
 			world_mt = world_mt * ctrans.GetTrans().GetMatrix();
 		}
 
@@ -128,7 +128,7 @@ bool NodeSelectOP::OnDraw() const
 	return false;
 }
 
-n0::SceneNodePtr NodeSelectOP::QueryByPos(int screen_x, int screen_y) const
+ee0::GameObj NodeSelectOP::QueryByPos(int screen_x, int screen_y) const
 {
 	auto cam = std::dynamic_pointer_cast<WxStageCanvas>(m_stage.GetImpl().GetCanvas())->GetCamera();
 	GD_ASSERT(cam, "null cam");
@@ -140,10 +140,10 @@ n0::SceneNodePtr NodeSelectOP::QueryByPos(int screen_x, int screen_y) const
 	var.m_val.l = ee0::WxStagePage::TRAV_QUERY;
 	vars.SetVariant("type", var);
 
-	n0::SceneNodePtr ret = nullptr;
-	m_stage.Traverse([&](const n0::SceneNodePtr& node)->bool
+	ee0::GameObj ret = nullptr;
+	m_stage.Traverse([&](const ee0::GameObj& obj)->bool
 	{
-		auto query = QueryByPos(node, pos);
+		auto query = QueryByPos(obj, pos);
 		if (query) 
 		{
 			m_draw_state_disable = true;
@@ -160,7 +160,7 @@ n0::SceneNodePtr NodeSelectOP::QueryByPos(int screen_x, int screen_y) const
 }
 
 void NodeSelectOP::QueryByRect(const sm::ivec2& p0, const sm::ivec2& p1, bool contain, 
-	                           std::vector<n0::SceneNodePtr>& result) const
+	                           std::vector<ee0::GameObj>& result) const
 {
 	auto cam = std::dynamic_pointer_cast<WxStageCanvas>(m_stage.GetImpl().GetCanvas())->GetCamera();
 	GD_ASSERT(cam, "null cam");
@@ -174,25 +174,25 @@ void NodeSelectOP::QueryByRect(const sm::ivec2& p0, const sm::ivec2& p1, bool co
 	var.m_val.l = ee0::WxStagePage::TRAV_QUERY;
 	vars.SetVariant("type", var);
 
-	m_stage.Traverse([&](const n0::SceneNodePtr& node)->bool {
-		QueryByRect(node, rect, contain, result);
+	m_stage.Traverse([&](const ee0::GameObj& obj)->bool {
+		QueryByRect(obj, rect, contain, result);
 		return true;
 	}, vars);
 }
 
-n0::SceneNodePtr NodeSelectOP::QueryByPos(const n0::SceneNodePtr& node, const sm::vec2& pos) const
+ee0::GameObj NodeSelectOP::QueryByPos(const ee0::GameObj& obj, const sm::vec2& pos) const
 {
-	auto& cbb = node->GetUniqueComp<n2::CompBoundingBox>();
-	if (cbb.GetBounding(*node).IsContain(pos)) {
-		return node;
+	auto& cbb = obj->GetUniqueComp<n2::CompBoundingBox>();
+	if (cbb.GetBounding(*obj).IsContain(pos)) {
+		return obj;
 	}
 
-	if (node->HasSharedComp<n2::CompComplex>())
+	if (obj->HasSharedComp<n2::CompComplex>())
 	{
-		auto mt = node->GetUniqueComp<n2::CompTransform>().GetTrans().GetMatrix().Inverted();
+		auto mt = obj->GetUniqueComp<n2::CompTransform>().GetTrans().GetMatrix().Inverted();
 		sm::vec2 child_pos = mt * pos;
 
-		auto& ccomplex = node->GetSharedComp<n2::CompComplex>();
+		auto& ccomplex = obj->GetSharedComp<n2::CompComplex>();
 		auto& children = ccomplex.GetAllChildren();
 		for (auto& child : children) 
 		{
@@ -206,15 +206,15 @@ n0::SceneNodePtr NodeSelectOP::QueryByPos(const n0::SceneNodePtr& node, const sm
 	return nullptr;
 }
 
-void NodeSelectOP::QueryByRect(const n0::SceneNodePtr& node, const sm::rect& rect, 
-	                           bool contain, std::vector<n0::SceneNodePtr>& result) const
+void NodeSelectOP::QueryByRect(const ee0::GameObj& obj, const sm::rect& rect, 
+	                           bool contain, std::vector<ee0::GameObj>& result) const
 {
-	auto& cbb = node->GetUniqueComp<n2::CompBoundingBox>();
-	auto& bb = cbb.GetBounding(*node);
+	auto& cbb = obj->GetUniqueComp<n2::CompBoundingBox>();
+	auto& bb = cbb.GetBounding(*obj);
 	if (contain && sm::is_rect_contain_rect(rect, bb.GetSize())) {
-		result.push_back(node);
+		result.push_back(obj);
 	} else if (!contain && bb.IsIntersect(rect)) {
-		result.push_back(node);
+		result.push_back(obj);
 	}
 	m_draw_state_disable = !result.empty();
 }

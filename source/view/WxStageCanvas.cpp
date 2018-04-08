@@ -93,17 +93,17 @@ void WxStageCanvas::DrawNodes() const
 	var.m_val.l = ee0::WxStagePage::TRAV_DRAW;
 	vars.SetVariant("type", var);
 
-	m_stage->Traverse([&](const n0::SceneNodePtr& node)->bool 
+	m_stage->Traverse([&](const ee0::GameObj& obj)->bool 
 	{
 		n2::RenderParams rp;
-		if (node->HasUniqueComp<n2::CompUniquePatch>()) 
+		if (obj->HasUniqueComp<n2::CompUniquePatch>()) 
 		{
-			auto patch = &node->GetUniqueComp<n2::CompUniquePatch>();
+			auto patch = &obj->GetUniqueComp<n2::CompUniquePatch>();
 			patch->Rewind();
 			rp.SetPatch(patch);
 		}
 
-		n2::RenderSystem::Draw(node, rp);
+		n2::RenderSystem::Draw(obj, rp);
 
 		return true;
 	}, vars);

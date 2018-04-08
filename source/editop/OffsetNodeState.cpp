@@ -16,13 +16,13 @@ namespace ee2
 {
 
 OffsetNodeState::OffsetNodeState(pt2::Camera& cam, ee0::EditRecord& record,
-	                             const ee0::SubjectMgrPtr& sub_mgr, const n0::SceneNodePtr& node)
+	                             const ee0::SubjectMgrPtr& sub_mgr, const ee0::GameObj& obj)
 	: m_cam(cam)
 	, m_record(record)
 	, m_sub_mgr(sub_mgr)
-	, m_node(node)
+	, m_obj(obj)
 {
-	auto& ctrans = node->GetUniqueComp<n2::CompTransform>();
+	auto& ctrans = obj->GetUniqueComp<n2::CompTransform>();
 	m_old_offset = ctrans.GetTrans().GetOffset();
 }
 
@@ -36,9 +36,9 @@ bool OffsetNodeState::OnMouseRelease(int x, int y)
 	float r = ArrangeNodeCfg::CTRL_NODE_RADIUS * s * 2;
 
 	sm::vec2 ctrl_nodes[8];
-	NodeCtrlPoint::GetNodeCtrlPoints(*m_node, ctrl_nodes);
+	NodeCtrlPoint::GetNodeCtrlPoints(*m_obj, ctrl_nodes);
 	sm::vec2 fixed = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
-	auto& ctrans = m_node->GetUniqueComp<n2::CompTransform>();
+	auto& ctrans = m_obj->GetUniqueComp<n2::CompTransform>();
 	auto& pos = ctrans.GetTrans().GetPosition();
 	if (sm::dis_pos_to_pos(fixed, pos) < r)
 	{
@@ -55,10 +55,10 @@ bool OffsetNodeState::OnMouseRelease(int x, int y)
 	}
 
 	sm::vec2 new_offset = sm::rotate_vector(fixed - ctrans.GetTrans().GetCenter(), -ctrans.GetTrans().GetAngle());
-	ctrans.SetOffset(*m_node, new_offset);
+	ctrans.SetOffset(*m_obj, new_offset);
 
 	// record
-	m_record.Add(std::make_shared<OffsetNodeAO>(m_sub_mgr, m_node, new_offset, m_old_offset));
+	m_record.Add(std::make_shared<OffsetNodeAO>(m_sub_mgr, m_obj, new_offset, m_old_offset));
 	ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 
 	return false;
@@ -67,12 +67,12 @@ bool OffsetNodeState::OnMouseRelease(int x, int y)
 bool OffsetNodeState::OnMouseDrag(int x, int y)
 {
 	auto pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
-	auto& ctrans = m_node->GetUniqueComp<n2::CompTransform>();
+	auto& ctrans = m_obj->GetUniqueComp<n2::CompTransform>();
 	sm::vec2 offset = sm::rotate_vector(
 		pos - ctrans.GetTrans().GetCenter(), 
 		-ctrans.GetTrans().GetAngle()
 	);
-	ctrans.SetOffset(*m_node, offset);
+	ctrans.SetOffset(*m_obj, offset);
 	
 	return true;
 }

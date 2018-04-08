@@ -42,7 +42,7 @@ public:
 //	virtual bool IsEmpty() const override;
 
 private:
-	n0::SceneNodePtr SelectByPos(const sm::vec2& pos) const;
+	ee0::GameObj SelectByPos(const sm::vec2& pos) const;
 
 private:
 	pt2::Camera& m_cam;

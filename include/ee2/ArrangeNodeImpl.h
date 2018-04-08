@@ -28,7 +28,7 @@ class ArrangeNodeImpl
 public:
 	ArrangeNodeImpl(pt2::Camera& cam, ee0::EditRecord& record, 
 		const ee0::SubjectMgrPtr& sub_mgr, ee0::SelectionSet<n0::NodeWithPos>& selection,
-		ee0::NodeContainer& nodes, const ee0::KeysState& key_state,
+		ee0::NodeContainer& objs, const ee0::KeysState& key_state,
 		const ArrangeNodeCfg& cfg = ArrangeNodeCfg());
 	virtual ~ArrangeNodeImpl() = default;
 
@@ -49,7 +49,7 @@ public:
 	virtual void Clear();
 
 	// query edited spr, include its extra edit region
-	n0::SceneNodePtr QueryEditedNode(const sm::vec2& pos) const;
+	ee0::GameObj QueryEditedNode(const sm::vec2& pos) const;
 
 	bool IsSelectionEmpty() const;
 
@@ -65,7 +65,7 @@ private:
 	void UpOneLayer();
 	void DownOneLayer();
 
-	sm::vec2 GetNodeOffset(const n0::SceneNodePtr& node) const;
+	sm::vec2 GetNodeOffset(const ee0::GameObj& obj) const;
 
 	bool OnSpriteShortcutKey(int keycode);
 

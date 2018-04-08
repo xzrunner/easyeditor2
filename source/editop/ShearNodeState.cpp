@@ -11,13 +11,13 @@ namespace ee2
 {
 
 ShearNodeState::ShearNodeState(pt2::Camera& cam, 
-	                           const n0::SceneNodePtr& node,
+	                           const ee0::GameObj& obj,
 	                           const NodeCtrlPoint::Node& ctrl_point)
 	: m_cam(cam)
-	, m_node(node)
+	, m_obj(obj)
 	, m_ctrl_point(ctrl_point)
 {
-	auto& ctrans = m_node->GetUniqueComp<n2::CompTransform>();
+	auto& ctrans = m_obj->GetUniqueComp<n2::CompTransform>();
 	m_first_shear = ctrans.GetTrans().GetShear();
 }
 
@@ -35,14 +35,14 @@ bool ShearNodeState::OnMouseDrag(int x, int y)
 
 void ShearNodeState::Shear(const sm::vec2& curr)
 {
-	if (!m_node) {
+	if (!m_obj) {
 		return;
 	}
 
 	// fix pos
 	sm::vec2 pos;
 	sm::vec2 ctrls[8];
-	NodeCtrlPoint::GetNodeCtrlPoints(*m_node, ctrls);
+	NodeCtrlPoint::GetNodeCtrlPoints(*m_obj, ctrls);
 	if (m_ctrl_point.type == NodeCtrlPoint::UP) {
 		sm::get_foot_of_perpendicular(ctrls[NodeCtrlPoint::LEFT_UP], ctrls[NodeCtrlPoint::RIGHT_UP], curr, &pos);
 	} else if (m_ctrl_point.type == NodeCtrlPoint::DOWN) {
@@ -71,7 +71,7 @@ void ShearNodeState::Shear(const sm::vec2& curr)
 	// kx = (pos.y - s*sx*x - ky*c*sy*x - c*sy*y - py) / (s*sx*y)
 	// ky = (pos.x - c*sx*x - kx*c*sx*y + s*sy*y - px) / (-s*sy*x)
 	// ky = (pos.y - s*sx*x - kx*s*sx*y - c*sy*y - py) / (c*sy*x)
-	auto& ctrans = m_node->GetUniqueComp<n2::CompTransform>();
+	auto& ctrans = m_obj->GetUniqueComp<n2::CompTransform>();
 	auto& srt = ctrans.GetTrans().GetSRT();
 	float c = cos(srt.angle), s = sin(srt.angle);
 	float sx = srt.scale.x, sy = srt.scale.y;
@@ -79,7 +79,7 @@ void ShearNodeState::Shear(const sm::vec2& curr)
 	float kx = srt.shear.x,
 		  ky = srt.shear.y;
 
-	auto& cbb = m_node->GetUniqueComp<n2::CompBoundingBox>();
+	auto& cbb = m_obj->GetUniqueComp<n2::CompBoundingBox>();
 	const sm::rect& r = cbb.GetSize();
 //  	pos.x -= px;
 //  	pos.y -= py;
@@ -127,19 +127,19 @@ void ShearNodeState::Shear(const sm::vec2& curr)
 			ky = (pos.y - s*sx*x - kx*s*sx*y - c*sy*y - py) / (c*sy*x);
 	}
 
-	ctrans.SetShear(*m_node, sm::vec2(kx, ky));
+	ctrans.SetShear(*m_obj, sm::vec2(kx, ky));
 }
 
 void ShearNodeState::Shear2(const sm::vec2& curr)
 {
-	if (!m_node) {
+	if (!m_obj) {
 		return;
 	}
 
-	auto& cbb = m_node->GetUniqueComp<n2::CompBoundingBox>();
+	auto& cbb = m_obj->GetUniqueComp<n2::CompBoundingBox>();
 	auto& region = cbb.GetSize();
 
-	auto& ctrans = m_node->GetUniqueComp<n2::CompTransform>();
+	auto& ctrans = m_obj->GetUniqueComp<n2::CompTransform>();
 	auto& srt = ctrans.GetTrans().GetSRT();
 
 	sm::vec2 sz = region.Size();
@@ -150,7 +150,7 @@ void ShearNodeState::Shear2(const sm::vec2& curr)
 	float sx = srt.scale.x,
 		  sy = srt.scale.y;
 	sm::vec2 ctrls[8];
-	NodeCtrlPoint::GetNodeCtrlPoints(*m_node, ctrls);
+	NodeCtrlPoint::GetNodeCtrlPoints(*m_obj, ctrls);
 
 	sm::vec2 center = (ctrls[NodeCtrlPoint::LEFT] + ctrls[NodeCtrlPoint::RIGHT]) * 0.5f;
 
@@ -173,7 +173,7 @@ void ShearNodeState::Shear2(const sm::vec2& curr)
 				kx = -kx;
 			}
 			kx /= sx;
-			ctrans.SetShear(*m_node, sm::vec2(kx, ky));
+			ctrans.SetShear(*m_obj, sm::vec2(kx, ky));
 		}
 		break;
 	case NodeCtrlPoint::LEFT: case NodeCtrlPoint::RIGHT:
@@ -193,7 +193,7 @@ void ShearNodeState::Shear2(const sm::vec2& curr)
 				ky = -ky;
 			}
 			ky /= sy;
-			ctrans.SetShear(*m_node, sm::vec2(kx, ky));
+			ctrans.SetShear(*m_obj, sm::vec2(kx, ky));
 		}
 		break;
 	}

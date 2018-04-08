@@ -9,16 +9,16 @@
 namespace ee2
 {
 
-VisibleNodeAO::VisibleNodeAO(const ee0::SubjectMgrPtr& sub_mgr, const std::vector<n0::SceneNodePtr>& nodes)
+VisibleNodeAO::VisibleNodeAO(const ee0::SubjectMgrPtr& sub_mgr, const std::vector<ee0::GameObj>& objs)
 	: m_sub_mgr(sub_mgr)
-	, m_nodes(nodes)
+	, m_objs(objs)
 {
 }
 
 void VisibleNodeAO::Undo()
 {
-	for (auto& node : m_nodes) {
-		auto& ceditor = node->GetUniqueComp<ee0::CompNodeEditor>();
+	for (auto& obj : m_objs) {
+		auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
 		ceditor.SetVisible(!ceditor.IsVisible());
 	}
 	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
@@ -26,8 +26,8 @@ void VisibleNodeAO::Undo()
 
 void VisibleNodeAO::Redo()
 {
-	for (auto& node : m_nodes) {
-		auto& ceditor = node->GetUniqueComp<ee0::CompNodeEditor>();
+	for (auto& obj : m_objs) {
+		auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
 		ceditor.SetVisible(!ceditor.IsVisible());
 	}
 	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);

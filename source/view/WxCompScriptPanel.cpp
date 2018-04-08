@@ -15,11 +15,11 @@ namespace ee2
 
 WxCompScriptPanel::WxCompScriptPanel(wxWindow* parent, n2::CompScript& cscript,
 	                                 const ee0::SubjectMgrPtr& sub_mgr,
-	                                 const n0::SceneNodePtr& node)
+	                                 const ee0::GameObj& obj)
 	: ee0::WxCompPanel(parent, "Script")
 	, m_cscript(cscript)
 	, m_sub_mgr(sub_mgr)
-	, m_node(node)
+	, m_obj(obj)
 {
 	InitLayout();
 	Expand();
@@ -73,13 +73,13 @@ void WxCompScriptPanel::OnSetFilepath(wxCommandEvent& event)
 	{
 		auto& path = dlg.GetPath();
 		m_cscript.SetFilepath(path.ToStdString());
-		m_cscript.Reload(m_node);
+		m_cscript.Reload(m_obj);
 	}
 }
 
 void WxCompScriptPanel::OnReloadScript(wxCommandEvent& event)
 {
-	m_cscript.Reload(m_node);
+	m_cscript.Reload(m_obj);
 	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
 

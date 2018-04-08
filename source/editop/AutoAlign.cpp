@@ -12,32 +12,32 @@
 namespace ee2
 {
 
-AutoAlign::AutoAlign(ee0::NodeContainer& nodes)
-	: m_nodes(nodes)
+AutoAlign::AutoAlign(ee0::NodeContainer& objs)
+	: m_objs(objs)
 	, m_open(true)
 {
 }
 
-void AutoAlign::Align(const std::vector<n0::SceneNodePtr>& nodes)
+void AutoAlign::Align(const std::vector<ee0::GameObj>& objs)
 {
 	m_hor[0].Set(0, 0);
 	m_hor[1].Set(0, 0);
 	m_ver[0].Set(0, 0);
 	m_ver[1].Set(0, 0);
 
-	// not support multi source node now
-	if (nodes.size() > 1)
+	// not support multi source obj now
+	if (objs.size() > 1)
 		return;
 
 	const float DIS = 5;
 
-	n0::SceneNodePtr hor_nearest, ver_nearest;
+	ee0::GameObj hor_nearest, ver_nearest;
 	float dis_hor = DIS, dis_ver = DIS;
 	// hor
-	m_nodes.Traverse([&](const n0::SceneNodePtr& node)->bool 
+	m_objs.Traverse([&](const ee0::GameObj& obj)->bool 
 	{
-		auto& dst = nodes[0];
-		auto& src = node;
+		auto& dst = objs[0];
+		auto& src = obj;
 		if (src == dst) {
 			return false;
 		}
@@ -80,10 +80,10 @@ void AutoAlign::Align(const std::vector<n0::SceneNodePtr>& nodes)
 	});
 
 	// ver
-	m_nodes.Traverse([&](const n0::SceneNodePtr& node)->bool
+	m_objs.Traverse([&](const ee0::GameObj& obj)->bool
 	{
-		auto& dst = nodes[0];
-		auto& src = node;
+		auto& dst = objs[0];
+		auto& src = obj;
 		if (src == dst) {
 			return false;
 		}
@@ -126,9 +126,9 @@ void AutoAlign::Align(const std::vector<n0::SceneNodePtr>& nodes)
 	});
 
 	if (hor_nearest)
-		Align(*hor_nearest, *nodes[0]);
+		Align(*hor_nearest, *objs[0]);
 	if (ver_nearest && ver_nearest != hor_nearest)
-		Align(*ver_nearest, *nodes[0]);
+		Align(*ver_nearest, *objs[0]);
 }
 
 void AutoAlign::Align(const n0::SceneNode& src, n0::SceneNode& dst)

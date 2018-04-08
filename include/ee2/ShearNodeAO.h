@@ -2,9 +2,9 @@
 
 #include <ee0/AtomicOP.h>
 #include <ee0/typedef.h>
+#include <ee0/GameObj.h>
 
 #include <SM_Vector.h>
-#include <node0/typedef.h>
 
 namespace ee2
 {
@@ -12,7 +12,7 @@ namespace ee2
 class ShearNodeAO : public ee0::AtomicOP
 {
 public:
-	ShearNodeAO(const ee0::SubjectMgrPtr& sub_mgr, const n0::SceneNodePtr& node,
+	ShearNodeAO(const ee0::SubjectMgrPtr& sub_mgr, const ee0::GameObj& obj,
 		const sm::vec2& new_shear, const sm::vec2& old_shear);
 
 	virtual void Undo() override;
@@ -21,7 +21,7 @@ public:
 private:
 	ee0::SubjectMgrPtr m_sub_mgr;
 
-	n0::SceneNodePtr m_node;
+	ee0::GameObj m_obj;
 
 	sm::vec2 m_old_shear, m_new_shear;
 

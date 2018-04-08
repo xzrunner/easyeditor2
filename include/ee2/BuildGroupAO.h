@@ -18,7 +18,7 @@ public:
 	virtual void Redo() override;
 
 private:
-	void CopyFromSelection(std::vector<n0::NodeWithPos>& nodes) const;
+	void CopyFromSelection(std::vector<n0::NodeWithPos>& objs) const;
 
 private:
 	ee0::SubjectMgrPtr m_sub_mgr;

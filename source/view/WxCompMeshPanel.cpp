@@ -16,10 +16,10 @@ namespace ee2
 {
 
 WxCompMeshPanel::WxCompMeshPanel(wxWindow* parent, n2::CompMesh& cmask, 
-	                             n0::SceneNode& node)
+	                             n0::SceneNode& obj)
 	: ee0::WxCompPanel(parent, "Mesh")
 	, m_cmesh(cmask)
-	, m_node(node)
+	, m_obj(obj)
 {
 	InitLayout();
 	Expand();
@@ -73,8 +73,8 @@ void WxCompMeshPanel::InitLayout()
 
 void WxCompMeshPanel::OnSetBasePath(wxCommandEvent& event)
 {
-	auto node = CreateNodeFromFile();
-	if (!node) {
+	auto obj = CreateNodeFromFile();
+	if (!obj) {
 		return;
 	}
 
@@ -82,11 +82,11 @@ void WxCompMeshPanel::OnSetBasePath(wxCommandEvent& event)
 //	mesh->SetMesh(std::make_unique<pm::TrianglesMesh>);
 	m_cmesh.SetMesh(mesh);
 
-	auto& ceditor = node->GetUniqueComp<ee0::CompNodeEditor>();
+	auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
 	m_base_path->SetValue(ceditor.GetFilepath());
 }
 
-n0::SceneNodePtr WxCompMeshPanel::CreateNodeFromFile()
+ee0::GameObj WxCompMeshPanel::CreateNodeFromFile()
 {
 	std::string filter = "*.png;*.jpg;*.bmp;*.pvr;*.pkm";
 	wxFileDialog dlg(this, wxT("Choose image"), wxEmptyString, filter);
@@ -95,16 +95,16 @@ n0::SceneNodePtr WxCompMeshPanel::CreateNodeFromFile()
 	}
 
 	std::string filepath = dlg.GetPath().ToStdString();
-	auto node = ns::NodeFactory::Create(filepath);
-	if (!node) {
+	auto obj = ns::NodeFactory::Create(filepath);
+	if (!obj) {
 		return nullptr;
 	}
 
 	// editor
-	auto& ceditor = node->GetUniqueComp<ee0::CompNodeEditor>();
+	auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
 	ceditor.SetFilepath(filepath);
 
-	return node;
+	return obj;
 }
 
 }

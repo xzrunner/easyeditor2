@@ -13,30 +13,30 @@ BreakUpAO::BreakUpAO(const ee0::SubjectMgrPtr& sub_mgr, const ee0::SelectionSet<
 void BreakUpAO::Undo()
 {
 	// copy, will change selection
-	std::vector<n0::NodeWithPos> nodes;
-	CopyFromSelection(nodes);
+	std::vector<n0::NodeWithPos> objs;
+	CopyFromSelection(objs);
 
-	NodeGroupHelper::BuildGroup(*m_sub_mgr, nodes);
+	NodeGroupHelper::BuildGroup(*m_sub_mgr, objs);
 }
 
 void BreakUpAO::Redo()
 {
 	// copy, will change selection
-	std::vector<n0::NodeWithPos> nodes;
-	CopyFromSelection(nodes);
+	std::vector<n0::NodeWithPos> objs;
+	CopyFromSelection(objs);
 
-	printf("BreakUpAO::Redo count %d\n", nodes.size());
+	printf("BreakUpAO::Redo count %d\n", objs.size());
 
-	for (auto& node : nodes) {
-		NodeGroupHelper::BreakUp(*m_sub_mgr, node);
+	for (auto& obj : objs) {
+		NodeGroupHelper::BreakUp(*m_sub_mgr, obj);
 	}
 }
 
-void BreakUpAO::CopyFromSelection(std::vector<n0::NodeWithPos>& nodes) const
+void BreakUpAO::CopyFromSelection(std::vector<n0::NodeWithPos>& objs) const
 {
-	nodes.reserve(m_selection.Size());
+	objs.reserve(m_selection.Size());
 	m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
-		nodes.push_back(nwp);
+		objs.push_back(nwp);
 		return true;
 	});
 }

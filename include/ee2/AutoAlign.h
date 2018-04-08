@@ -1,7 +1,8 @@
 #pragma once
 
+#include <ee0/GameObj.h>
+
 #include <SM_Vector.h>
-#include <node0/typedef.h>
 
 #include <vector>
 
@@ -13,9 +14,9 @@ namespace ee2
 class AutoAlign
 {
 public:
-	AutoAlign(ee0::NodeContainer& nodes);
+	AutoAlign(ee0::NodeContainer& objs);
 
-	void Align(const std::vector<n0::SceneNodePtr>& nodes);
+	void Align(const std::vector<ee0::GameObj>& objs);
 	void Align(const n0::SceneNode& src, n0::SceneNode& dst);
 
 	void Draw() const;
@@ -26,7 +27,7 @@ public:
 	void SetOpen(bool open) { m_open = open; }
 
 private:
-	ee0::NodeContainer& m_nodes;
+	ee0::NodeContainer& m_objs;
 
 	bool m_open;
 	sm::vec2 m_hor[2], m_ver[2];

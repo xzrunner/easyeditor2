@@ -36,13 +36,13 @@ bool RotateNodeState::OnMouseRelease(int x, int y)
 	}
 
 	// record
-	std::vector<n0::SceneNodePtr> nodes;
-	nodes.reserve(m_selection.Size());
+	std::vector<ee0::GameObj> objs;
+	objs.reserve(m_selection.Size());
 	m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
-		nodes.push_back(nwp.GetNode());
+		objs.push_back(nwp.GetNode());
 		return true;
 	});
-	m_record.Add(std::make_shared<RotateNodeAO>(m_sub_mgr, nodes, m_angle));
+	m_record.Add(std::make_shared<RotateNodeAO>(m_sub_mgr, objs, m_angle));
 	ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 
 	return false;

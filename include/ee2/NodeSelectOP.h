@@ -29,13 +29,13 @@ public:
 	virtual bool OnDraw() const override;
 
 private:
-	virtual n0::SceneNodePtr QueryByPos(int screen_x, int screen_y) const override;
+	virtual ee0::GameObj QueryByPos(int screen_x, int screen_y) const override;
 	virtual void QueryByRect(const sm::ivec2& p0, const sm::ivec2& p1,
-		bool contain, std::vector<n0::SceneNodePtr>& result) const;
+		bool contain, std::vector<ee0::GameObj>& result) const;
 
-	n0::SceneNodePtr QueryByPos(const n0::SceneNodePtr& node, const sm::vec2& pos) const;
-	void QueryByRect(const n0::SceneNodePtr& node, const sm::rect& rect,
-		bool contain, std::vector<n0::SceneNodePtr>& result) const;
+	ee0::GameObj QueryByPos(const ee0::GameObj& obj, const sm::vec2& pos) const;
+	void QueryByRect(const ee0::GameObj& obj, const sm::rect& rect,
+		bool contain, std::vector<ee0::GameObj>& result) const;
 
 	void BuildGroup();
 	void BreakUpGroup();

@@ -9,10 +9,10 @@
 namespace ee2
 {
 
-OffsetNodeAO::OffsetNodeAO(const ee0::SubjectMgrPtr& sub_mgr, const n0::SceneNodePtr& node,
+OffsetNodeAO::OffsetNodeAO(const ee0::SubjectMgrPtr& sub_mgr, const ee0::GameObj& obj,
 	                       const sm::vec2& new_offset, const sm::vec2& old_offset)
 	: m_sub_mgr(sub_mgr)
-	, m_node(node)
+	, m_obj(obj)
 	, m_new_offset(new_offset)
 	, m_old_offset(old_offset)
 {
@@ -20,15 +20,15 @@ OffsetNodeAO::OffsetNodeAO(const ee0::SubjectMgrPtr& sub_mgr, const n0::SceneNod
 
 void OffsetNodeAO::Undo()
 {
-	auto& ctrans = m_node->GetUniqueComp<n2::CompTransform>();
-	ctrans.SetOffset(*m_node, m_old_offset);
+	auto& ctrans = m_obj->GetUniqueComp<n2::CompTransform>();
+	ctrans.SetOffset(*m_obj, m_old_offset);
 	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
 
 void OffsetNodeAO::Redo()
 {
-	auto& ctrans = m_node->GetUniqueComp<n2::CompTransform>();
-	ctrans.SetOffset(*m_node, m_new_offset);
+	auto& ctrans = m_obj->GetUniqueComp<n2::CompTransform>();
+	ctrans.SetOffset(*m_obj, m_new_offset);
 	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
 

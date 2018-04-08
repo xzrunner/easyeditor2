@@ -14,18 +14,18 @@ namespace ee2
 {
 
 void NodeGroupHelper::BuildGroup(ee0::SubjectMgr& sub_mgr, 
-	                             const std::vector<n0::NodeWithPos>& nodes)
+	                             const std::vector<n0::NodeWithPos>& objs)
 {
-	if (nodes.empty()) {
+	if (objs.empty()) {
 		return;
 	}
 
-	auto node = std::make_shared<n0::SceneNode>();
+	auto obj = std::make_shared<n0::SceneNode>();
 
 	// complex
-	auto& ccomplex = node->AddSharedComp<n2::CompComplex>();
-	for (auto& node : nodes) {
-		ccomplex.AddChild(node.GetNode());
+	auto& ccomplex = obj->AddSharedComp<n2::CompComplex>();
+	for (auto& obj : objs) {
+		ccomplex.AddChild(obj.GetNode());
 	}
 
 	// aabb
@@ -38,37 +38,37 @@ void NodeGroupHelper::BuildGroup(ee0::SubjectMgr& sub_mgr,
 		ctrans.SetPosition(*child, ctrans.GetTrans().GetPosition() - center);
 	}
 	bounding.Translate(-center);
-	node->AddUniqueComp<n2::CompBoundingBox>(bounding);
+	obj->AddUniqueComp<n2::CompBoundingBox>(bounding);
 
 	// transform
-	auto& ctrans = node->AddUniqueComp<n2::CompTransform>();
-	ctrans.SetPosition(*node, center);
+	auto& ctrans = obj->AddUniqueComp<n2::CompTransform>();
+	ctrans.SetPosition(*obj, center);
 
 	// editor
-	node->AddUniqueComp<ee0::CompNodeEditor>();
+	obj->AddUniqueComp<ee0::CompNodeEditor>();
 
 	// insert & delete
 	sub_mgr.NotifyObservers(ee0::MSG_NODE_SELECTION_CLEAR);
 
-	ee0::MsgHelper::InsertNode(sub_mgr, node, true);
+	ee0::MsgHelper::InsertNode(sub_mgr, obj, true);
 	for (auto& child : children) {
 		ee0::MsgHelper::DeleteNode(sub_mgr, child);
 	}
 }
 
-void NodeGroupHelper::BreakUp(ee0::SubjectMgr& sub_mgr, const n0::NodeWithPos& node)
+void NodeGroupHelper::BreakUp(ee0::SubjectMgr& sub_mgr, const n0::NodeWithPos& obj)
 {
-	if (!node.GetNode()->HasSharedComp<n2::CompComplex>()) {
+	if (!obj.GetNode()->HasSharedComp<n2::CompComplex>()) {
 		return;
 	}
 
-	auto& ccomplex = node.GetNode()->GetSharedComp<n2::CompComplex>();
+	auto& ccomplex = obj.GetNode()->GetSharedComp<n2::CompComplex>();
 
 	// children
 	auto children = ccomplex.GetAllChildren();
 
 	// transform
-	auto& psrt = node.GetNode()->GetUniqueComp<n2::CompTransform>().GetTrans().GetSRT();
+	auto& psrt = obj.GetNode()->GetUniqueComp<n2::CompTransform>().GetTrans().GetSRT();
 	for (auto& child : children)
 	{
 		auto& ctrans = child->GetUniqueComp<n2::CompTransform>();
@@ -81,7 +81,7 @@ void NodeGroupHelper::BreakUp(ee0::SubjectMgr& sub_mgr, const n0::NodeWithPos& n
 	for (auto& child : children) {
 		ee0::MsgHelper::InsertNode(sub_mgr, child, true);
 	}
-	ee0::MsgHelper::DeleteNode(sub_mgr, node.GetNode());
+	ee0::MsgHelper::DeleteNode(sub_mgr, obj.GetNode());
 }
 
 }

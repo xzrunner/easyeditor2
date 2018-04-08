@@ -2,6 +2,7 @@
 
 #include <ee0/EditOpState.h>
 #include <ee0/SelectionSet.h>
+#include <ee0/GameObj.h>
 
 #include <SM_Vector.h>
 #include <node0/NodeWithPos.h>
@@ -25,7 +26,7 @@ public:
 private:
 	pt2::Camera& m_cam;
 
-	std::vector<n0::SceneNodePtr> m_nodes;
+	std::vector<ee0::GameObj> m_objs;
 
 	sm::vec2 m_center;
 	std::vector<sm::vec2> m_offset;

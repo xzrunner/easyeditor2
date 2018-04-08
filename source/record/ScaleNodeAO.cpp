@@ -10,11 +10,11 @@ namespace ee2
 {
 
 ScaleNodeAO::ScaleNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
-	                     const n0::SceneNodePtr& node,
+	                     const ee0::GameObj& obj,
 	                     const sm::vec2& new_scale, 
 	                     const sm::vec2& old_scale)
 	: m_sub_mgr(sub_mgr)
-	, m_node(node)
+	, m_obj(obj)
 	, m_new_scale(new_scale)
 	, m_old_scale(old_scale)
 {
@@ -22,15 +22,15 @@ ScaleNodeAO::ScaleNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
 
 void ScaleNodeAO::Undo()
 {
-	auto& ctrans = m_node->GetUniqueComp<n2::CompTransform>();
-	ctrans.SetScale(*m_node, m_old_scale);
+	auto& ctrans = m_obj->GetUniqueComp<n2::CompTransform>();
+	ctrans.SetScale(*m_obj, m_old_scale);
 	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
 
 void ScaleNodeAO::Redo()
 {
-	auto& ctrans = m_node->GetUniqueComp<n2::CompTransform>();
-	ctrans.SetScale(*m_node, m_new_scale);
+	auto& ctrans = m_obj->GetUniqueComp<n2::CompTransform>();
+	ctrans.SetScale(*m_obj, m_new_scale);
 	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
 

@@ -51,14 +51,14 @@ void WxStageDropTarget::OnDropText(wxCoord x, wxCoord y, const wxString& text)
 			continue;
 		}
 
-		auto node = ns::NodeFactory::Create(item->GetFilepath());
-		if (!node) {
+		auto obj = ns::NodeFactory::Create(item->GetFilepath());
+		if (!obj) {
 			continue;
 		}
 
-		InitNodeComp(node, pos, item->GetFilepath());
+		InitNodeComp(obj, pos, item->GetFilepath());
 
-		InsertNode(node);
+		InsertNode(obj);
 	}
 
 	m_stage->GetSubjectMgr()->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
@@ -68,34 +68,34 @@ void WxStageDropTarget::OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& f
 {
 }
 
-void WxStageDropTarget::InsertNode(n0::SceneNodePtr& node)
+void WxStageDropTarget::InsertNode(ee0::GameObj& obj)
 {
-	bool succ = ee0::MsgHelper::InsertNode(*m_stage->GetSubjectMgr(), node);
+	bool succ = ee0::MsgHelper::InsertNode(*m_stage->GetSubjectMgr(), obj);
 	GD_ASSERT(succ, "no MSG_INSERT_SCENE_NODE");
 
 	m_stage->GetImpl().GetEditRecord().Add(std::make_shared<InsertNodeAO>(
-		m_stage->GetSubjectMgr(), node));
+		m_stage->GetSubjectMgr(), obj));
 	ee0::MsgHelper::SetEditorDirty(*m_stage->GetSubjectMgr(), true);
 }
 
-void WxStageDropTarget::InitNodeComp(const n0::SceneNodePtr& node, 
+void WxStageDropTarget::InitNodeComp(const ee0::GameObj& obj, 
 	                                 const sm::vec2& pos,
 	                                 const std::string& filepath)
 {
 	// transform
-	auto& ctrans = node->GetUniqueComp<n2::CompTransform>();
+	auto& ctrans = obj->GetUniqueComp<n2::CompTransform>();
 	// todo
-	//auto parent = node->GetParent();
+	//auto parent = obj->GetParent();
 	//if (parent) {
 	//	auto p_pos = parent->GetUniqueComp<n2::CompTransform>().GetTrans().GetMatrix() * sm::vec2(0, 0);
-	//	ctrans.SetPosition(node, pos - p_pos);
+	//	ctrans.SetPosition(obj, pos - p_pos);
 	//} else {
-	//	ctrans.SetPosition(node, pos);
+	//	ctrans.SetPosition(obj, pos);
 	//}
-	ctrans.SetPosition(*node, pos);
+	ctrans.SetPosition(*obj, pos);
 
 	// editor
-	auto& ceditor = node->GetUniqueComp<ee0::CompNodeEditor>();
+	auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
 	ceditor.SetFilepath(filepath);
 }
 

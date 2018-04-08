@@ -15,47 +15,47 @@ TranslateNodeAO::TranslateNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
 	: m_sub_mgr(sub_mgr)
 	, m_offset(offset)
 {
-	m_nodes.reserve(selection.Size());
+	m_objs.reserve(selection.Size());
 	selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
-		m_nodes.push_back(nwp.GetNode());
+		m_objs.push_back(nwp.GetNode());
 		return true;
 	});
 }
 
 TranslateNodeAO::TranslateNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
-	                             const n0::SceneNodePtr& node, 
+	                             const ee0::GameObj& obj, 
 	                             const sm::vec2& offset)
 	: m_sub_mgr(sub_mgr)
 	, m_offset(offset)
 {
-	m_nodes.push_back(node);
+	m_objs.push_back(obj);
 }
 
 TranslateNodeAO::TranslateNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
-	                             const std::vector<n0::SceneNodePtr>& nodes,
+	                             const std::vector<ee0::GameObj>& objs,
 	                             const sm::vec2& offset)
 	: m_sub_mgr(sub_mgr)
 	, m_offset(offset)
-	, m_nodes(nodes)
+	, m_objs(objs)
 {
 }
 
 void TranslateNodeAO::Undo()
 {
-	for (auto& node : m_nodes) 
+	for (auto& obj : m_objs) 
 	{
-		auto& ctrans = node->GetUniqueComp<n2::CompTransform>();
-		ctrans.SetPosition(*node, ctrans.GetTrans().GetPosition() - m_offset);
+		auto& ctrans = obj->GetUniqueComp<n2::CompTransform>();
+		ctrans.SetPosition(*obj, ctrans.GetTrans().GetPosition() - m_offset);
 		m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 	}
 }
 
 void TranslateNodeAO::Redo()
 {
-	for (auto& node : m_nodes)
+	for (auto& obj : m_objs)
 	{
-		auto& ctrans = node->GetUniqueComp<n2::CompTransform>();
-		ctrans.SetPosition(*node, ctrans.GetTrans().GetPosition() + m_offset);
+		auto& ctrans = obj->GetUniqueComp<n2::CompTransform>();
+		ctrans.SetPosition(*obj, ctrans.GetTrans().GetPosition() + m_offset);
 		m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 	}
 }

@@ -1,8 +1,7 @@
 #pragma once
 
 #include <ee0/WxDropTarget.h>
-
-#include <node0/typedef.h>
+#include <ee0/GameObj.h>
 
 namespace ee0 { class WxLibraryPanel; class WxStagePage; }
 
@@ -18,9 +17,9 @@ public:
 	virtual void OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& filenames) override;
 
 private:
-	void InsertNode(n0::SceneNodePtr& node);
+	void InsertNode(ee0::GameObj& obj);
 
-	void InitNodeComp(const n0::SceneNodePtr& node, const sm::vec2& pos,
+	void InitNodeComp(const ee0::GameObj& obj, const sm::vec2& pos,
 		const std::string& filepath);
 
 private:

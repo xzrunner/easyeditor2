@@ -16,10 +16,10 @@ namespace ee2
 {
 
 WxCompMaskPanel::WxCompMaskPanel(wxWindow* parent, n2::CompMask& cmask, 
-	                             n0::SceneNode& node)
+	                             n0::SceneNode& obj)
 	: ee0::WxCompPanel(parent, "Mask")
 	, m_cmask(cmask)
-	, m_node(node)
+	, m_obj(obj)
 {
 	InitLayout();
 	Expand();
@@ -54,8 +54,8 @@ void WxCompMaskPanel::InitLayout()
 		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("Base ")));
 
 		std::string path;
-		if (auto node = m_cmask.GetBaseNode()) {
-			auto& ceditor = node->GetUniqueComp<ee0::CompNodeEditor>();
+		if (auto obj = m_cmask.GetBaseNode()) {
+			auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
 			path = ceditor.GetFilepath();
 		}
 		sizer->Add(m_base_path = new wxTextCtrl(win, wxID_ANY, path,
@@ -77,8 +77,8 @@ void WxCompMaskPanel::InitLayout()
 		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("Mask ")));
 
 		std::string path;
-		if (auto node = m_cmask.GetMaskNode()) {
-			auto& ceditor = node->GetUniqueComp<ee0::CompNodeEditor>();
+		if (auto obj = m_cmask.GetMaskNode()) {
+			auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
 			path = ceditor.GetFilepath();
 		}
 		sizer->Add(m_mask_path = new wxTextCtrl(win, wxID_ANY, path,
@@ -100,34 +100,34 @@ void WxCompMaskPanel::InitLayout()
 
 void WxCompMaskPanel::OnSetBasePath(wxCommandEvent& event)
 {
-	auto node = CreateNodeFromFile();
-	if (!node) {
+	auto obj = CreateNodeFromFile();
+	if (!obj) {
 		return;
 	}
 
-	m_cmask.SetBaseNode(node);
+	m_cmask.SetBaseNode(obj);
 
-	auto& ceditor = node->GetUniqueComp<ee0::CompNodeEditor>();
+	auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
 	m_base_path->SetValue(ceditor.GetFilepath());
 }
 
 void WxCompMaskPanel::OnSetMaskPath(wxCommandEvent& event)
 {
-	auto node = CreateNodeFromFile();
-	if (!node) {
+	auto obj = CreateNodeFromFile();
+	if (!obj) {
 		return;
 	}
 
-	m_cmask.SetMaskNode(node);
+	m_cmask.SetMaskNode(obj);
 
-	auto& ceditor = node->GetUniqueComp<ee0::CompNodeEditor>();
+	auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
 	m_mask_path->SetValue(ceditor.GetFilepath());
 
-	auto& cbb = m_node.GetUniqueComp<n2::CompBoundingBox>();
-	cbb.SetSize(m_node, node->GetUniqueComp<n2::CompBoundingBox>().GetSize());
+	auto& cbb = m_obj.GetUniqueComp<n2::CompBoundingBox>();
+	cbb.SetSize(m_obj, obj->GetUniqueComp<n2::CompBoundingBox>().GetSize());
 }
 
-n0::SceneNodePtr WxCompMaskPanel::CreateNodeFromFile()
+ee0::GameObj WxCompMaskPanel::CreateNodeFromFile()
 {
 	std::string filter = "*.png;*.jpg;*.bmp;*.pvr;*.pkm";
 	wxFileDialog dlg(this, wxT("Choose image"), wxEmptyString, filter);
@@ -136,16 +136,16 @@ n0::SceneNodePtr WxCompMaskPanel::CreateNodeFromFile()
 	}
 
 	std::string filepath = dlg.GetPath().ToStdString();
-	auto node = ns::NodeFactory::Create(filepath);
-	if (!node) {
+	auto obj = ns::NodeFactory::Create(filepath);
+	if (!obj) {
 		return nullptr;
 	}
 
 	// editor
-	auto& ceditor = node->GetUniqueComp<ee0::CompNodeEditor>();
+	auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
 	ceditor.SetFilepath(filepath);
 
-	return node;
+	return obj;
 }
 
 }

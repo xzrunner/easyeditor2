@@ -13,28 +13,28 @@ BuildGroupAO::BuildGroupAO(const ee0::SubjectMgrPtr& sub_mgr, const ee0::Selecti
 void BuildGroupAO::Undo()
 {
 	// copy, will change selection
-	std::vector<n0::NodeWithPos> nodes;
-	CopyFromSelection(nodes);
+	std::vector<n0::NodeWithPos> objs;
+	CopyFromSelection(objs);
 
-	for (auto& node : nodes) {
-		NodeGroupHelper::BreakUp(*m_sub_mgr, node);
+	for (auto& obj : objs) {
+		NodeGroupHelper::BreakUp(*m_sub_mgr, obj);
 	}
 }
 
 void BuildGroupAO::Redo()
 {
 	// copy, will change selection
-	std::vector<n0::NodeWithPos> nodes;
-	CopyFromSelection(nodes);
+	std::vector<n0::NodeWithPos> objs;
+	CopyFromSelection(objs);
 
-	NodeGroupHelper::BuildGroup(*m_sub_mgr, nodes);
+	NodeGroupHelper::BuildGroup(*m_sub_mgr, objs);
 }
 
-void BuildGroupAO::CopyFromSelection(std::vector<n0::NodeWithPos>& nodes) const
+void BuildGroupAO::CopyFromSelection(std::vector<n0::NodeWithPos>& objs) const
 {
-	nodes.reserve(m_selection.Size());
+	objs.reserve(m_selection.Size());
 	m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
-		nodes.push_back(nwp);
+		objs.push_back(nwp);
 		return true;
 	});
 }

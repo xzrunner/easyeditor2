@@ -12,7 +12,7 @@ namespace ee2
 class ShearNodeState : public ee0::EditOpState
 {
 public:
-	ShearNodeState(pt2::Camera& cam, const n0::SceneNodePtr& node,
+	ShearNodeState(pt2::Camera& cam, const ee0::GameObj& obj,
 		const NodeCtrlPoint::Node& ctrl_point);
 
 	virtual bool OnMouseRelease(int x, int y) override;
@@ -25,7 +25,7 @@ private:
 private:
 	pt2::Camera& m_cam;
 
-	n0::SceneNodePtr m_node;
+	ee0::GameObj m_obj;
 
 	NodeCtrlPoint::Node m_ctrl_point;
 

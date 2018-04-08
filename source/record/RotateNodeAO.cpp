@@ -11,7 +11,7 @@ namespace ee2
 {
 
 RotateNodeAO::RotateNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
-	                       const std::vector<n0::SceneNodePtr>& nodes, 
+	                       const std::vector<ee0::GameObj>& objs, 
 	                       const sm::vec2& start, 
 	                       const sm::vec2& end)
 	: m_sub_mgr(sub_mgr)
@@ -19,17 +19,17 @@ RotateNodeAO::RotateNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
 	, m_start(start)
 	, m_end(end)
 	, m_angle(0)
-	, m_nodes(nodes)
+	, m_objs(objs)
 {
 }
 
 RotateNodeAO::RotateNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
-	                       const std::vector<n0::SceneNodePtr>& nodes, 
+	                       const std::vector<ee0::GameObj>& objs, 
 	                       float angle)
 	: m_sub_mgr(sub_mgr)
 	, m_inited(false)
 	, m_angle(angle)
-	, m_nodes(nodes)
+	, m_objs(objs)
 {
 }
 
@@ -37,19 +37,19 @@ void RotateNodeAO::Undo()
 {
 	if (m_inited) 
 	{
-		for (auto& node : m_nodes) 
+		for (auto& obj : m_objs) 
 		{
-			auto& ctrans = node->GetUniqueComp<n2::CompTransform>();
+			auto& ctrans = obj->GetUniqueComp<n2::CompTransform>();
 			float angle = sm::get_angle_in_direction(ctrans.GetTrans().GetPosition(), m_start, m_end);
-			ctrans.SetAngle(*node, ctrans.GetTrans().GetAngle() - angle);
+			ctrans.SetAngle(*obj, ctrans.GetTrans().GetAngle() - angle);
 		}
 	} 
 	else if (m_angle != 0) 
 	{
-		for (auto& node : m_nodes) 
+		for (auto& obj : m_objs) 
 		{
-			auto& ctrans = node->GetUniqueComp<n2::CompTransform>();
-			ctrans.SetAngle(*node, ctrans.GetTrans().GetAngle() - m_angle);
+			auto& ctrans = obj->GetUniqueComp<n2::CompTransform>();
+			ctrans.SetAngle(*obj, ctrans.GetTrans().GetAngle() - m_angle);
 		}
 	}
 	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
@@ -59,19 +59,19 @@ void RotateNodeAO::Redo()
 {
 	if (m_inited)
 	{
-		for (auto& node : m_nodes)
+		for (auto& obj : m_objs)
 		{
-			auto& ctrans = node->GetUniqueComp<n2::CompTransform>();
+			auto& ctrans = obj->GetUniqueComp<n2::CompTransform>();
 			float angle = sm::get_angle_in_direction(ctrans.GetTrans().GetPosition(), m_start, m_end);
-			ctrans.SetAngle(*node, ctrans.GetTrans().GetAngle() + angle);
+			ctrans.SetAngle(*obj, ctrans.GetTrans().GetAngle() + angle);
 		}
 	}
 	else if (m_angle != 0)
 	{
-		for (auto& node : m_nodes)
+		for (auto& obj : m_objs)
 		{
-			auto& ctrans = node->GetUniqueComp<n2::CompTransform>();
-			ctrans.SetAngle(*node, ctrans.GetTrans().GetAngle() + m_angle);
+			auto& ctrans = obj->GetUniqueComp<n2::CompTransform>();
+			ctrans.SetAngle(*obj, ctrans.GetTrans().GetAngle() + m_angle);
 		}
 	}
 	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);

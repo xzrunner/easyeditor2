@@ -1,7 +1,8 @@
 #pragma once
 
+#include <ee0/GameObj.h>
+
 #include <SM_Vector.h>
-#include <node0/typedef.h>
 
 namespace ee2
 {
@@ -9,10 +10,10 @@ namespace ee2
 class NodeCtrlPoint
 {
 public:
-	static void GetNodeCtrlPoints(const n0::SceneNode& node, sm::vec2 nodes[8]);
+	static void GetNodeCtrlPoints(const n0::SceneNode& obj, sm::vec2 objs[8]);
 
 	//// todo for perspective
-	//static void GetNodeCtrlPointsExt(const n0::SceneNode& node, sm::vec2 nodes[4]);
+	//static void GetNodeCtrlPointsExt(const n0::SceneNode& obj, sm::vec2 objs[4]);
 
 public:
  	// 0 4 1

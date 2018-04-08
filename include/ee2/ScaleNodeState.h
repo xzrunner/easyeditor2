@@ -15,7 +15,7 @@ class ScaleNodeState : public ee0::EditOpState
 {
 public:
 	ScaleNodeState(pt2::Camera& cam, ee0::EditRecord& record,
-		const ee0::SubjectMgrPtr& sub_mgr, const n0::SceneNodePtr& node,
+		const ee0::SubjectMgrPtr& sub_mgr, const ee0::GameObj& obj,
 		const NodeCtrlPoint::Node& ctrl_point);
 
 	virtual bool OnMouseRelease(int x, int y) override;
@@ -32,7 +32,7 @@ private:
 	ee0::EditRecord&   m_record;
 	ee0::SubjectMgrPtr m_sub_mgr;
 
-	n0::SceneNodePtr m_node;
+	ee0::GameObj m_obj;
 
 	NodeCtrlPoint::Node m_ctrl_point;
 

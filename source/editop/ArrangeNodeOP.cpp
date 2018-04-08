@@ -166,7 +166,7 @@ bool ArrangeNodeOP::Clear()
 //	return m_impl->IsSelectionEmpty();
 //}
 
-n0::SceneNodePtr ArrangeNodeOP::SelectByPos(const sm::vec2& pos) const
+ee0::GameObj ArrangeNodeOP::SelectByPos(const sm::vec2& pos) const
 {
 	auto spr = m_impl->QueryEditedNode(pos);
 	//if (!spr) {
