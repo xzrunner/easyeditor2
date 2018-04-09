@@ -12,13 +12,13 @@
 #include <ee0/MsgHelper.h>
 #include <ee0/WxStagePage.h>
 #include <ee0/SubjectMgr.h>
-#include <ee0/StringHelper.h>
 
 #include <guard/check.h>
 #include <node0/SceneNode.h>
 #include <node2/CompTransform.h>
 #include <painting2/OrthoCamera.h>
 #include <ns/NodeFactory.h>
+#include <sx/StringHelper.h>
 
 namespace ee2
 {
@@ -33,7 +33,7 @@ WxStageDropTarget::WxStageDropTarget(ee0::WxLibraryPanel* library, ee0::WxStageP
 void WxStageDropTarget::OnDropText(wxCoord x, wxCoord y, const wxString& text)
 {
 	std::vector<std::string> keys;
-	ee0::StringHelper::Split(text.ToStdString().c_str(), ",", keys);
+	sx::StringHelper::Split(text.ToStdString().c_str(), ",", keys);
 
 	if (keys.size() <= 1) {
 		return;
