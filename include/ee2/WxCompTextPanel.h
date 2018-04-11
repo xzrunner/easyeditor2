@@ -27,7 +27,8 @@ private:
 
 	void CommandEventHandler(wxCommandEvent& event);
 	void SpinEventHandler(wxSpinEvent& event);
-	void ColourPickerEventHandler(wxColourPickerEvent& event);
+
+	void RefreshColorBtn(const pt2::Textbox& tb);
 
 	static wxColour ToWxColor(const pt2::Color& col);
 
@@ -39,15 +40,13 @@ private:
 
 	wxSpinCtrl *m_width, *m_height;
 
-	wxChoice*           m_font_type;
-	wxSpinCtrl*         m_font_size;
-	wxColourPickerCtrl* m_font_color;
-	wxButton*           m_font_color_gradient;
+	wxChoice*   m_font_type;
+	wxSpinCtrl* m_font_size;
+	wxButton*   m_font_color;
 	
-	wxCheckBox*         m_has_edge;
-	wxTextCtrl*         m_edge_size;
-	wxColourPickerCtrl* m_edge_color;
-	wxButton*           m_edge_color_gradient;
+	wxCheckBox* m_has_edge;
+	wxTextCtrl* m_edge_size;
+	wxButton*   m_edge_color;
 
 	wxTextCtrl *m_align_h, *m_align_v;
 

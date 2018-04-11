@@ -38,15 +38,11 @@ void WxCompTextPanel::RefreshNodeComp()
 
 	m_font_type->SetSelection(tb.font_type);
 	m_font_size->SetValue(tb.font_size);
-	if (text.tb.font_color.items.size() == 1) {
-		m_font_color->SetColour(ToWxColor(text.tb.font_color.items[0].col));
-	}
 
 	m_has_edge->SetValue(tb.has_edge);
 	m_edge_size->SetValue(std::to_string(tb.edge_size));
-	if (text.tb.edge_color.items.size() == 1) {
-		m_edge_color->SetColour(ToWxColor(text.tb.edge_color.items[0].col));
-	}
+
+	RefreshColorBtn(tb);
 
 	m_align_h->SetValue(std::to_string(tb.align_hori));
 	m_align_v->SetValue(std::to_string(tb.align_vert));
@@ -126,12 +122,9 @@ void WxCompTextPanel::InitLayout()
 		{
 			wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
 
-			sizer->Add(m_font_color = new wxColourPickerCtrl(win, wxID_ANY, ToWxColor(text.tb.font_color.items[0].col)));
-			Connect(m_font_color->GetId(), wxEVT_COLOURPICKER_CHANGED,
-				wxColourPickerEventHandler(WxCompTextPanel::ColourPickerEventHandler));
-
-			sizer->Add(m_font_color_gradient = new wxButton(win, wxID_ANY, "gradient..."));
-			Connect(m_font_color_gradient->GetId(), wxEVT_COMMAND_BUTTON_CLICKED,
+			sizer->Add(new wxStaticText(win, wxID_ANY, wxT("Color ")));
+			sizer->Add(m_font_color = new wxButton(win, wxID_ANY));
+			Connect(m_font_color->GetId(), wxEVT_COMMAND_BUTTON_CLICKED,
 				wxCommandEventHandler(WxCompTextPanel::CommandEventHandler));
 
 			vert_sizer->Add(sizer);
@@ -160,12 +153,9 @@ void WxCompTextPanel::InitLayout()
 		{
 			wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
 
-			sizer->Add(m_edge_color = new wxColourPickerCtrl(win, wxID_ANY, ToWxColor(text.tb.edge_color.items[0].col)));
-			Connect(m_edge_color->GetId(), wxEVT_COLOURPICKER_CHANGED,
-				wxColourPickerEventHandler(WxCompTextPanel::ColourPickerEventHandler));
-
-			sizer->Add(m_edge_color_gradient = new wxButton(win, wxID_ANY, "gradient..."));
-			Connect(m_edge_color_gradient->GetId(), wxEVT_COMMAND_BUTTON_CLICKED,
+			sizer->Add(new wxStaticText(win, wxID_ANY, wxT("Color ")));
+			sizer->Add(m_edge_color = new wxButton(win, wxID_ANY, "gradient..."));
+			Connect(m_edge_color->GetId(), wxEVT_COMMAND_BUTTON_CLICKED,
 				wxCommandEventHandler(WxCompTextPanel::CommandEventHandler));
 
 			vert_sizer->Add(sizer);
@@ -225,6 +215,7 @@ void WxCompTextPanel::InitLayout()
 
 		pane_sizer->Add(sizer);
 	}
+	RefreshColorBtn(text.tb);
 
 	win->SetSizer(pane_sizer);
 	pane_sizer->SetSizeHints(win);
@@ -242,19 +233,23 @@ void WxCompTextPanel::CommandEventHandler(wxCommandEvent& event)
 		tb.font_type = m_font_type->GetSelection();
 	} else if (id == m_font_size->GetId()) {
 		tb.font_size = m_font_size->GetValue();
-	} else if (id == m_font_color_gradient->GetId()) {
+	} else if (id == m_font_color->GetId()) {
 		ee0::WxColorGradientDlg dlg(this, m_ctext.GetText().tb.font_color);
-		if (dlg.ShowModal() == wxID_OK) {
+		if (dlg.ShowModal() == wxID_OK) 
+		{
 			tb.font_color = dlg.GetColor();
+			RefreshColorBtn(tb);
 		}
 	} else if (id == m_has_edge->GetId()) {
 		tb.has_edge = m_has_edge->GetValue();
 	} else if (id == m_edge_size->GetId()) {
 		tb.edge_size = std::stof(m_edge_size->GetValue().ToStdString());
-	}  else if (id == m_edge_color_gradient->GetId()) {
+	}  else if (id == m_edge_color->GetId()) {
 		ee0::WxColorGradientDlg dlg(this, m_ctext.GetText().tb.edge_color);
-		if (dlg.ShowModal() == wxID_OK) {
+		if (dlg.ShowModal() == wxID_OK) 
+		{
 			tb.edge_color = dlg.GetColor();
+			RefreshColorBtn(tb);
 		}
 	} else if (id == m_align_h->GetId()) {
 		tb.align_hori = static_cast<pt2::Textbox::HoriAlign>(
@@ -292,23 +287,21 @@ void WxCompTextPanel::SpinEventHandler(wxSpinEvent& event)
 	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
 
-void WxCompTextPanel::ColourPickerEventHandler(wxColourPickerEvent& event)
+void WxCompTextPanel::RefreshColorBtn(const pt2::Textbox& tb)
 {
-	pt2::Text& text = m_ctext.GetText();
-	auto& tb = text.tb;
-
-	int id = event.GetId();
-	if (id == m_font_color->GetId()) 
-	{
-		auto col = m_font_color->GetColour();
-		tb.font_color.items.resize(1);
-		tb.font_color.items[0].col.FromABGR(col.GetRGBA());
-	} 
-	else if (id == m_edge_color->GetId()) 
-	{
-		auto col = m_edge_color->GetColour();
-		tb.edge_color.items.resize(1);
-		tb.edge_color.items[0].col.FromABGR(col.GetRGBA());
+	if (tb.font_color.items.size() == 1) {
+		m_font_color->SetLabelText("");
+		m_font_color->SetBackgroundColour(ToWxColor(tb.font_color.items[0].col));
+	} else {
+		m_font_color->SetLabelText("gradient");
+		m_font_color->SetBackgroundColour(*wxWHITE);
+	}
+	if (tb.edge_color.items.size() == 1) {
+		m_edge_color->SetLabelText("");
+		m_edge_color->SetBackgroundColour(ToWxColor(tb.edge_color.items[0].col));
+	} else {
+		m_edge_color->SetLabelText("gradient");
+		m_edge_color->SetBackgroundColour(*wxWHITE);
 	}
 }
 
