@@ -96,7 +96,7 @@ bool NodeSelectOP::OnDraw() const
 		return true;
 	}
 
-	m_stage.GetNodeSelection().Traverse([](const n0::NodeWithPos& nwp)->bool
+	m_stage.GetSelection().Traverse([](const n0::NodeWithPos& nwp)->bool
 	{
 		CU_VEC<sm::vec2> bound;
 		auto& cbb = nwp.GetNode()->GetUniqueComp<n2::CompBoundingBox>();
@@ -221,7 +221,7 @@ void NodeSelectOP::QueryByRect(const ee0::GameObj& obj, const sm::rect& rect,
 
 void NodeSelectOP::BuildGroup()
 {
-	auto ao = std::make_shared<BuildGroupAO>(m_stage.GetSubjectMgr(), m_stage.GetNodeSelection());
+	auto ao = std::make_shared<BuildGroupAO>(m_stage.GetSubjectMgr(), m_stage.GetSelection());
 	ao->Redo();
 	m_stage.GetImpl().GetEditRecord().Add(ao);
 	ee0::MsgHelper::SetEditorDirty(*m_stage.GetSubjectMgr(), true);
@@ -229,7 +229,7 @@ void NodeSelectOP::BuildGroup()
 
 void NodeSelectOP::BreakUpGroup()
 {
-	auto ao = std::make_shared<BreakUpAO>(m_stage.GetSubjectMgr(), m_stage.GetNodeSelection());
+	auto ao = std::make_shared<BreakUpAO>(m_stage.GetSubjectMgr(), m_stage.GetSelection());
 	ao->Redo();
 	m_stage.GetImpl().GetEditRecord().Add(ao);
 	ee0::MsgHelper::SetEditorDirty(*m_stage.GetSubjectMgr(), true);

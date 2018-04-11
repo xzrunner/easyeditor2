@@ -3,30 +3,50 @@
 #include <ee0/CameraHelper.h>
 #include <ee0/MsgHelper.h>
 
+#ifndef GAME_OBJ_ECS
 #include <node0/SceneNode.h>
 #include <node2/CompTransform.h>
+#else
+#include <ecsx/World.h>
+#include <entity2/CompPosition.h>
+#endif // GAME_OBJ_ECS
 
 namespace ee2
 {
 
-CopyPasteNodeState::CopyPasteNodeState(pt2::Camera& cam, const ee0::SubjectMgrPtr& sub_mgr,
-	                                   ee0::SelectionSet<n0::NodeWithPos>& selection)
+CopyPasteNodeState::CopyPasteNodeState(pt2::Camera& cam, 
+	                                   const ee0::SubjectMgrPtr& sub_mgr,
+#ifdef GAME_OBJ_ECS
+                                       const ecsx::World& world,
+#endif // GAME_OBJ_ECS
+	                                   ee0::SelectionSet<ee0::GameObjWithPos>& selection)
 	: m_cam(cam)
 	, m_sub_mgr(sub_mgr)
+#ifdef GAME_OBJ_ECS
+	, m_world(world)
+#endif // GAME_OBJ_ECS
 {
-	m_nwps.reserve(selection.Size());
-	selection.Traverse([&](const n0::NodeWithPos& nwp)->bool 
+	m_objs.reserve(selection.Size());
+	selection.Traverse([&](const ee0::GameObjWithPos& owp)->bool
 	{
-		m_nwps.push_back(n0::NodeWithPos(nwp.GetNode()->Clone(), nwp.GetRoot(), 0));
+#ifndef GAME_OBJ_ECS
+		m_objs.push_back(n0::NodeWithPos(owp.GetNode()->Clone(), owp.GetRoot(), 0));
+#else
+		m_objs.push_back(owp);
+#endif // GAME_OBJ_ECS
 		return true;
 	});
 
 	selection.Clear();
-	for (auto& nwp : m_nwps) 
+	for (auto& obj : m_objs) 
 	{
-		selection.Add(nwp);
+		selection.Add(obj);
+#ifndef GAME_OBJ_ECS
 		ee0::MsgHelper::InsertNode(*m_sub_mgr, 
-			std::const_pointer_cast<n0::SceneNode>(nwp.GetNode()));
+			std::const_pointer_cast<n0::SceneNode>(obj.GetNode()));
+#else
+		ee0::MsgHelper::InsertNode(*m_sub_mgr, obj);
+#endif // GAME_OBJ_ECS
 	}
 }
 
@@ -41,10 +61,16 @@ bool CopyPasteNodeState::OnMouseDrag(int x, int y)
 {
 	auto pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
 	sm::vec2 offset = pos - m_last_pos;
-	for (auto& nwp : m_nwps) 
+	for (auto& obj : m_objs) 
 	{
-		auto& ctrans = nwp.GetNode()->GetUniqueComp<n2::CompTransform>();
-		ctrans.SetPosition(*nwp.GetNode(), ctrans.GetTrans().GetPosition() + offset);
+#ifndef GAME_OBJ_ECS
+		auto& ctrans = obj.GetNode()->GetUniqueComp<n2::CompTransform>();
+		ctrans.SetPosition(*obj.GetNode(), ctrans.GetTrans().GetPosition() + offset);
+#else
+		auto& cpos = m_world.GetComponent<e2::CompPosition>(obj);
+		cpos.x += offset.x;
+		cpos.y += offset.y;
+#endif // GAME_OBJ_ECS
 	}
 	m_last_pos = pos;
 

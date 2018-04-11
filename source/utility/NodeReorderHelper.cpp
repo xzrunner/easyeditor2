@@ -41,7 +41,7 @@ void NodeReorderHelper::UpOneLayer(ee0::SubjectMgr& sub_mgr,
 	}
 
 	sub_mgr.NotifyObservers(ee0::MSG_NODE_SELECTION_CLEAR);
-	ee0::MsgHelper::InsertNodeSelection(sub_mgr, objs);
+	ee0::MsgHelper::InsertSelection(sub_mgr, objs);
 
 	sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
@@ -81,7 +81,7 @@ void NodeReorderHelper::DownOneLayer(ee0::SubjectMgr& sub_mgr,
 	});
 
 	sub_mgr.NotifyObservers(ee0::MSG_NODE_SELECTION_CLEAR);
-	ee0::MsgHelper::InsertNodeSelection(sub_mgr, objs);
+	ee0::MsgHelper::InsertSelection(sub_mgr, objs);
 
 	sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
