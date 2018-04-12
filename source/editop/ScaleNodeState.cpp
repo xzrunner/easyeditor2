@@ -60,7 +60,7 @@ void ScaleNodeState::Scale(const sm::vec2& curr)
 	}
 
 	sm::vec2 ctrls[8];
-	NodeCtrlPoint::GetNodeCtrlPoints(*m_obj, ctrls);
+	NodeCtrlPoint::GetNodeCtrlPoints(m_obj, ctrls);
 	
 	sm::vec2 ori = ctrls[m_ctrl_point.type];
 	auto& ctrans = m_obj->GetUniqueComp<n2::CompTransform>();

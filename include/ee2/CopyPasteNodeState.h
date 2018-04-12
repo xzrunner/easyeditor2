@@ -24,7 +24,7 @@ public:
 		pt2::Camera& cam, 
 		const ee0::SubjectMgrPtr& sub_mgr,
 #ifdef GAME_OBJ_ECS
-		const ecsx::World& world, 
+		ecsx::World& world, 
 #endif // GAME_OBJ_ECS
 		ee0::SelectionSet<ee0::GameObjWithPos>& selection
 	);
@@ -36,7 +36,7 @@ private:
 	pt2::Camera&       m_cam;
 	ee0::SubjectMgrPtr m_sub_mgr;
 #ifdef GAME_OBJ_ECS
-	const ecsx::World& m_world;
+	ecsx::World&       m_world;
 #endif // GAME_OBJ_ECS
 
 	sm::vec2 m_last_pos;

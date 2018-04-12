@@ -42,7 +42,7 @@ void ShearNodeState::Shear(const sm::vec2& curr)
 	// fix pos
 	sm::vec2 pos;
 	sm::vec2 ctrls[8];
-	NodeCtrlPoint::GetNodeCtrlPoints(*m_obj, ctrls);
+	NodeCtrlPoint::GetNodeCtrlPoints(m_obj, ctrls);
 	if (m_ctrl_point.type == NodeCtrlPoint::UP) {
 		sm::get_foot_of_perpendicular(ctrls[NodeCtrlPoint::LEFT_UP], ctrls[NodeCtrlPoint::RIGHT_UP], curr, &pos);
 	} else if (m_ctrl_point.type == NodeCtrlPoint::DOWN) {
@@ -150,7 +150,7 @@ void ShearNodeState::Shear2(const sm::vec2& curr)
 	float sx = srt.scale.x,
 		  sy = srt.scale.y;
 	sm::vec2 ctrls[8];
-	NodeCtrlPoint::GetNodeCtrlPoints(*m_obj, ctrls);
+	NodeCtrlPoint::GetNodeCtrlPoints(m_obj, ctrls);
 
 	sm::vec2 center = (ctrls[NodeCtrlPoint::LEFT] + ctrls[NodeCtrlPoint::RIGHT]) * 0.5f;
 

@@ -199,7 +199,7 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 	if (m_cfg.is_deform_open && !m_key_state.GetKeyState(WXK_SHIFT))
 	{
 		sm::vec2 ctrlNodes[8];
-		NodeCtrlPoint::GetNodeCtrlPoints(*selected, ctrlNodes);
+		NodeCtrlPoint::GetNodeCtrlPoints(selected, ctrlNodes);
 		for (int i = 0; i < 8; ++i)
 		{
 			if (sm::dis_pos_to_pos(ctrlNodes[i], pos) < m_ctrl_node_radius)
@@ -294,7 +294,7 @@ void ArrangeNodeImpl::OnMouseRightDown(int x, int y)
 	if (m_cfg.is_deform_open)
 	{
 		sm::vec2 ctrlNodes[8];
-		NodeCtrlPoint::GetNodeCtrlPoints(*selected, ctrlNodes);
+		NodeCtrlPoint::GetNodeCtrlPoints(selected, ctrlNodes);
 		for (int i = 0; i < 8; ++i)
 		{
 			if (sm::dis_pos_to_pos(ctrlNodes[i], pos) < m_ctrl_node_radius)
@@ -419,7 +419,7 @@ void ArrangeNodeImpl::OnDraw(float cam_scale) const
 				else
 				{
 					sm::vec2 ctrl_nodes[8];
-					NodeCtrlPoint::GetNodeCtrlPoints(*selected, ctrl_nodes);
+					NodeCtrlPoint::GetNodeCtrlPoints(selected, ctrl_nodes);
 					for (int i = 0; i < 4; ++i) {
 						pt2::PrimitiveDraw::SetColor(pt2::Color(51, 204, 51));
 						pt2::PrimitiveDraw::Circle(nullptr, ctrl_nodes[i], m_ctrl_node_radius, false);
@@ -472,7 +472,7 @@ ee0::GameObj ArrangeNodeImpl::QueryEditedNode(const sm::vec2& pos) const
 	if (m_cfg.is_deform_open && !m_key_state.GetKeyState(WXK_SHIFT))
 	{
 		sm::vec2 ctrl_nodes[8];
-		NodeCtrlPoint::GetNodeCtrlPoints(*selected, ctrl_nodes);
+		NodeCtrlPoint::GetNodeCtrlPoints(selected, ctrl_nodes);
 		for (int i = 0; i < 8; ++i) {
 			if (sm::dis_pos_to_pos(ctrl_nodes[i], pos) < m_ctrl_node_radius) {
 				return selected;

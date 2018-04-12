@@ -7,8 +7,7 @@
 #include <node0/SceneNode.h>
 #include <node2/CompTransform.h>
 #else
-#include <ecsx/World.h>
-#include <entity2/CompPosition.h>
+#include <entity2/SysTransform.h>
 #endif // GAME_OBJ_ECS
 
 namespace ee2
@@ -17,7 +16,7 @@ namespace ee2
 CopyPasteNodeState::CopyPasteNodeState(pt2::Camera& cam, 
 	                                   const ee0::SubjectMgrPtr& sub_mgr,
 #ifdef GAME_OBJ_ECS
-                                       const ecsx::World& world,
+                                       ecsx::World& world,
 #endif // GAME_OBJ_ECS
 	                                   ee0::SelectionSet<ee0::GameObjWithPos>& selection)
 	: m_cam(cam)
@@ -61,17 +60,15 @@ bool CopyPasteNodeState::OnMouseDrag(int x, int y)
 {
 	auto pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
 	sm::vec2 offset = pos - m_last_pos;
-	for (auto& obj : m_objs) 
-	{
 #ifndef GAME_OBJ_ECS
+	for (auto& obj : m_objs)
+	{
 		auto& ctrans = obj.GetNode()->GetUniqueComp<n2::CompTransform>();
 		ctrans.SetPosition(*obj.GetNode(), ctrans.GetTrans().GetPosition() + offset);
-#else
-		auto& cpos = m_world.GetComponent<e2::CompPosition>(obj);
-		cpos.x += offset.x;
-		cpos.y += offset.y;
-#endif // GAME_OBJ_ECS
 	}
+#else
+	e2::SysTransform::Translate(m_world, m_objs, offset);
+#endif
 	m_last_pos = pos;
 
 	return true;
