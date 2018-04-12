@@ -3,6 +3,11 @@
 #include <ee0/SubjectMgr.h>
 #include <ee0/MessageID.h>
 #include <ee0/WxColorGradientDlg.h>
+#include <ee0/ConfigFile.h>
+
+#include <node0/SceneNode.h>
+#include <node2/CompBoundingBox.h>
+#include <sx/StringHelper.h>
 
 #include <wx/sizer.h>
 #include <wx/stattext.h>
@@ -13,13 +18,28 @@
 #include <wx/checkbox.h>
 #include <wx/clrpicker.h>
 
+namespace
+{
+
+const wxString HORI_ALIGN_LABELS[] = { 
+	wxT("左"), wxT("右"), wxT("中"), wxT("自动") };
+const wxString VERT_ALIGN_LABELS[] = { 
+	wxT("上"), wxT("下"), wxT("中"), wxT("自动") };
+
+const wxString OVER_LABEL_LABELS[] = {
+	wxT("溢出"), wxT("截断"), wxT("压缩") };
+
+}
+
 namespace ee2
 {
 
 WxCompTextPanel::WxCompTextPanel(wxWindow* parent, n2::CompText& ctext,
+	                             n0::SceneNode& obj, 
 	                             const ee0::SubjectMgrPtr& sub_mgr)
 	: ee0::WxCompPanel(parent, "Text")
 	, m_ctext(ctext)
+	, m_obj(obj)
 	, m_sub_mgr(sub_mgr)
 {
 	InitLayout();
@@ -44,13 +64,13 @@ void WxCompTextPanel::RefreshNodeComp()
 
 	RefreshColorBtn(tb);
 
-	m_align_h->SetValue(std::to_string(tb.align_hori));
-	m_align_v->SetValue(std::to_string(tb.align_vert));
+	m_align_h->SetSelection(tb.align_hori);
+	m_align_v->SetSelection(tb.align_vert);
 
 	m_space_h->SetValue(std::to_string(tb.space_hori));
 	m_space_v->SetValue(std::to_string(tb.space_vert));
 
-	m_overflow->SetValue(tb.overflow);
+	m_over_label->SetSelection(tb.overlabel);
 	m_richtext->SetValue(tb.richtext);
 }
 
@@ -61,6 +81,7 @@ void WxCompTextPanel::InitLayout()
 	wxSizer* pane_sizer = new wxBoxSizer(wxVERTICAL);
 
 	auto& text = m_ctext.GetText();
+	auto& tb = text.tb;
 
 	static const wxSize INPUT_SIZE(65, 19);
 
@@ -82,16 +103,20 @@ void WxCompTextPanel::InitLayout()
 		wxSizer* sizer = new wxStaticBoxSizer(bounding, wxHORIZONTAL);
 
 		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("Width ")));
-		sizer->Add(m_width = new wxSpinCtrl(win, wxID_ANY, std::to_string(text.tb.width),
-			wxDefaultPosition, INPUT_SIZE, wxSP_ARROW_KEYS, 1, 1024, text.tb.width));
+		sizer->Add(m_width = new wxSpinCtrl(win, wxID_ANY, std::to_string(tb.width),
+			wxDefaultPosition, INPUT_SIZE, wxSP_ARROW_KEYS | wxTE_PROCESS_ENTER, 1, 1024, tb.width));
 		Connect(m_width->GetId(), wxEVT_COMMAND_SPINCTRL_UPDATED,
 			wxSpinEventHandler(WxCompTextPanel::SpinEventHandler));
+		Connect(m_width->GetId(), wxEVT_COMMAND_TEXT_ENTER,
+			wxCommandEventHandler(WxCompTextPanel::CommandEventHandler));
 
 		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("  Height ")));
-		sizer->Add(m_height = new wxSpinCtrl(win, wxID_ANY, std::to_string(text.tb.height),
-			wxDefaultPosition, INPUT_SIZE, wxSP_ARROW_KEYS, 1, 1024, text.tb.width));
+		sizer->Add(m_height = new wxSpinCtrl(win, wxID_ANY, std::to_string(tb.height),
+			wxDefaultPosition, INPUT_SIZE, wxSP_ARROW_KEYS | wxTE_PROCESS_ENTER, 1, 1024, tb.width));
 		Connect(m_height->GetId(), wxEVT_COMMAND_SPINCTRL_UPDATED,
 			wxSpinEventHandler(WxCompTextPanel::SpinEventHandler));
+		Connect(m_height->GetId(), wxEVT_COMMAND_TEXT_ENTER,
+			wxCommandEventHandler(WxCompTextPanel::CommandEventHandler));
 
 		pane_sizer->Add(sizer);
 	}
@@ -103,15 +128,20 @@ void WxCompTextPanel::InitLayout()
 			wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
 
 			wxArrayString choices;
-			choices.Add("todo");
+			auto& fonts = ee0::ConfigFile::Instance()->GetFonts();
+			for (auto& font : fonts) {
+				auto name = sx::StringHelper::UTF8ToGBK(font.first.c_str());
+				choices.push_back(font.first);
+			}
 			sizer->Add(new wxStaticText(win, wxID_ANY, wxT("  Type ")));
 			sizer->Add(m_font_type = new wxChoice(win, wxID_ANY, wxDefaultPosition, wxDefaultSize, choices));
 			Connect(m_font_type->GetId(), wxEVT_COMMAND_CHOICE_SELECTED,
 				wxCommandEventHandler(WxCompTextPanel::CommandEventHandler));
+			m_font_type->SetSelection(tb.font_type);
 
 			sizer->Add(new wxStaticText(win, wxID_ANY, wxT("  Size ")));
-			sizer->Add(m_font_size = new wxSpinCtrl(win, wxID_ANY, std::to_string(text.tb.font_size),
-				wxDefaultPosition, INPUT_SIZE, wxSP_ARROW_KEYS | wxTE_PROCESS_ENTER, 1, 128, text.tb.font_size));
+			sizer->Add(m_font_size = new wxSpinCtrl(win, wxID_ANY, std::to_string(tb.font_size),
+				wxDefaultPosition, INPUT_SIZE, wxSP_ARROW_KEYS | wxTE_PROCESS_ENTER, 1, 128, tb.font_size));
 			Connect(m_font_size->GetId(), wxEVT_COMMAND_SPINCTRL_UPDATED,
 				wxSpinEventHandler(WxCompTextPanel::SpinEventHandler));
 			Connect(m_font_size->GetId(), wxEVT_COMMAND_TEXT_ENTER,
@@ -143,7 +173,7 @@ void WxCompTextPanel::InitLayout()
 				wxCommandEventHandler(WxCompTextPanel::CommandEventHandler));
 
 			sizer->Add(new wxStaticText(win, wxID_ANY, wxT("Size ")));
-			sizer->Add(m_edge_size = new wxTextCtrl(win, wxID_ANY, std::to_string(text.tb.edge_size),
+			sizer->Add(m_edge_size = new wxTextCtrl(win, wxID_ANY, std::to_string(tb.edge_size),
 				wxDefaultPosition, INPUT_SIZE, wxTE_PROCESS_ENTER));
 			Connect(m_edge_size->GetId(), wxEVT_COMMAND_TEXT_ENTER,
 				wxCommandEventHandler(WxCompTextPanel::CommandEventHandler));
@@ -154,7 +184,7 @@ void WxCompTextPanel::InitLayout()
 			wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
 
 			sizer->Add(new wxStaticText(win, wxID_ANY, wxT("Color ")));
-			sizer->Add(m_edge_color = new wxButton(win, wxID_ANY, "gradient..."));
+			sizer->Add(m_edge_color = new wxButton(win, wxID_ANY));
 			Connect(m_edge_color->GetId(), wxEVT_COMMAND_BUTTON_CLICKED,
 				wxCommandEventHandler(WxCompTextPanel::CommandEventHandler));
 
@@ -168,16 +198,16 @@ void WxCompTextPanel::InitLayout()
 		wxSizer* sizer = new wxStaticBoxSizer(bounding, wxHORIZONTAL);
 
 		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("Hori ")));
-		sizer->Add(m_align_h = new wxTextCtrl(win, wxID_ANY, std::to_string(text.tb.align_hori),
-			wxDefaultPosition, INPUT_SIZE, wxTE_PROCESS_ENTER));
-		Connect(m_align_h->GetId(), wxEVT_COMMAND_TEXT_ENTER,
+		sizer->Add(m_align_h = new wxChoice(win, wxID_ANY, wxDefaultPosition, wxDefaultSize, 4, HORI_ALIGN_LABELS));
+		Connect(m_align_h->GetId(), wxEVT_COMMAND_CHOICE_SELECTED,
 			wxCommandEventHandler(WxCompTextPanel::CommandEventHandler));
+		m_align_h->SetSelection(tb.align_hori);
 
 		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("  Vert ")));
-		sizer->Add(m_align_v = new wxTextCtrl(win, wxID_ANY, std::to_string(text.tb.align_vert),
-			wxDefaultPosition, INPUT_SIZE, wxTE_PROCESS_ENTER));
-		Connect(m_align_v->GetId(), wxEVT_COMMAND_TEXT_ENTER,
+		sizer->Add(m_align_v = new wxChoice(win, wxID_ANY, wxDefaultPosition, wxDefaultSize, 4, VERT_ALIGN_LABELS));
+		Connect(m_align_v->GetId(), wxEVT_COMMAND_CHOICE_SELECTED,
 			wxCommandEventHandler(WxCompTextPanel::CommandEventHandler));
+		m_align_v->SetSelection(tb.align_vert);
 
 		pane_sizer->Add(sizer);
 	}
@@ -187,13 +217,13 @@ void WxCompTextPanel::InitLayout()
 		wxSizer* sizer = new wxStaticBoxSizer(bounding, wxHORIZONTAL);
 
 		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("Hori ")));
-		sizer->Add(m_space_h = new wxTextCtrl(win, wxID_ANY, std::to_string(text.tb.space_hori),
+		sizer->Add(m_space_h = new wxTextCtrl(win, wxID_ANY, std::to_string(tb.space_hori),
 			wxDefaultPosition, INPUT_SIZE, wxTE_PROCESS_ENTER));
 		Connect(m_space_h->GetId(), wxEVT_COMMAND_TEXT_ENTER,
 			wxCommandEventHandler(WxCompTextPanel::CommandEventHandler));
 
 		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("  Vert ")));
-		sizer->Add(m_space_v = new wxTextCtrl(win, wxID_ANY, std::to_string(text.tb.space_vert),
+		sizer->Add(m_space_v = new wxTextCtrl(win, wxID_ANY, std::to_string(tb.space_vert),
 			wxDefaultPosition, INPUT_SIZE, wxTE_PROCESS_ENTER));
 		Connect(m_space_v->GetId(), wxEVT_COMMAND_TEXT_ENTER,
 			wxCommandEventHandler(WxCompTextPanel::CommandEventHandler));
@@ -205,9 +235,13 @@ void WxCompTextPanel::InitLayout()
 		wxStaticBox* bounding = new wxStaticBox(win, wxID_ANY, "Others");
 		wxSizer* sizer = new wxStaticBoxSizer(bounding, wxHORIZONTAL);
 
-		sizer->Add(m_overflow = new wxCheckBox(win, wxID_ANY, "Overflow"));
-		Connect(m_overflow->GetId(), wxEVT_COMMAND_CHECKBOX_CLICKED,
+		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("Over Label ")));
+		sizer->Add(m_over_label = new wxChoice(win, wxID_ANY, wxDefaultPosition, wxDefaultSize, 3, OVER_LABEL_LABELS));
+		Connect(m_over_label->GetId(), wxEVT_COMMAND_CHOICE_SELECTED,
 			wxCommandEventHandler(WxCompTextPanel::CommandEventHandler));
+		m_over_label->SetSelection(tb.overlabel);
+
+		sizer->AddSpacer(10);
 
 		sizer->Add(m_richtext = new wxCheckBox(win, wxID_ANY, "Richtext"));
 		Connect(m_richtext->GetId(), wxEVT_COMMAND_CHECKBOX_CLICKED,
@@ -215,7 +249,7 @@ void WxCompTextPanel::InitLayout()
 
 		pane_sizer->Add(sizer);
 	}
-	RefreshColorBtn(text.tb);
+	RefreshColorBtn(tb);
 
 	win->SetSizer(pane_sizer);
 	pane_sizer->SetSizeHints(win);
@@ -229,6 +263,12 @@ void WxCompTextPanel::CommandEventHandler(wxCommandEvent& event)
 	int id = event.GetId();
 	if (id == m_text->GetId()) {
 		text.text = m_text->GetValue().ToStdString();
+	} else if (id == m_width->GetId()) {
+		tb.width = m_width->GetValue();
+		UpdateBoundingBox(tb);
+	} else if (id == m_height->GetId()) {
+		tb.height = m_height->GetValue();
+		UpdateBoundingBox(tb);
 	} else if (id == m_font_type->GetId()) {
 		tb.font_type = m_font_type->GetSelection();
 	} else if (id == m_font_size->GetId()) {
@@ -252,17 +292,15 @@ void WxCompTextPanel::CommandEventHandler(wxCommandEvent& event)
 			RefreshColorBtn(tb);
 		}
 	} else if (id == m_align_h->GetId()) {
-		tb.align_hori = static_cast<pt2::Textbox::HoriAlign>(
-			std::stoi(m_align_h->GetValue().ToStdString()));
+		tb.align_hori = static_cast<pt2::Textbox::HoriAlign>(m_align_h->GetSelection());
 	} else if (id == m_align_v->GetId()) {
-		tb.align_vert = static_cast<pt2::Textbox::VertAlign>(
-			std::stoi(m_align_v->GetValue().ToStdString()));
+		tb.align_vert = static_cast<pt2::Textbox::VertAlign>(m_align_v->GetSelection());
 	} else if (id == m_space_h->GetId()) {
 		tb.space_hori = std::stof(m_space_h->GetValue().ToStdString());
 	} else if (id == m_space_v->GetId()) {
 		tb.space_vert = std::stof(m_space_v->GetValue().ToStdString());
-	} else if (id == m_overflow->GetId()) {
-		tb.overflow = m_overflow->GetValue();
+	} else if (id == m_over_label->GetId()) {
+		tb.overlabel = static_cast<pt2::Textbox::OverLabel>(m_over_label->GetSelection());
 	} else if (id == m_richtext->GetId()) {
 		tb.richtext = m_richtext->GetValue();
 	}
@@ -278,8 +316,10 @@ void WxCompTextPanel::SpinEventHandler(wxSpinEvent& event)
 	int id = event.GetId();
 	if (id == m_width->GetId()) {
 		tb.width = m_width->GetValue();
+		UpdateBoundingBox(tb);
 	} else if (id == m_height->GetId()) {
 		tb.height = m_height->GetValue();
+		UpdateBoundingBox(tb);
 	} else if (id == m_font_size->GetId()) {
 		tb.font_size = m_font_size->GetValue();
 	}
@@ -303,6 +343,12 @@ void WxCompTextPanel::RefreshColorBtn(const pt2::Textbox& tb)
 		m_edge_color->SetLabelText("gradient");
 		m_edge_color->SetBackgroundColour(*wxWHITE);
 	}
+}
+
+void WxCompTextPanel::UpdateBoundingBox(const pt2::Textbox& tb)
+{
+	auto& cbb = m_obj.GetUniqueComp<n2::CompBoundingBox>();
+	cbb.SetSize(m_obj, sm::rect(tb.width, tb.height));
 }
 
 wxColour WxCompTextPanel::ToWxColor(const pt2::Color& col)

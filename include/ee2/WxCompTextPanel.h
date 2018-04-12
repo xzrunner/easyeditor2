@@ -18,7 +18,7 @@ class WxCompTextPanel : public ee0::WxCompPanel
 {
 public:
 	WxCompTextPanel(wxWindow* parent, n2::CompText& ctext,
-		const ee0::SubjectMgrPtr& sub_mgr);
+		n0::SceneNode& obj, const ee0::SubjectMgrPtr& sub_mgr);
 
 	virtual void RefreshNodeComp() override;
 
@@ -30,10 +30,13 @@ private:
 
 	void RefreshColorBtn(const pt2::Textbox& tb);
 
+	void UpdateBoundingBox(const pt2::Textbox& tb);
+
 	static wxColour ToWxColor(const pt2::Color& col);
 
 private:
 	n2::CompText&      m_ctext;
+	n0::SceneNode&     m_obj;
 	ee0::SubjectMgrPtr m_sub_mgr;
 
 	wxTextCtrl* m_text;
@@ -48,11 +51,13 @@ private:
 	wxTextCtrl* m_edge_size;
 	wxButton*   m_edge_color;
 
-	wxTextCtrl *m_align_h, *m_align_v;
+	wxChoice   *m_align_h, *m_align_v;
 
 	wxTextCtrl *m_space_h, *m_space_v;
 
-	wxCheckBox *m_overflow, *m_richtext;
+	wxChoice*   m_over_label;
+
+	wxCheckBox* m_richtext;
 
 }; // WxCompTextPanel
 
