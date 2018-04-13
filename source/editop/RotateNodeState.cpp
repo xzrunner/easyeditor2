@@ -12,7 +12,6 @@
 #include <node2/CompTransform.h>
 #else
 #include <ecsx/World.h>
-#include <entity2/CompTransform.h>
 #include <entity2/SysTransform.h>
 #endif // GAME_OBJ_ECS
 
@@ -50,11 +49,11 @@ bool RotateNodeState::OnMouseRelease(int x, int y)
 	// record
 	std::vector<ee0::GameObj> objs;
 	objs.reserve(m_selection.Size());
-	m_selection.Traverse([&](const ee0::GameObjWithPos& owp)->bool {
+	m_selection.Traverse([&](const ee0::GameObjWithPos& opw)->bool {
 #ifndef GAME_OBJ_ECS
-		objs.push_back(owp.GetNode());
+		objs.push_back(opw.GetNode());
 #else
-		objs.push_back(owp);
+		objs.push_back(opw);
 #endif // GAME_OBJ_ECS
 		return true;
 	});
@@ -71,19 +70,19 @@ bool RotateNodeState::OnMouseDrag(int x, int y)
 	}
 
 	auto pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
-	m_selection.Traverse([&](const ee0::GameObjWithPos& owp)->bool
+	m_selection.Traverse([&](const ee0::GameObjWithPos& opw)->bool
 	{
 #ifndef GAME_OBJ_ECS
-		auto& ctrans = owp.GetNode()->GetUniqueComp<n2::CompTransform>();
+		auto& ctrans = opw.GetNode()->GetUniqueComp<n2::CompTransform>();
 		sm::vec2 center = ctrans.GetTrans().GetPosition() + ctrans.GetTrans().GetOffset();
 		float rot = sm::get_angle_in_direction(center, m_last_pos, pos);
-		ctrans.SetAngle(*owp.GetNode(), ctrans.GetTrans().GetAngle() + rot);
+		ctrans.SetAngle(*opw.GetNode(), ctrans.GetTrans().GetAngle() + rot);
 #else
-		sm::vec2 offset = e2::SysTransform::GetOffset(m_world, owp);
-		sm::vec2 pos = e2::SysTransform::GetPosition(m_world, owp);
+		sm::vec2 offset = e2::SysTransform::GetOffset(m_world, opw);
+		sm::vec2 pos = e2::SysTransform::GetPosition(m_world, opw);
 		sm::vec2 center = pos + offset;
 		float rot = sm::get_angle_in_direction(center, m_last_pos, pos);
-		e2::SysTransform::Rotate(m_world, owp, rot);
+		e2::SysTransform::Rotate(m_world, opw, rot);
 #endif // GAME_OBJ_ECS
 
 		m_angle += rot;

@@ -10,9 +10,13 @@
 #include <painting2/Blackboard.h>
 #include <painting2/RenderContext.h>
 #include <painting2/WindowContext.h>
+#ifndef GAME_OBJ_ECS
 #include <node0/SceneNode.h>
 #include <node2/RenderSystem.h>
 #include <node2/CompUniquePatch.h>
+#else
+#include <entity2/SysRender.h>
+#endif // GAME_OBJ_ECS
 
 namespace
 {
@@ -27,10 +31,17 @@ const uint32_t MESSAGES[] =
 namespace ee2
 {
 
-WxStageCanvas::WxStageCanvas(ee0::WxStagePage* stage, const ee0::RenderContext* rc, 
+WxStageCanvas::WxStageCanvas(ee0::WxStagePage* stage, 
+#ifdef GAME_OBJ_ECS
+	                         const ecsx::World& world,
+#endif // GAME_OBJ_ECS
+                             const ee0::RenderContext* rc, 
 	                         const ee0::WindowContext* wc)
 	: ee0::WxStageCanvas(stage, stage->GetImpl(), rc, wc, HAS_2D)
 	, m_stage(stage)
+#ifdef GAME_OBJ_ECS
+	, m_world(world)
+#endif // GAME_OBJ_ECS
 {
 	m_cam = std::make_shared<pt2::OrthoCamera>();
 
@@ -95,6 +106,7 @@ void WxStageCanvas::DrawNodes() const
 
 	m_stage->Traverse([&](const ee0::GameObj& obj)->bool 
 	{
+#ifndef GAME_OBJ_ECS
 		n2::RenderParams rp;
 		if (obj->HasUniqueComp<n2::CompUniquePatch>()) 
 		{
@@ -104,7 +116,10 @@ void WxStageCanvas::DrawNodes() const
 		}
 
 		n2::RenderSystem::Draw(obj, rp);
-
+#else
+		e2::RenderParams rp;
+		e2::SysRender::Draw(m_world, obj, rp);
+#endif // GAME_OBJ_ECS
 		return true;
 	}, vars);
 }

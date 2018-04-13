@@ -2,11 +2,15 @@
 
 #include <ee0/WxStageCanvas.h>
 #include <ee0/Observer.h>
+#include <ee0/Config.h>
 
 #include <memory>
 
 namespace ee0 { class WxStagePage; }
 namespace pt2 { class Camera; }
+#ifdef GAME_OBJ_ECS
+namespace ecsx { class World; }
+#endif // GAME_OBJ_ECS
 
 namespace ee2
 {
@@ -14,7 +18,12 @@ namespace ee2
 class WxStageCanvas : public ee0::WxStageCanvas, public ee0::Observer
 {
 public:
-	WxStageCanvas(ee0::WxStagePage* stage, const ee0::RenderContext* rc = nullptr, 
+	WxStageCanvas(
+		ee0::WxStagePage* stage,
+#ifdef GAME_OBJ_ECS
+		const ecsx::World& world,
+#endif // GAME_OBJ_ECS
+		const ee0::RenderContext* rc = nullptr, 
 		const ee0::WindowContext* wc = nullptr);
 	virtual ~WxStageCanvas();
 
@@ -34,6 +43,10 @@ protected:
 	ee0::WxStagePage* m_stage;
 
 private:
+#ifdef GAME_OBJ_ECS
+	const ecsx::World& m_world;
+#endif // GAME_OBJ_ECS
+
 	std::shared_ptr<pt2::Camera> m_cam = nullptr;
 
 }; // WxStageCanvas

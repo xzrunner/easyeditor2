@@ -6,7 +6,6 @@
 #include <ee0/GameObj.h>
 
 #include <SM_Vector.h>
-#include <node0/NodeWithPos.h>
 
 #include <vector>
 
@@ -17,7 +16,7 @@ class TranslateNodeAO : public ee0::AtomicOP
 {
 public:
 	TranslateNodeAO(const ee0::SubjectMgrPtr& sub_mgr, 
-		const ee0::SelectionSet<n0::NodeWithPos>& selection, const sm::vec2& offset);
+		const ee0::SelectionSet<ee0::GameObjWithPos>& selection, const sm::vec2& offset);
 	TranslateNodeAO(const ee0::SubjectMgrPtr& sub_mgr, 
 		const ee0::GameObj& obj, const sm::vec2& offset);
 	TranslateNodeAO(const ee0::SubjectMgrPtr& sub_mgr, 

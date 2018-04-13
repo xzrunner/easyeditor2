@@ -9,6 +9,9 @@
 #include <memory>
 
 namespace ee0 { class EditOpState; class WxStagePage; }
+#ifdef GAME_OBJ_ECS
+namespace ecsx { class World; }
+#endif // GAME_OBJ_ECS
 
 namespace ee2
 {
@@ -18,7 +21,12 @@ class CamControlOP;
 class NodeSelectOP : public ee0::NodeSelectOP
 {
 public:
-	NodeSelectOP(ee0::WxStagePage& stage);
+	NodeSelectOP(
+#ifdef GAME_OBJ_ECS
+		const ecsx::World& world,
+#endif // GAME_OBJ_ECS
+		ee0::WxStagePage& stage
+	);
 	virtual ~NodeSelectOP() = default;
 
 	virtual bool OnKeyDown(int key_code) override;
@@ -41,6 +49,10 @@ private:
 	void BreakUpGroup();
 
 private:
+#ifdef GAME_OBJ_ECS
+	const ecsx::World& m_world;
+#endif // GAME_OBJ_ECS
+
 	std::unique_ptr<ee0::EditOpState> m_draw_state = nullptr;
 	mutable bool m_draw_state_disable;
 

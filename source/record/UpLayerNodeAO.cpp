@@ -5,7 +5,7 @@ namespace ee2
 {
 
 UpLayerNodeAO::UpLayerNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
-	                         const ee0::SelectionSet<n0::NodeWithPos>& selection)
+	                         const ee0::SelectionSet<ee0::GameObjWithPos>& selection)
 	: m_sub_mgr(sub_mgr)
 	, m_selection(selection)
 {

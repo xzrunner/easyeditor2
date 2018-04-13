@@ -8,25 +8,43 @@
 #include <ee0/WxDropTarget.h>
 #include <ee0/WxLibraryPanel.h>
 #include <ee0/WxLibraryItem.h>
+#ifndef GAME_OBJ_ECS
 #include <ee0/CompNodeEditor.h>
+#else
+#include <ee0/CompEntityEditor.h>
+#endif // GAME_OBJ_ECS
 #include <ee0/MsgHelper.h>
 #include <ee0/WxStagePage.h>
 #include <ee0/SubjectMgr.h>
 
 #include <guard/check.h>
+#ifndef GAME_OBJ_ECS
 #include <node0/SceneNode.h>
 #include <node2/CompTransform.h>
-#include <painting2/OrthoCamera.h>
 #include <ns/NodeFactory.h>
+#else
+#include <es/EntityFactory.h>
+#include <entity2/SysTransform.h>
+#endif // GAME_OBJ_ECS
+#include <painting2/OrthoCamera.h>
 #include <sx/StringHelper.h>
 
 namespace ee2
 {
 
-WxStageDropTarget::WxStageDropTarget(ee0::WxLibraryPanel* library, ee0::WxStagePage* stage)
+WxStageDropTarget::WxStageDropTarget(
+#ifdef GAME_OBJ_ECS
+	ecsx::World& world,
+#endif // GAME_OBJ_ECS
+	ee0::WxLibraryPanel* library, 
+	ee0::WxStagePage* stage
+	)
 	: WxDropTarget()
 	, m_library(library)
 	, m_stage(stage)
+#ifdef GAME_OBJ_ECS
+	, m_world(world)
+#endif // GAME_OBJ_ECS
 {
 }
 
@@ -51,10 +69,14 @@ void WxStageDropTarget::OnDropText(wxCoord x, wxCoord y, const wxString& text)
 			continue;
 		}
 
+#ifndef GAME_OBJ_ECS
 		auto obj = ns::NodeFactory::Create(item->GetFilepath());
 		if (!obj) {
 			continue;
 		}
+#else
+		auto obj = es::EntityFactory::Create(m_world, item->GetFilepath());
+#endif // GAME_OBJ_ECS
 
 		InitNodeComp(obj, pos, item->GetFilepath());
 
@@ -82,6 +104,7 @@ void WxStageDropTarget::InitNodeComp(const ee0::GameObj& obj,
 	                                 const sm::vec2& pos,
 	                                 const std::string& filepath)
 {
+#ifndef GAME_OBJ_ECS
 	// transform
 	auto& ctrans = obj->GetUniqueComp<n2::CompTransform>();
 	// todo
@@ -97,6 +120,13 @@ void WxStageDropTarget::InitNodeComp(const ee0::GameObj& obj,
 	// editor
 	auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
 	ceditor.SetFilepath(filepath);
+#else
+	e2::SysTransform::SetPosition(m_world, obj, pos);
+
+	// editor
+	auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(obj);
+	ceditor.filepath = filepath;
+#endif // GAME_OBJ_ECS
 }
 
 }

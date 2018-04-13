@@ -3,9 +3,15 @@
 #include <ee0/NodeContainer.h>
 
 #include <SM_Rect.h>
+#ifndef GAME_OBJ_ECS
 #include <node0/SceneNode.h>
 #include <node2/CompBoundingBox.h>
 #include <node2/CompTransform.h>
+#else
+#include <ecsx/World.h>
+#include <entity2/CompBoundingBox.h>
+#include <entity2/SysTransform.h>
+#endif // GAME_OBJ_ECS
 #include <painting2/PrimitiveDraw.h>
 #include <painting2/Color.h>
 
@@ -18,7 +24,11 @@ AutoAlign::AutoAlign(ee0::NodeContainer& objs)
 {
 }
 
-void AutoAlign::Align(const std::vector<ee0::GameObj>& objs)
+void AutoAlign::Align(
+#ifdef GAME_OBJ_ECS
+	ecsx::World& world,
+#endif // GAME_OBJ_ECS
+	const std::vector<ee0::GameObj>& objs)
 {
 	m_hor[0].Set(0, 0);
 	m_hor[1].Set(0, 0);
@@ -31,7 +41,11 @@ void AutoAlign::Align(const std::vector<ee0::GameObj>& objs)
 
 	const float DIS = 5;
 
+#ifndef GAME_OBJ_ECS
+	ee0::GameObj hor_nearest = nullptr, ver_nearest = nullptr;
+#else
 	ee0::GameObj hor_nearest, ver_nearest;
+#endif // GAME_OBJ_ECS
 	float dis_hor = DIS, dis_ver = DIS;
 	// hor
 	m_objs.Traverse([&](const ee0::GameObj& obj)->bool 
@@ -42,8 +56,13 @@ void AutoAlign::Align(const std::vector<ee0::GameObj>& objs)
 			return false;
 		}
 
-		sm::rect src_rect = src->GetUniqueComp<n2::CompBoundingBox>().GetSize(),
-			     dst_rect = dst->GetUniqueComp<n2::CompBoundingBox>().GetSize();
+#ifndef GAME_OBJ_ECS
+		auto &src_rect = src->GetUniqueComp<n2::CompBoundingBox>().GetSize(),
+			 &dst_rect = dst->GetUniqueComp<n2::CompBoundingBox>().GetSize();
+#else
+		auto &src_rect = world.GetComponent<e2::CompBoundingBox>(src).rect,
+			 &dst_rect = world.GetComponent<e2::CompBoundingBox>(dst).rect;
+#endif // GAME_OBJ_ECS
 
 		float src_cy = src_rect.Center().y;
 		float src_down = src_rect.ymin;
@@ -88,8 +107,13 @@ void AutoAlign::Align(const std::vector<ee0::GameObj>& objs)
 			return false;
 		}
 
-		sm::rect src_rect = src->GetUniqueComp<n2::CompBoundingBox>().GetSize(),
-			     dst_rect = dst->GetUniqueComp<n2::CompBoundingBox>().GetSize();
+#ifndef GAME_OBJ_ECS
+		auto &src_rect = src->GetUniqueComp<n2::CompBoundingBox>().GetSize(),
+			 &dst_rect = dst->GetUniqueComp<n2::CompBoundingBox>().GetSize();
+#else
+		auto &src_rect = world.GetComponent<e2::CompBoundingBox>(src).rect,
+			 &dst_rect = world.GetComponent<e2::CompBoundingBox>(dst).rect;
+#endif // GAME_OBJ_ECS
 
 		float src_cx = src_rect.Center().x;
 		float src_left = src_rect.xmin;
@@ -125,19 +149,42 @@ void AutoAlign::Align(const std::vector<ee0::GameObj>& objs)
 		return true;
 	});
 
-	if (hor_nearest)
-		Align(*hor_nearest, *objs[0]);
-	if (ver_nearest && ver_nearest != hor_nearest)
-		Align(*ver_nearest, *objs[0]);
+#ifndef GAME_OBJ_ECS
+	if (hor_nearest) {
+		Align(hor_nearest, objs[0]);
+	}
+	if (ver_nearest && ver_nearest != hor_nearest) {
+		Align(ver_nearest, objs[0]);
+	}
+#else
+	if (!hor_nearest.IsNull()) {
+		Align(world, hor_nearest, objs[0]);
+	}
+	if (!ver_nearest.IsNull() && ver_nearest != hor_nearest) {
+		Align(world, ver_nearest, objs[0]);
+	}
+#endif // GAME_OBJ_ECS
 }
 
-void AutoAlign::Align(const n0::SceneNode& src, n0::SceneNode& dst)
+void AutoAlign::Align(
+#ifdef GAME_OBJ_ECS
+	ecsx::World& world,
+#endif // GAME_OBJ_ECS
+	const ee0::GameObj& src, 
+	const ee0::GameObj& dst
+)
 {
 	const float DIS = 5;
 	const float LEN = 400;
 
-	sm::rect src_rect = src.GetUniqueComp<n2::CompBoundingBox>().GetSize(),
-		     dst_rect = dst.GetUniqueComp<n2::CompBoundingBox>().GetSize();
+#ifndef GAME_OBJ_ECS
+	auto &src_rect = src->GetUniqueComp<n2::CompBoundingBox>().GetSize();
+	// todo
+	sm::rect dst_rect = dst->GetUniqueComp<n2::CompBoundingBox>().GetSize();
+#else
+	auto &src_rect = world.GetComponent<e2::CompBoundingBox>(src).rect,
+	     &dst_rect = world.GetComponent<e2::CompBoundingBox>(dst).rect;
+#endif // GAME_OBJ_ECS
 
 	float src_left	= src_rect.xmin,
 		  src_right = src_rect.xmax,
@@ -146,8 +193,10 @@ void AutoAlign::Align(const n0::SceneNode& src, n0::SceneNode& dst)
 	float src_cx	= src_rect.Center().x,
 		  src_cy	= src_rect.Center().y;
 
-	auto& dst_ctrans = dst.GetUniqueComp<n2::CompTransform>();
+#ifndef GAME_OBJ_ECS
+	auto& dst_ctrans = dst->GetUniqueComp<n2::CompTransform>();
 	auto& dst_trans = dst_ctrans.GetTrans();
+#endif // GAME_OBJ_ECS
 
 	// up
 	float nearest = DIS;
@@ -155,7 +204,11 @@ void AutoAlign::Align(const n0::SceneNode& src, n0::SceneNode& dst)
 	{
 		float dy = src_up - dst_rect.ymax;
 		nearest = dis;
-		dst_ctrans.SetPosition(dst, sm::vec2(dst_trans.GetPosition().x, dst_trans.GetPosition().y + dy));
+#ifndef GAME_OBJ_ECS
+		dst_ctrans.SetPosition(*dst, sm::vec2(dst_trans.GetPosition().x, dst_trans.GetPosition().y + dy));
+#else
+		e2::SysTransform::Translate(world, dst, sm::vec2(0, dy));
+#endif // GAME_OBJ_ECS
 		dst_rect.Translate(sm::vec2(0, dy));
 		m_hor[0].Set(src_cx - LEN, src_up);
 		m_hor[1].Set(src_cx + LEN, src_up);
@@ -164,7 +217,11 @@ void AutoAlign::Align(const n0::SceneNode& src, n0::SceneNode& dst)
 	{
 		float dy = src_down - dst_rect.ymax;
 		nearest = dis;
-		dst_ctrans.SetPosition(dst, sm::vec2(dst_trans.GetPosition().x, dst_trans.GetPosition().y + dy));
+#ifndef GAME_OBJ_ECS
+		dst_ctrans.SetPosition(*dst, sm::vec2(dst_trans.GetPosition().x, dst_trans.GetPosition().y + dy));
+#else
+		e2::SysTransform::Translate(world, dst, sm::vec2(0, dy));
+#endif // GAME_OBJ_ECS
 		dst_rect.Translate(sm::vec2(0, dy));
 		m_hor[0].Set(src_cx - LEN, src_down);
 		m_hor[1].Set(src_cx + LEN, src_down);
@@ -174,7 +231,11 @@ void AutoAlign::Align(const n0::SceneNode& src, n0::SceneNode& dst)
 	{
 		float dy = src_up - dst_rect.ymin;
 		nearest = dis;
-		dst_ctrans.SetPosition(dst, sm::vec2(dst_trans.GetPosition().x, dst_trans.GetPosition().y + dy));
+#ifndef GAME_OBJ_ECS
+		dst_ctrans.SetPosition(*dst, sm::vec2(dst_trans.GetPosition().x, dst_trans.GetPosition().y + dy));
+#else
+		e2::SysTransform::Translate(world, dst, sm::vec2(0, dy));
+#endif // GAME_OBJ_ECS
 		dst_rect.Translate(sm::vec2(0, dy));
 		m_hor[0].Set(src_cx - LEN, src_up);
 		m_hor[1].Set(src_cx + LEN, src_up);
@@ -183,7 +244,11 @@ void AutoAlign::Align(const n0::SceneNode& src, n0::SceneNode& dst)
 	{
 		float dy = src_down - dst_rect.ymin;
 		nearest = dis;
-		dst_ctrans.SetPosition(dst, sm::vec2(dst_trans.GetPosition().x, dst_trans.GetPosition().y + dy));
+#ifndef GAME_OBJ_ECS
+		dst_ctrans.SetPosition(*dst, sm::vec2(dst_trans.GetPosition().x, dst_trans.GetPosition().y + dy));
+#else
+		e2::SysTransform::Translate(world, dst, sm::vec2(0, dy));
+#endif // GAME_OBJ_ECS
 		dst_rect.Translate(sm::vec2(0, dy));
 		m_hor[0].Set(src_cx - LEN, src_down);
 		m_hor[1].Set(src_cx + LEN, src_down);
@@ -194,7 +259,11 @@ void AutoAlign::Align(const n0::SceneNode& src, n0::SceneNode& dst)
 	{
 		float dx = src_left - dst_rect.xmin;
 		nearest = dis;
-		dst_ctrans.SetPosition(dst, sm::vec2(dst_trans.GetPosition().x + dx, dst_trans.GetPosition().y));
+#ifndef GAME_OBJ_ECS
+		dst_ctrans.SetPosition(*dst, sm::vec2(dst_trans.GetPosition().x + dx, dst_trans.GetPosition().y));
+#else
+		e2::SysTransform::Translate(world, dst, sm::vec2(dx, 0));
+#endif // GAME_OBJ_ECS
 		dst_rect.Translate(sm::vec2(dx, 0));
 		m_ver[0].Set(src_left, src_cy - LEN);
 		m_ver[1].Set(src_left, src_cy + LEN);
@@ -203,7 +272,11 @@ void AutoAlign::Align(const n0::SceneNode& src, n0::SceneNode& dst)
 	{
 		float dx = src_right - dst_rect.xmin;
 		nearest = dis;
-		dst_ctrans.SetPosition(dst, sm::vec2(dst_trans.GetPosition().x + dx, dst_trans.GetPosition().y));
+#ifndef GAME_OBJ_ECS
+		dst_ctrans.SetPosition(*dst, sm::vec2(dst_trans.GetPosition().x + dx, dst_trans.GetPosition().y));
+#else
+		e2::SysTransform::Translate(world, dst, sm::vec2(dx, 0));
+#endif // GAME_OBJ_ECS
 		dst_rect.Translate(sm::vec2(dx, 0));
 		m_ver[0].Set(src_right, src_cy - LEN);
 		m_ver[1].Set(src_right, src_cy + LEN);
@@ -213,7 +286,11 @@ void AutoAlign::Align(const n0::SceneNode& src, n0::SceneNode& dst)
 	{
 		float dx = src_left - dst_rect.xmax;
 		nearest = dis;
-		dst_ctrans.SetPosition(dst, sm::vec2(dst_trans.GetPosition().x + dx, dst_trans.GetPosition().y));
+#ifndef GAME_OBJ_ECS
+		dst_ctrans.SetPosition(*dst, sm::vec2(dst_trans.GetPosition().x + dx, dst_trans.GetPosition().y));
+#else
+		e2::SysTransform::Translate(world, dst, sm::vec2(dx, 0));
+#endif // GAME_OBJ_ECS
 		dst_rect.Translate(sm::vec2(dx, 0));
 		m_ver[0].Set(src_left, src_cy - LEN);
 		m_ver[1].Set(src_left, src_cy + LEN);
@@ -222,7 +299,11 @@ void AutoAlign::Align(const n0::SceneNode& src, n0::SceneNode& dst)
 	{
 		float dx = src_right - dst_rect.xmax;
 		nearest = dis;
-		dst_ctrans.SetPosition(dst, sm::vec2(dst_trans.GetPosition().x + dx, dst_trans.GetPosition().y));
+#ifndef GAME_OBJ_ECS
+		dst_ctrans.SetPosition(*dst, sm::vec2(dst_trans.GetPosition().x + dx, dst_trans.GetPosition().y));
+#else
+		e2::SysTransform::Translate(world, dst, sm::vec2(dx, 0));
+#endif // GAME_OBJ_ECS
 		dst_rect.Translate(sm::vec2(dx, 0));
 		m_ver[0].Set(src_right, src_cy - LEN);
 		m_ver[1].Set(src_right, src_cy + LEN);

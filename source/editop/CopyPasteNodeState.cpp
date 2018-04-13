@@ -26,12 +26,12 @@ CopyPasteNodeState::CopyPasteNodeState(pt2::Camera& cam,
 #endif // GAME_OBJ_ECS
 {
 	m_objs.reserve(selection.Size());
-	selection.Traverse([&](const ee0::GameObjWithPos& owp)->bool
+	selection.Traverse([&](const ee0::GameObjWithPos& opw)->bool
 	{
 #ifndef GAME_OBJ_ECS
-		m_objs.push_back(n0::NodeWithPos(owp.GetNode()->Clone(), owp.GetRoot(), 0));
+		m_objs.push_back(ee0::GameObjWithPos(opw.GetNode()->Clone(), opw.GetRoot(), 0));
 #else
-		m_objs.push_back(owp);
+		m_objs.push_back(opw);
 #endif // GAME_OBJ_ECS
 		return true;
 	});

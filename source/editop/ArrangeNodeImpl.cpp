@@ -27,9 +27,15 @@
 
 #include <guard/check.h>
 #include <SM_Calc.h>
+#ifndef GAME_OBJ_ECS
 #include <node0/SceneNode.h>
 #include <node2/CompBoundingBox.h>
 #include <node2/CompTransform.h>
+#else
+#include <ecsx/World.h>
+#include <entity2/SysTransform.h>
+#include <entity2/CompBoundingBox.h>
+#endif // GAME_OBJ_ECS
 #include <painting2/PrimitiveDraw.h>
 #include <painting2/Color.h>
 
@@ -39,13 +45,19 @@ namespace ee2
 ArrangeNodeImpl::ArrangeNodeImpl(pt2::Camera& cam, 
 	                             ee0::EditRecord& record,
 	                             const ee0::SubjectMgrPtr& sub_mgr,
-	                             ee0::SelectionSet<n0::NodeWithPos>& selection, 
+#ifdef GAME_OBJ_ECS
+	                             ecsx::World& world,
+#endif // GAME_OBJ_ECS
+	                             ee0::SelectionSet<ee0::GameObjWithPos>& selection, 
 	                             ee0::NodeContainer& objs,
 	                             const ee0::KeysState& key_state,
 	                             const ArrangeNodeCfg& cfg)
 	: m_cam(cam)
 	, m_record(record)
 	, m_sub_mgr(sub_mgr)
+#ifdef GAME_OBJ_ECS
+	, m_world(world)
+#endif // GAME_OBJ_ECS
 	, m_selection(selection)
 	, m_key_state(key_state)
 	, m_cfg(cfg)
@@ -90,7 +102,12 @@ bool ArrangeNodeImpl::OnKeyDown(int keycode)
 		break;
 	case 'm' : case 'M':
 		ret = true;
-		m_op_state = std::make_unique<MoveNodeState>(m_cam, m_selection);
+		m_op_state = std::make_unique<MoveNodeState>(
+			m_cam, 
+#ifdef GAME_OBJ_ECS
+			m_world,
+#endif // GAME_OBJ_ECS
+			m_selection);
 		break;
 	case WXK_SPACE:
 		ret = true;
@@ -167,18 +184,36 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 
 	// copy & paste
 	if (wxGetKeyState(WXK_ALT)) {
-		m_op_state = std::make_unique<CopyPasteNodeState>(m_cam, m_sub_mgr, m_selection);
+		m_op_state = std::make_unique<CopyPasteNodeState>(
+			m_cam, 
+			m_sub_mgr, 
+#ifdef GAME_OBJ_ECS
+			m_world,
+#endif // GAME_OBJ_ECS
+			m_selection);
 	}
 
+#ifndef GAME_OBJ_ECS
 	ee0::GameObj selected = nullptr;
+#else
+	ee0::GameObj selected;
+#endif // GAME_OBJ_ECS
 	if (m_selection.Size() == 1)
 	{
-		m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
-			selected = nwp.GetNode();
+		m_selection.Traverse([&](const ee0::GameObjWithPos& opw)->bool {
+#ifndef GAME_OBJ_ECS
+			selected = opw.GetNode();
+#else
+			selected = opw;
+#endif // GAME_OBJ_ECS
 			return false;
 		});
 	}
+#ifndef GAME_OBJ_ECS
 	if (!selected) {
+#else
+	if (!selected.IsNull()) {
+#endif // GAME_OBJ_ECS
 		if (m_op_state) {
 			m_op_state->OnMousePress(x, y);
 		}
@@ -190,7 +225,14 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 	{
 		sm::vec2 offset = GetNodeOffset(selected);
 		if (sm::dis_pos_to_pos(offset, pos) < m_ctrl_node_radius) {
-			m_op_state = std::make_unique<OffsetNodeState>(m_cam, m_record, m_sub_mgr, selected);
+			m_op_state = std::make_unique<OffsetNodeState>(
+				m_cam, 
+				m_record, 
+				m_sub_mgr, 
+#ifdef GAME_OBJ_ECS
+				m_world,
+#endif // GAME_OBJ_ECS
+				selected);
 			return;
 		}
 	}
@@ -198,16 +240,28 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 	// scale
 	if (m_cfg.is_deform_open && !m_key_state.GetKeyState(WXK_SHIFT))
 	{
-		sm::vec2 ctrlNodes[8];
-		NodeCtrlPoint::GetNodeCtrlPoints(selected, ctrlNodes);
+		sm::vec2 ctrl_nodes[8];
+#ifndef GAME_OBJ_ECS
+		NodeCtrlPoint::GetNodeCtrlPoints(selected, ctrl_nodes);
+#else
+		NodeCtrlPoint::GetNodeCtrlPoints(m_world, selected, ctrl_nodes);
+#endif // GAME_OBJ_ECS
 		for (int i = 0; i < 8; ++i)
 		{
-			if (sm::dis_pos_to_pos(ctrlNodes[i], pos) < m_ctrl_node_radius)
+			if (sm::dis_pos_to_pos(ctrl_nodes[i], pos) < m_ctrl_node_radius)
 			{
 				NodeCtrlPoint::Node cn;
-				cn.pos = ctrlNodes[i];
+				cn.pos = ctrl_nodes[i];
 				cn.type = NodeCtrlPoint::Type(i);
-				m_op_state = std::make_unique<ScaleNodeState>(m_cam, m_record, m_sub_mgr, selected, cn);
+				m_op_state = std::make_unique<ScaleNodeState>(
+					m_cam, 
+					m_record, 
+					m_sub_mgr, 
+#ifdef GAME_OBJ_ECS
+					m_world,
+#endif // GAME_OBJ_ECS
+					selected, 
+					cn);
 				return;
 			}
 		}
@@ -230,7 +284,15 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 	//}
 
 	// translate
-	m_op_state = std::make_unique<TranslateNodeState>(m_cam, m_record, m_sub_mgr, m_selection, pos);
+	m_op_state = std::make_unique<TranslateNodeState>(
+		m_cam, 
+		m_record, 
+		m_sub_mgr, 
+#ifdef GAME_OBJ_ECS
+		m_world,
+#endif // GAME_OBJ_ECS
+		m_selection, 
+		pos);
 
 	m_op_state->OnMousePress(x, y);
 }
@@ -245,7 +307,15 @@ void ArrangeNodeImpl::OnMouseLeftUp(int x, int y)
 
 	sm::vec2 pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
 	if (!m_selection.IsEmpty()) {
-		m_op_state = std::make_unique<TranslateNodeState>(m_cam, m_record, m_sub_mgr, m_selection, pos);
+		m_op_state = std::make_unique<TranslateNodeState>(
+			m_cam, 
+			m_record, 
+			m_sub_mgr, 
+#ifdef GAME_OBJ_ECS
+			m_world,
+#endif // GAME_OBJ_ECS
+			m_selection, 
+			pos);
 	}
 
 	if (m_cfg.is_auto_align_open &&
@@ -254,11 +324,19 @@ void ArrangeNodeImpl::OnMouseLeftUp(int x, int y)
 		m_left_down_pos != pos)
 	{
 		std::vector<ee0::GameObj> objs;
-		m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
-			objs.push_back(nwp.GetNode());
+		m_selection.Traverse([&](const ee0::GameObjWithPos& opw)->bool {
+#ifndef GAME_OBJ_ECS
+			objs.push_back(opw.GetNode());
+#else
+			objs.push_back(opw);
+#endif // GAME_OBJ_ECS
 			return false;
 		});
+#ifndef GAME_OBJ_ECS
 		m_align.Align(objs);
+#else
+		m_align.Align(m_world, objs);
+#endif // GAME_OBJ_ECS
 
 		m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 	}
@@ -278,31 +356,53 @@ void ArrangeNodeImpl::OnMouseRightDown(int x, int y)
 	sm::vec2 pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
 	m_right_down_pos = pos;
 
+#ifndef GAME_OBJ_ECS
 	ee0::GameObj selected = nullptr;
+#else
+	ee0::GameObj selected;
+#endif // GAME_OBJ_ECS
 	if (m_selection.Size() == 1)
 	{
-		m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
-			selected = nwp.GetNode();
+		m_selection.Traverse([&](const ee0::GameObjWithPos& opw)->bool {
+#ifndef GAME_OBJ_ECS
+			selected = opw.GetNode();
+#else
+			selected = opw;
+#endif // GAME_OBJ_ECS
 			return false;
 		});
 	}
+#ifndef GAME_OBJ_ECS
 	if (!selected) {
+#else
+	if (!selected.IsNull()) {
+#endif // GAME_OBJ_ECS
 		return;
 	}
 
 	// shear
 	if (m_cfg.is_deform_open)
 	{
-		sm::vec2 ctrlNodes[8];
-		NodeCtrlPoint::GetNodeCtrlPoints(selected, ctrlNodes);
+		sm::vec2 ctrl_nodes[8];
+#ifndef GAME_OBJ_ECS
+		NodeCtrlPoint::GetNodeCtrlPoints(selected, ctrl_nodes);
+#else
+		NodeCtrlPoint::GetNodeCtrlPoints(m_world, selected, ctrl_nodes);
+#endif // GAME_OBJ_ECS
 		for (int i = 0; i < 8; ++i)
 		{
-			if (sm::dis_pos_to_pos(ctrlNodes[i], pos) < m_ctrl_node_radius)
+			if (sm::dis_pos_to_pos(ctrl_nodes[i], pos) < m_ctrl_node_radius)
 			{
 				NodeCtrlPoint::Node cn;
-				cn.pos = ctrlNodes[i];
+				cn.pos = ctrl_nodes[i];
 				cn.type = NodeCtrlPoint::Type(i);
-				m_op_state = std::make_unique<ShearNodeState>(m_cam, selected, cn);
+				m_op_state = std::make_unique<ShearNodeState>(
+					m_cam, 
+#ifdef GAME_OBJ_ECS
+					m_world,
+#endif // GAME_OBJ_ECS
+					selected, 
+					cn);
 				return;
 			}
 		}
@@ -310,7 +410,15 @@ void ArrangeNodeImpl::OnMouseRightDown(int x, int y)
 
 	// rotate
 	if (m_cfg.is_rotate_open) {
-		m_op_state = std::make_unique<RotateNodeState>(m_cam, m_record, m_sub_mgr, m_selection, pos);
+		m_op_state = std::make_unique<RotateNodeState>(
+			m_cam, 
+			m_record, 
+			m_sub_mgr,
+#ifdef GAME_OBJ_ECS
+			m_world,
+#endif // GAME_OBJ_ECS
+			m_selection, 
+			pos);
 	}
 }
 
@@ -382,18 +490,37 @@ void ArrangeNodeImpl::OnDraw(float cam_scale) const
 	m_ctrl_node_radius = ArrangeNodeCfg::CTRL_NODE_RADIUS * cam_scale;
 	if ((m_cfg.is_deform_open || m_cfg.is_offset_open) && m_selection.Size() == 1)
 	{
+#ifndef GAME_OBJ_ECS
 		ee0::GameObj selected = nullptr;
-		m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
-			selected = nwp.GetNode();
+#else
+		ee0::GameObj selected;
+#endif // GAME_OBJ_ECS
+		m_selection.Traverse([&](const ee0::GameObjWithPos& opw)->bool {
+#ifndef GAME_OBJ_ECS
+			selected = opw.GetNode();
+#else
+			selected = opw;
+#endif // GAME_OBJ_ECS
 			return false;
 		});
 
+#ifndef GAME_OBJ_ECS
 		GD_ASSERT(selected, "null selected");
 		auto& cbb = selected->GetUniqueComp<n2::CompBoundingBox>();
 		auto& ctrans = selected->GetUniqueComp<n2::CompTransform>();
 		auto& sz = cbb.GetSize();
-		float w = sz.Width() * fabs(ctrans.GetTrans().GetScale().x);
-		float h = sz.Height() * fabs(ctrans.GetTrans().GetScale().y);
+		float sx = ctrans.GetTrans().GetScale().x,
+			  sy = ctrans.GetTrans().GetScale().y;
+#else
+		GD_ASSERT(!selected.IsNull(), "null selected");
+		auto& cbb = m_world.GetComponent<e2::CompBoundingBox>(selected);
+		auto& sz = cbb.rect;
+		auto scale = e2::SysTransform::GetScale(m_world, selected);
+		float sx = scale.x, sy = scale.y;
+#endif // GAME_OBJ_ECS
+
+		float w = sz.Width() * fabs(sx);
+		float h = sz.Height() * fabs(sy);
 		float max_e = std::max(w, h);
 		if (max_e / cam_scale < 100) 
 		{
@@ -419,7 +546,11 @@ void ArrangeNodeImpl::OnDraw(float cam_scale) const
 				else
 				{
 					sm::vec2 ctrl_nodes[8];
+#ifndef GAME_OBJ_ECS
 					NodeCtrlPoint::GetNodeCtrlPoints(selected, ctrl_nodes);
+#else
+					NodeCtrlPoint::GetNodeCtrlPoints(m_world, selected, ctrl_nodes);
+#endif // GAME_OBJ_ECS
 					for (int i = 0; i < 4; ++i) {
 						pt2::PrimitiveDraw::SetColor(pt2::Color(51, 204, 51));
 						pt2::PrimitiveDraw::Circle(nullptr, ctrl_nodes[i], m_ctrl_node_radius, false);
@@ -449,16 +580,30 @@ void ArrangeNodeImpl::Clear()
 
 ee0::GameObj ArrangeNodeImpl::QueryEditedNode(const sm::vec2& pos) const
 {
+#ifndef GAME_OBJ_ECS
 	ee0::GameObj selected = nullptr;
+	ee0::GameObj ret = nullptr;
+#else
+	ee0::GameObj selected;
+	ee0::GameObj ret;
+#endif // GAME_OBJ_ECS
 	if (m_cfg.is_deform_open && m_selection.Size() == 1)
 	{
-		m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
-			selected = nwp.GetNode();
+		m_selection.Traverse([&](const ee0::GameObjWithPos& opw)->bool {
+#ifndef GAME_OBJ_ECS
+			selected = opw.GetNode();
+#else
+			selected = opw;
+#endif // GAME_OBJ_ECS
 			return false;
 		});
 	}
+#ifndef GAME_OBJ_ECS
 	if (!selected) {
-		return nullptr;
+#else
+	if (!selected.IsNull()) {
+#endif // GAME_OBJ_ECS
+		return ret;
 	}
 
 	if (m_cfg.is_offset_open)
@@ -472,7 +617,11 @@ ee0::GameObj ArrangeNodeImpl::QueryEditedNode(const sm::vec2& pos) const
 	if (m_cfg.is_deform_open && !m_key_state.GetKeyState(WXK_SHIFT))
 	{
 		sm::vec2 ctrl_nodes[8];
+#ifndef GAME_OBJ_ECS
 		NodeCtrlPoint::GetNodeCtrlPoints(selected, ctrl_nodes);
+#else
+		NodeCtrlPoint::GetNodeCtrlPoints(m_world, selected, ctrl_nodes);
+#endif // GAME_OBJ_ECS
 		for (int i = 0; i < 8; ++i) {
 			if (sm::dis_pos_to_pos(ctrl_nodes[i], pos) < m_ctrl_node_radius) {
 				return selected;
@@ -491,7 +640,7 @@ ee0::GameObj ArrangeNodeImpl::QueryEditedNode(const sm::vec2& pos) const
 	//	}
 	//}
 
-	return NULL;
+	return ret;
 }
 
 bool ArrangeNodeImpl::IsSelectionEmpty() const
@@ -522,23 +671,44 @@ void ArrangeNodeImpl::OnSpaceKeyDown()
 
 	auto comb = std::make_shared<CombineAO>();
 
-	m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool
+	m_selection.Traverse([&](const ee0::GameObjWithPos& opw)->bool
 	{
-		auto& obj = nwp.GetNode();
+#ifndef GAME_OBJ_ECS
+		auto& obj = opw.GetNode();
 		auto& ctrans = obj->GetUniqueComp<n2::CompTransform>();
+
+		auto& pos = ctrans.GetTrans().GetPosition();
+		auto  angle = ctrans.GetTrans().GetAngle();
+		auto& scale = ctrans.GetTrans().GetScale();
+		auto& shear = ctrans.GetTrans().GetShear();
+#else
+		auto& obj = opw;
+
+		auto pos = e2::SysTransform::GetPosition(m_world, obj);
+		auto angle = e2::SysTransform::GetAngle(m_world, obj);
+		auto scale = e2::SysTransform::GetScale(m_world, obj);
+		auto shear = e2::SysTransform::GetShear(m_world, obj);
+#endif // GAME_OBJ_ECS
 
 		// record
 		std::vector<ee0::GameObj> objs;
 		objs.push_back(obj);
-		comb->Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, obj, - ctrans.GetTrans().GetPosition()));
-		comb->Add(std::make_shared<RotateNodeAO>(m_sub_mgr, objs, - ctrans.GetTrans().GetAngle()));
-		comb->Add(std::make_shared<ScaleNodeAO>(m_sub_mgr, obj, sm::vec2(1, 1), ctrans.GetTrans().GetScale()));
-		comb->Add(std::make_shared<ShearNodeAO>(m_sub_mgr, obj, sm::vec2(0, 0), ctrans.GetTrans().GetShear()));
+		comb->Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, obj, - pos));
+		comb->Add(std::make_shared<RotateNodeAO>(m_sub_mgr, objs, - angle));
+		comb->Add(std::make_shared<ScaleNodeAO>(m_sub_mgr, obj, sm::vec2(1, 1), scale));
+		comb->Add(std::make_shared<ShearNodeAO>(m_sub_mgr, obj, sm::vec2(0, 0), shear));
 
+#ifndef GAME_OBJ_ECS
 		ctrans.SetPosition(*obj, sm::vec2(0, 0));
 		ctrans.SetAngle(*obj, 0);
 		ctrans.SetShear(*obj, sm::vec2(0, 0));
 		ctrans.SetScale(*obj, sm::vec2(1, 1));
+#else
+		e2::SysTransform::SetPosition(m_world, obj, sm::vec2(0, 0));
+		e2::SysTransform::SetAngle(m_world, obj, 0);
+		e2::SysTransform::SetShear(m_world, obj, sm::vec2(0, 0));
+		e2::SysTransform::SetScale(m_world, obj, sm::vec2(1, 1));
+#endif // GAME_OBJ_ECS
 
 		return true;
 	});
@@ -563,10 +733,15 @@ void ArrangeNodeImpl::OnDeleteKeyDown()
 
 	std::vector<ee0::GameObj> objs;
 	objs.reserve(m_selection.Size());
-	m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool
+	m_selection.Traverse([&](const ee0::GameObjWithPos& opw)->bool
 	{
-		objs.push_back(nwp.GetNode());
-		ee0::MsgHelper::DeleteNode(*m_sub_mgr, nwp.GetNode());
+#ifndef GAME_OBJ_ECS
+		objs.push_back(opw.GetNode());
+		ee0::MsgHelper::DeleteNode(*m_sub_mgr, opw.GetNode());
+#else
+		objs.push_back(opw);
+		ee0::MsgHelper::DeleteNode(*m_sub_mgr, opw);
+#endif // GAME_OBJ_ECS
 		return true;
 	});
 
@@ -594,8 +769,13 @@ void ArrangeNodeImpl::DownOneLayer()
 
 sm::vec2 ArrangeNodeImpl::GetNodeOffset(const ee0::GameObj& obj) const
 {
+#ifndef GAME_OBJ_ECS
 	auto& ctrans = obj->GetUniqueComp<n2::CompTransform>();
 	sm::vec2 offset = ctrans.GetTrans().GetPosition() + ctrans.GetTrans().GetOffset();
+#else
+	auto offset = e2::SysTransform::GetPosition(m_world, obj) +
+		          e2::SysTransform::GetOffset(m_world, obj);
+#endif // GAME_OBJ_ECS
 	return offset;
 }
 

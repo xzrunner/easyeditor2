@@ -4,7 +4,7 @@
 namespace ee2
 {
 
-BreakUpAO::BreakUpAO(const ee0::SubjectMgrPtr& sub_mgr, const ee0::SelectionSet<n0::NodeWithPos>& selection)
+BreakUpAO::BreakUpAO(const ee0::SubjectMgrPtr& sub_mgr, const ee0::SelectionSet<ee0::GameObjWithPos>& selection)
 	: m_sub_mgr(sub_mgr)
 	, m_selection(selection)
 {
@@ -13,7 +13,7 @@ BreakUpAO::BreakUpAO(const ee0::SubjectMgrPtr& sub_mgr, const ee0::SelectionSet<
 void BreakUpAO::Undo()
 {
 	// copy, will change selection
-	std::vector<n0::NodeWithPos> objs;
+	std::vector<ee0::GameObjWithPos> objs;
 	CopyFromSelection(objs);
 
 	NodeGroupHelper::BuildGroup(*m_sub_mgr, objs);
@@ -22,7 +22,7 @@ void BreakUpAO::Undo()
 void BreakUpAO::Redo()
 {
 	// copy, will change selection
-	std::vector<n0::NodeWithPos> objs;
+	std::vector<ee0::GameObjWithPos> objs;
 	CopyFromSelection(objs);
 
 	printf("BreakUpAO::Redo count %d\n", objs.size());
@@ -32,11 +32,11 @@ void BreakUpAO::Redo()
 	}
 }
 
-void BreakUpAO::CopyFromSelection(std::vector<n0::NodeWithPos>& objs) const
+void BreakUpAO::CopyFromSelection(std::vector<ee0::GameObjWithPos>& objs) const
 {
 	objs.reserve(m_selection.Size());
-	m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
-		objs.push_back(nwp);
+	m_selection.Traverse([&](const ee0::GameObjWithPos& opw)->bool {
+		objs.push_back(opw);
 		return true;
 	});
 }

@@ -6,8 +6,13 @@
 #include <ee0/EditRecord.h>
 #include <ee0/MsgHelper.h>
 
+#ifndef GAME_OBJ_ECS
 #include <node0/SceneNode.h>
 #include <node2/CompTransform.h>
+#else
+#include <ecsx/World.h>
+#include <entity2/SysTransform.h>
+#endif // GAME_OBJ_ECS
 
 namespace ee2
 {
@@ -15,11 +20,17 @@ namespace ee2
 TranslateNodeState::TranslateNodeState(pt2::Camera& cam, 
 	                                   ee0::EditRecord& record,
 	                                   const ee0::SubjectMgrPtr& sub_mgr,
-		                               const ee0::SelectionSet<n0::NodeWithPos>& selection, 
+#ifdef GAME_OBJ_ECS
+	                                   ecsx::World& world,
+#endif // GAME_OBJ_ECS
+		                               const ee0::SelectionSet<ee0::GameObjWithPos>& selection,
 		                               const sm::vec2& first_pos)
 	: m_cam(cam)
 	, m_record(record)
 	, m_sub_mgr(sub_mgr)
+#ifdef GAME_OBJ_ECS
+	, m_world(world)
+#endif // GAME_OBJ_ECS
 	, m_selection(selection)
 	, m_dirty(false)
 {
@@ -106,10 +117,14 @@ bool TranslateNodeState::OnDirectionKeyDown(int type)
 
 void TranslateNodeState::Translate(const sm::vec2& offset)
 {
-	m_selection.Traverse([&](const n0::NodeWithPos& nwp)->bool
+	m_selection.Traverse([&](const ee0::GameObjWithPos& opw)->bool
 	{
-		auto& ctrans = nwp.GetNode()->GetUniqueComp<n2::CompTransform>();
-		ctrans.SetPosition(*nwp.GetNode(), ctrans.GetTrans().GetPosition() + offset);
+#ifndef GAME_OBJ_ECS
+		auto& ctrans = opw.GetNode()->GetUniqueComp<n2::CompTransform>();
+		ctrans.SetPosition(*opw.GetNode(), ctrans.GetTrans().GetPosition() + offset);
+#else
+		e2::SysTransform::Translate(m_world, opw, offset);
+#endif // GAME_OBJ_ECS
 		return true;
 	});
 }

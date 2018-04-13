@@ -9,17 +9,17 @@ namespace ee2
 {
 
 void NodeReorderHelper::UpOneLayer(ee0::SubjectMgr& sub_mgr, 
-	                               const ee0::SelectionSet<n0::NodeWithPos>& selection)
+	                               const ee0::SelectionSet<ee0::GameObjWithPos>& selection)
 {
 	if (selection.IsEmpty()) {
 		return;
 	}
 
-	std::vector<n0::NodeWithPos> objs;
+	std::vector<ee0::GameObjWithPos> objs;
 	objs.reserve(selection.Size());
-	selection.Traverse([&](const n0::NodeWithPos& nwp)->bool
+	selection.Traverse([&](const ee0::GameObjWithPos& opw)->bool
 	{
-		objs.push_back(nwp);
+		objs.push_back(opw);
 		return true;
 	});
 	
@@ -47,27 +47,27 @@ void NodeReorderHelper::UpOneLayer(ee0::SubjectMgr& sub_mgr,
 }
 
 void NodeReorderHelper::DownOneLayer(ee0::SubjectMgr& sub_mgr, 
-	                                 const ee0::SelectionSet<n0::NodeWithPos>& selection)
+	                                 const ee0::SelectionSet<ee0::GameObjWithPos>& selection)
 {
 	if (selection.IsEmpty()) {
 		return;
 	}
 
-	std::vector<n0::NodeWithPos> objs;
+	std::vector<ee0::GameObjWithPos> objs;
 	objs.reserve(selection.Size());
-	selection.Traverse([&](const n0::NodeWithPos& nwp)->bool
+	selection.Traverse([&](const ee0::GameObjWithPos& opw)->bool
 	{
-		objs.push_back(nwp);
+		objs.push_back(opw);
 		return true;
 	});
 
-	selection.Traverse([&](const n0::NodeWithPos& nwp)->bool
+	selection.Traverse([&](const ee0::GameObjWithPos& opw)->bool
 	{
 		ee0::VariantSet vars;
 
 		ee0::Variant var_obj;
 		var_obj.m_type = ee0::VT_PVOID;
-		var_obj.m_val.pv = &std::const_pointer_cast<n0::SceneNode>(nwp.GetNode());
+		var_obj.m_val.pv = &std::const_pointer_cast<n0::SceneNode>(opw.GetNode());
 		vars.SetVariant("obj", var_obj);
 
 		ee0::Variant var_up;

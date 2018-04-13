@@ -7,8 +7,6 @@
 #include <ee0/SelectionSet.h>
 #include <ee0/typedef.h>
 
-#include <node0/NodeWithPos.h>
-
 #include <wx/menu.h>
 
 namespace ee0 { class EditRecord; class EditOpState; class KeysState; }
@@ -26,9 +24,16 @@ class SpriteSelection;
 class ArrangeNodeImpl
 {
 public:
-	ArrangeNodeImpl(pt2::Camera& cam, ee0::EditRecord& record, 
-		const ee0::SubjectMgrPtr& sub_mgr, ee0::SelectionSet<n0::NodeWithPos>& selection,
-		ee0::NodeContainer& objs, const ee0::KeysState& key_state,
+	ArrangeNodeImpl(
+		pt2::Camera& cam, 
+		ee0::EditRecord& record, 
+		const ee0::SubjectMgrPtr& sub_mgr, 
+#ifdef GAME_OBJ_ECS
+		ecsx::World& world,
+#endif // GAME_OBJ_ECS
+		ee0::SelectionSet<ee0::GameObjWithPos>& selection,
+		ee0::NodeContainer& objs, 
+		const ee0::KeysState& key_state,
 		const ArrangeNodeCfg& cfg = ArrangeNodeCfg());
 	virtual ~ArrangeNodeImpl() = default;
 
@@ -74,8 +79,11 @@ private:
 
 	ee0::EditRecord&   m_record;
 	ee0::SubjectMgrPtr m_sub_mgr;
+#ifdef GAME_OBJ_ECS
+	ecsx::World&       m_world;
+#endif // GAME_OBJ_ECS
 
-	ee0::SelectionSet<n0::NodeWithPos>& m_selection;
+	ee0::SelectionSet<ee0::GameObjWithPos>& m_selection;
 
 	const ee0::KeysState& m_key_state;
 

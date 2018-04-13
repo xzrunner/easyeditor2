@@ -26,15 +26,15 @@ MoveNodeState::MoveNodeState(pt2::Camera& cam,
 {
 	m_center.Set(0, 0);
 	m_objs.reserve(selection.Size());
-	selection.Traverse([&](const ee0::GameObjWithPos& owp)->bool
+	selection.Traverse([&](const ee0::GameObjWithPos& opw)->bool
 	{
 #ifndef GAME_OBJ_ECS
-		m_objs.push_back(owp.GetNode());
-		auto& ctrans = owp.GetNode()->GetUniqueComp<n2::CompTransform>();
+		m_objs.push_back(opw.GetNode());
+		auto& ctrans = opw.GetNode()->GetUniqueComp<n2::CompTransform>();
 		m_center += ctrans.GetTrans().GetPosition();
 #else
-		m_objs.push_back(owp);
-		m_center += e2::SysTransform::GetPosition(world, owp);
+		m_objs.push_back(opw);
+		m_center += e2::SysTransform::GetPosition(world, opw);
 #endif // GAME_OBJ_ECS
 		return true;
 	});

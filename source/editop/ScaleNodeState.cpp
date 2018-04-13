@@ -8,8 +8,13 @@
 #include <ee0/MsgHelper.h>
 
 #include <SM_Calc.h>
+#ifndef GAME_OBJ_ECS
 #include <node0/SceneNode.h>
 #include <node2/CompTransform.h>
+#else
+#include <ecsx/World.h>
+#include <entity2/SysTransform.h>
+#endif // GAME_OBJ_ECS
 
 namespace ee2
 {
@@ -17,17 +22,28 @@ namespace ee2
 ScaleNodeState::ScaleNodeState(pt2::Camera& cam, 
 	                           ee0::EditRecord& record,
 	                           const ee0::SubjectMgrPtr& sub_mgr, 
+#ifdef GAME_OBJ_ECS
+	                           ecsx::World& world,
+#endif // GAME_OBJ_ECS
 	                           const ee0::GameObj& obj,
 	                           const NodeCtrlPoint::Node& ctrl_point)
 	: m_cam(cam)
 	, m_record(record)
 	, m_sub_mgr(sub_mgr)
+#ifdef GAME_OBJ_ECS
+	, m_world(world)
+#endif // GAME_OBJ_ECS
 	, m_obj(obj)
 	, m_ctrl_point(ctrl_point)
 {
+#ifndef GAME_OBJ_ECS
 	auto& ctrans = obj->GetUniqueComp<n2::CompTransform>();
 	m_first_pos = ctrans.GetTrans().GetPosition();
 	m_first_scale = ctrans.GetTrans().GetScale();
+#else
+	m_first_pos = e2::SysTransform::GetPosition(m_world, m_obj);
+	m_first_scale = e2::SysTransform::GetScale(m_world, m_obj);
+#endif // GAME_OBJ_ECS
 }
 
 bool ScaleNodeState::OnMouseRelease(int x, int y)
@@ -35,9 +51,18 @@ bool ScaleNodeState::OnMouseRelease(int x, int y)
 	// record
 	auto comb = std::make_shared<CombineAO>();
 
+	sm::vec2 offset;
+	sm::vec2 new_scale;
+#ifndef GAME_OBJ_ECS
 	auto& ctrans = m_obj->GetUniqueComp<n2::CompTransform>();
-	comb->Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, m_obj, ctrans.GetTrans().GetPosition() - m_first_pos));
-	comb->Add(std::make_shared<ScaleNodeAO>(m_sub_mgr, m_obj, ctrans.GetTrans().GetScale(), m_first_scale));
+	offset = ctrans.GetTrans().GetPosition() - m_first_pos;
+	new_scale = ctrans.GetTrans().GetScale();
+#else
+	offset = e2::SysTransform::GetPosition(m_world, m_obj) - m_first_pos;
+	new_scale = e2::SysTransform::GetScale(m_world, m_obj);
+#endif // GAME_OBJ_ECS
+	comb->Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, m_obj, offset));
+	comb->Add(std::make_shared<ScaleNodeAO>(m_sub_mgr, m_obj, new_scale, m_first_scale));
 
 	m_record.Add(comb);
 
@@ -55,16 +80,26 @@ bool ScaleNodeState::OnMouseDrag(int x, int y)
 
 void ScaleNodeState::Scale(const sm::vec2& curr)
 {
+#ifndef GAME_OBJ_ECS
 	if (!m_obj) {
 		return;
 	}
+#endif // GAME_OBJ_ECS
 
 	sm::vec2 ctrls[8];
+#ifndef GAME_OBJ_ECS
 	NodeCtrlPoint::GetNodeCtrlPoints(m_obj, ctrls);
+#else
+	NodeCtrlPoint::GetNodeCtrlPoints(m_world, m_obj, ctrls);
+#endif // GAME_OBJ_ECS
 	
 	sm::vec2 ori = ctrls[m_ctrl_point.type];
+#ifndef GAME_OBJ_ECS
 	auto& ctrans = m_obj->GetUniqueComp<n2::CompTransform>();
 	sm::vec2 center = ctrans.GetTrans().GetPosition() + ctrans.GetTrans().GetOffset();
+#else
+	auto center = e2::SysTransform::GetPosition(m_world, m_obj) + e2::SysTransform::GetOffset(m_world, m_obj);
+#endif // GAME_OBJ_ECS
 	sm::vec2 fix;
 	sm::get_foot_of_perpendicular(center, ori, curr, &fix);
 
@@ -86,10 +121,16 @@ void ScaleNodeState::Scale(const sm::vec2& curr)
 
 void ScaleNodeState::SetScaleTimes(const sm::vec2& st)
 {
+#ifndef GAME_OBJ_ECS
 	auto& ctrans = m_obj->GetUniqueComp<n2::CompTransform>();
 	sm::vec2 scale = ctrans.GetTrans().GetScale();
 	scale *= st;
 	ctrans.SetScale(*m_obj, scale);
+#else
+	auto scale = e2::SysTransform::GetScale(m_world, m_obj);
+	scale *= st;
+	e2::SysTransform::SetScale(m_world, m_obj, scale);
+#endif // GAME_OBJ_ECS
 }
 
 }

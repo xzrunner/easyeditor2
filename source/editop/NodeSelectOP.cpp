@@ -8,11 +8,17 @@
 #include <ee0/WxStagePage.h>
 #include <ee0/MsgHelper.h>
 
+#ifndef GAME_OBJ_ECS
 #include <node0/SceneNode.h>
 #include <node0/SceneTreeHelper.h>
 #include <node2/CompComplex.h>
 #include <node2/CompBoundingBox.h>
 #include <node2/CompTransform.h>
+#else
+#include <ecsx/World.h>
+#include <entity2/CompBoundingBox.h>
+#endif // GAME_OBJ_ECS
+#include <SM_Test.h>
 #include <guard/check.h>
 #include <painting2/Color.h>
 #include <painting2/PrimitiveDraw.h>
@@ -20,8 +26,16 @@
 namespace ee2
 {
 
-NodeSelectOP::NodeSelectOP(ee0::WxStagePage& stage)
+NodeSelectOP::NodeSelectOP(
+#ifdef GAME_OBJ_ECS
+	const ecsx::World& world
+#endif // GAME_OBJ_ECS
+	ee0::WxStagePage& stage
+)
 	: ee0::NodeSelectOP(stage)
+#ifdef GAME_OBJ_ECS
+	, m_world(world)
+#endif // GAME_OBJ_ECS
 	, m_draw_state_disable(false)
 {
 	auto cam = std::dynamic_pointer_cast<WxStageCanvas>(m_stage.GetImpl().GetCanvas())->GetCamera();
@@ -96,15 +110,21 @@ bool NodeSelectOP::OnDraw() const
 		return true;
 	}
 
-	m_stage.GetSelection().Traverse([](const n0::NodeWithPos& nwp)->bool
+	m_stage.GetSelection().Traverse([&](const ee0::GameObjWithPos& opw)->bool
 	{
 		CU_VEC<sm::vec2> bound;
-		auto& cbb = nwp.GetNode()->GetUniqueComp<n2::CompBoundingBox>();
-		cbb.GetBounding(*nwp.GetNode()).GetBoundPos(bound);
+#ifndef GAME_OBJ_ECS
+		auto& cbb = opw.GetNode()->GetUniqueComp<n2::CompBoundingBox>();
+		cbb.GetBounding(*opw.GetNode()).GetBoundPos(bound);
+#else
+		auto& cbb = m_world.GetComponent<e2::CompBoundingBox>(opw);
+		cbb.GetBoundPos(bound);
+#endif // GAME_OBJ_ECS
 
+#ifndef GAME_OBJ_ECS
 		sm::Matrix2D world_mt;
 		std::vector<ee0::GameObj> path;
-		n0::SceneTreeHelper::GetPathToRoot(nwp.GetRoot(), nwp.GetNodeID(), path);
+		n0::SceneTreeHelper::GetPathToRoot(opw.GetRoot(), opw.GetNodeID(), path);
 		path.pop_back();
 		for (auto& obj : path) {
 			auto& ctrans = obj->GetUniqueComp<n2::CompTransform>();
@@ -114,6 +134,7 @@ bool NodeSelectOP::OnDraw() const
 		for (auto& pos : bound) {
 			pos = world_mt * pos;
 		}
+#endif // GAME_OBJ_ECS
 
 		pt2::PrimitiveDraw::SetColor(pt2::Color(255, 0, 0));
 		pt2::PrimitiveDraw::Polyline(nullptr, bound, true);
@@ -140,11 +161,19 @@ ee0::GameObj NodeSelectOP::QueryByPos(int screen_x, int screen_y) const
 	var.m_val.l = ee0::WxStagePage::TRAV_QUERY;
 	vars.SetVariant("type", var);
 
+#ifndef GAME_OBJ_ECS
 	ee0::GameObj ret = nullptr;
+#else
+	ee0::GameObj ret;
+#endif // GAME_OBJ_ECS
 	m_stage.Traverse([&](const ee0::GameObj& obj)->bool
 	{
 		auto query = QueryByPos(obj, pos);
+#ifndef GAME_OBJ_ECS
 		if (query) 
+#else
+		if (!query.IsNull())
+#endif // GAME_OBJ_ECS
 		{
 			m_draw_state_disable = true;
 			ret = query;
@@ -182,11 +211,19 @@ void NodeSelectOP::QueryByRect(const sm::ivec2& p0, const sm::ivec2& p1, bool co
 
 ee0::GameObj NodeSelectOP::QueryByPos(const ee0::GameObj& obj, const sm::vec2& pos) const
 {
+#ifndef GAME_OBJ_ECS
 	auto& cbb = obj->GetUniqueComp<n2::CompBoundingBox>();
 	if (cbb.GetBounding(*obj).IsContain(pos)) {
 		return obj;
 	}
+#else
+	auto& cbb = m_world.GetComponent<e2::CompBoundingBox>(obj);
+	if (cbb.IsContain(pos)) {
+		return obj;
+	}
+#endif // GAME_OBJ_ECS
 
+#ifndef GAME_OBJ_ECS
 	if (obj->HasSharedComp<n2::CompComplex>())
 	{
 		auto mt = obj->GetUniqueComp<n2::CompTransform>().GetTrans().GetMatrix().Inverted();
@@ -202,13 +239,19 @@ ee0::GameObj NodeSelectOP::QueryByPos(const ee0::GameObj& obj, const sm::vec2& p
 			}
 		}
 	}
+#endif // GAME_OBJ_ECS
 
+#ifndef GAME_OBJ_ECS
 	return nullptr;
+#else
+	return ee0::GameObj();
+#endif // GAME_OBJ_ECS
 }
 
 void NodeSelectOP::QueryByRect(const ee0::GameObj& obj, const sm::rect& rect, 
 	                           bool contain, std::vector<ee0::GameObj>& result) const
 {
+#ifndef GAME_OBJ_ECS
 	auto& cbb = obj->GetUniqueComp<n2::CompBoundingBox>();
 	auto& bb = cbb.GetBounding(*obj);
 	if (contain && sm::is_rect_contain_rect(rect, bb.GetSize())) {
@@ -216,6 +259,16 @@ void NodeSelectOP::QueryByRect(const ee0::GameObj& obj, const sm::rect& rect,
 	} else if (!contain && bb.IsIntersect(rect)) {
 		result.push_back(obj);
 	}
+#else
+	auto& cbb = m_world.GetComponent<e2::CompBoundingBox>(obj);
+	if (contain && sm::is_rect_contain_rect(rect, cbb.rect)) {
+		result.push_back(obj);
+	}
+	else if (!contain && cbb.IsIntersect(rect)) {
+		result.push_back(obj);
+	}
+#endif // GAME_OBJ_ECS
+
 	m_draw_state_disable = !result.empty();
 }
 

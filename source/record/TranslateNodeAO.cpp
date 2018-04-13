@@ -10,14 +10,14 @@ namespace ee2
 {
 
 TranslateNodeAO::TranslateNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
-	                             const ee0::SelectionSet<n0::NodeWithPos>& selection, 
+	                             const ee0::SelectionSet<ee0::GameObjWithPos>& selection, 
 	                             const sm::vec2& offset)
 	: m_sub_mgr(sub_mgr)
 	, m_offset(offset)
 {
 	m_objs.reserve(selection.Size());
-	selection.Traverse([&](const n0::NodeWithPos& nwp)->bool {
-		m_objs.push_back(nwp.GetNode());
+	selection.Traverse([&](const ee0::GameObjWithPos& opw)->bool {
+		m_objs.push_back(opw.GetNode());
 		return true;
 	});
 }

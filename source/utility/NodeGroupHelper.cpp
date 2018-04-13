@@ -14,7 +14,7 @@ namespace ee2
 {
 
 void NodeGroupHelper::BuildGroup(ee0::SubjectMgr& sub_mgr, 
-	                             const std::vector<n0::NodeWithPos>& objs)
+	                             const std::vector<ee0::GameObjWithPos>& objs)
 {
 	if (objs.empty()) {
 		return;
@@ -56,7 +56,7 @@ void NodeGroupHelper::BuildGroup(ee0::SubjectMgr& sub_mgr,
 	}
 }
 
-void NodeGroupHelper::BreakUp(ee0::SubjectMgr& sub_mgr, const n0::NodeWithPos& obj)
+void NodeGroupHelper::BreakUp(ee0::SubjectMgr& sub_mgr, const ee0::GameObjWithPos& obj)
 {
 	if (!obj.GetNode()->HasSharedComp<n2::CompComplex>()) {
 		return;

@@ -21,11 +21,11 @@ namespace ee2
 WxCompTransformPanel::WxCompTransformPanel(wxWindow* parent, 
 	                                       n2::CompTransform& trans, 
 	                                       const ee0::SubjectMgrPtr& sub_mgr,
-	                                       const n0::NodeWithPos& nwp)
+	                                       const ee0::GameObjWithPos& opw)
 	: ee0::WxCompPanel(parent, "Transform")
 	, m_ctrans(trans)
 	, m_sub_mgr(sub_mgr)
-	, m_nwp(nwp)
+	, m_nwp(opw)
 {
 	InitLayout();
 	Expand();
