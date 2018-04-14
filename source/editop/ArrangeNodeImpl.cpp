@@ -693,10 +693,17 @@ void ArrangeNodeImpl::OnSpaceKeyDown()
 		// record
 		std::vector<ee0::GameObj> objs;
 		objs.push_back(obj);
+#ifndef GAME_OBJ_ECS
 		comb->Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, obj, - pos));
 		comb->Add(std::make_shared<RotateNodeAO>(m_sub_mgr, objs, - angle));
 		comb->Add(std::make_shared<ScaleNodeAO>(m_sub_mgr, obj, sm::vec2(1, 1), scale));
 		comb->Add(std::make_shared<ShearNodeAO>(m_sub_mgr, obj, sm::vec2(0, 0), shear));
+#else
+		comb->Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, m_world, obj, -pos));
+		comb->Add(std::make_shared<RotateNodeAO>(m_sub_mgr, m_world, objs, -angle));
+		comb->Add(std::make_shared<ScaleNodeAO>(m_sub_mgr, m_world, obj, sm::vec2(1, 1), scale));
+		comb->Add(std::make_shared<ShearNodeAO>(m_sub_mgr, m_world, obj, sm::vec2(0, 0), shear));
+#endif // GAME_OBJ_ECS
 
 #ifndef GAME_OBJ_ECS
 		ctrans.SetPosition(*obj, sm::vec2(0, 0));

@@ -29,7 +29,11 @@ void NodeReorderHelper::UpOneLayer(ee0::SubjectMgr& sub_mgr,
 
 		ee0::Variant var_obj;
 		var_obj.m_type = ee0::VT_PVOID;
+#ifndef GAME_OBJ_ECS
 		var_obj.m_val.pv = &std::const_pointer_cast<n0::SceneNode>(itr->GetNode());
+#else
+		var_obj.m_val.pv = &(*itr);
+#endif // GAME_OBJ_ECS
 		vars.SetVariant("obj", var_obj);
 
 		ee0::Variant var_up;
@@ -67,7 +71,11 @@ void NodeReorderHelper::DownOneLayer(ee0::SubjectMgr& sub_mgr,
 
 		ee0::Variant var_obj;
 		var_obj.m_type = ee0::VT_PVOID;
+#ifndef GAME_OBJ_ECS
 		var_obj.m_val.pv = &std::const_pointer_cast<n0::SceneNode>(opw.GetNode());
+#else
+		var_obj.m_val.pv = &const_cast<ee0::GameObjWithPos&>(opw);
+#endif // GAME_OBJ_ECS
 		vars.SetVariant("obj", var_obj);
 
 		ee0::Variant var_up;

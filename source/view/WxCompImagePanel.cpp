@@ -1,5 +1,12 @@
 #include "ee2/WxCompImagePanel.h"
 
+#ifndef GAME_OBJ_ECS
+#include <ee0/CompNodeEditor.h>
+#include <node0/SceneNode.h>
+#else
+#include <ee0/CompEntityEditor.h>
+#include <ecsx/World.h>
+#endif // GAME_OBJ_ECS
 #include <facade/ResPool.h>
 #include <facade/Image.h>
 #include <facade/Texture.h>
@@ -12,9 +19,20 @@
 namespace ee2
 {
 
-WxCompImagePanel::WxCompImagePanel(wxWindow* parent, n2::CompImage& cimage)
+WxCompImagePanel::WxCompImagePanel(wxWindow* parent, 
+#ifndef GAME_OBJ_ECS
+	                               n2::CompImage& cimage,
+#else
+	                               ecsx::World& world,
+	                               e2::CompImage& cimage,
+#endif // GAME_OBJ_ECS
+	                               const ee0::GameObj& obj)
 	: ee0::WxCompPanel(parent, "Image")
+#ifdef GAME_OBJ_ECS
+	, m_world(world)
+#endif // GAME_OBJ_ECS
 	, m_cimage(cimage)
+	, m_obj(obj)
 {
 	InitLayout();
 	Expand();
@@ -22,7 +40,13 @@ WxCompImagePanel::WxCompImagePanel(wxWindow* parent, n2::CompImage& cimage)
 
 void WxCompImagePanel::RefreshNodeComp()
 {
-	m_filepath->SetValue(m_cimage.GetFilepath());
+#ifndef GAME_OBJ_ECS
+	auto& ceditor = m_obj->GetUniqueComp<ee0::CompNodeEditor>();
+	m_filepath->SetValue(ceditor.GetFilepath());
+#else
+	auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(m_obj);
+	m_filepath->SetValue(ceditor.filepath);
+#endif // GAME_OBJ_ECS
 }
 
 void WxCompImagePanel::InitLayout()
@@ -35,7 +59,14 @@ void WxCompImagePanel::InitLayout()
 	{
 		wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
 
-		sizer->Add(m_filepath = new wxTextCtrl(win, wxID_ANY, m_cimage.GetFilepath(),
+#ifndef GAME_OBJ_ECS
+		auto& ceditor = m_obj->GetUniqueComp<ee0::CompNodeEditor>();
+		auto& filepath = ceditor.GetFilepath();
+#else
+		auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(m_obj);
+		auto& filepath = ceditor.filepath;
+#endif // GAME_OBJ_ECS
+		sizer->Add(m_filepath = new wxTextCtrl(win, wxID_ANY, filepath,
 			wxDefaultPosition, wxSize(180, -1), wxTE_READONLY));
 
 		sizer->AddSpacer(5);
@@ -60,8 +91,11 @@ void WxCompImagePanel::OnSetFilepath(wxCommandEvent& event)
 	{
 		auto& path = dlg.GetPath();
 		auto img = facade::ResPool::Instance().Fetch<facade::Image>(path.ToStdString());
-		m_cimage.SetFilepath(path.ToStdString());
+#ifndef GAME_OBJ_ECS
 		m_cimage.SetTexture(img->GetTexture());
+#else
+		m_cimage.tex = img->GetTexture();
+#endif // GAME_OBJ_ECS
 	}
 }
 

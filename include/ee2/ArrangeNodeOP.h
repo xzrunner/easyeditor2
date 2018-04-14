@@ -7,6 +7,9 @@
 #include <memory>
 
 namespace ee0 { class WxStagePage; }
+#ifdef GAME_OBJ_ECS
+namespace ecsx { class World; }
+#endif // GAME_OBJ_ECS
 
 namespace ee2
 {
@@ -16,12 +19,24 @@ class ArrangeNodeImpl;
 class ArrangeNodeOP : public ee0::EditOP
 {
 public:
-	ArrangeNodeOP(ee0::WxStagePage& stage, pt2::Camera& cam,
+	ArrangeNodeOP(
+		ee0::WxStagePage& stage, 
+		pt2::Camera& cam,
+#ifdef GAME_OBJ_ECS
+		ecsx::World& world,
+#endif // GAME_OBJ_ECS
 		const ArrangeNodeCfg& cfg = ArrangeNodeCfg(),
-		const std::shared_ptr<ee0::EditOP>& prev_op = nullptr);
-	ArrangeNodeOP(ee0::WxStagePage& stage, pt2::Camera& cam,
+		const std::shared_ptr<ee0::EditOP>& prev_op = nullptr
+	);
+	ArrangeNodeOP(
+		ee0::WxStagePage& stage, 
+		pt2::Camera& cam,
+#ifdef GAME_OBJ_ECS
+		ecsx::World& world,
+#endif // GAME_OBJ_ECS
 		std::unique_ptr<ArrangeNodeImpl>& impl,
-		const std::shared_ptr<ee0::EditOP>& prev_op = nullptr);
+		const std::shared_ptr<ee0::EditOP>& prev_op = nullptr
+	);
 
 	virtual bool OnKeyDown(int key_code) override;
 	virtual bool OnKeyUp(int key_code) override;
@@ -46,6 +61,9 @@ private:
 
 private:
 	pt2::Camera& m_cam;
+#ifdef GAME_OBJ_ECS
+	ecsx::World& m_world;
+#endif // GAME_OBJ_ECS
 
 	std::unique_ptr<ArrangeNodeImpl> m_impl = nullptr;
 	

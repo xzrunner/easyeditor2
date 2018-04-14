@@ -1,10 +1,16 @@
 #include "ee2/WxCompMeshPanel.h"
 
+#ifndef GAME_OBJ_ECS
 #include <ee0/CompNodeEditor.h>
 #include <node0/SceneNode.h>
 #include <node2/CompBoundingBox.h>
 #include <node2/CompTransform.h>
 #include <ns/NodeFactory.h>
+#else
+#include <ee0/CompEntityEditor.h>
+#include <es/EntityFactory.h>
+#include <ecsx/World.h>
+#endif // GAME_OBJ_ECS
 
 #include <wx/sizer.h>
 #include <wx/textctrl.h>
@@ -15,10 +21,19 @@
 namespace ee2
 {
 
-WxCompMeshPanel::WxCompMeshPanel(wxWindow* parent, n2::CompMesh& cmask, 
-	                             n0::SceneNode& obj)
+WxCompMeshPanel::WxCompMeshPanel(wxWindow* parent, 
+#ifndef GAME_OBJ_ECS
+		                         n2::CompMesh& cmesh,
+#else
+	                             ecsx::World& world,
+		                         e2::CompMesh& cmesh,
+#endif // GAME_OBJ_ECS
+	                             const ee0::GameObj& obj)
 	: ee0::WxCompPanel(parent, "Mesh")
-	, m_cmesh(cmask)
+#ifdef GAME_OBJ_ECS
+	, m_world(world)
+#endif // GAME_OBJ_ECS
+	, m_cmesh(cmesh)
 	, m_obj(obj)
 {
 	InitLayout();
@@ -27,12 +42,21 @@ WxCompMeshPanel::WxCompMeshPanel(wxWindow* parent, n2::CompMesh& cmask,
 
 void WxCompMeshPanel::RefreshNodeComp()
 {
+#ifndef GAME_OBJ_ECS
 	if (auto& mesh = m_cmesh.GetMesh()) {
 		if (auto& base = mesh->GetBaseSymbol()) {
 			auto& ceditor = base->GetUniqueComp<ee0::CompNodeEditor>();
 			m_base_path->SetValue(ceditor.GetFilepath());
 		}
 	}
+#else
+	if (m_cmesh.mesh) {
+		if (auto& base = m_cmesh.mesh->GetBaseSymbol()) {
+			auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(*base);
+			m_base_path->SetValue(ceditor.filepath);
+		}
+	}
+#endif // GAME_OBJ_ECS
 }
 
 void WxCompMeshPanel::InitLayout()
@@ -48,12 +72,21 @@ void WxCompMeshPanel::InitLayout()
 		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("Base ")));
 
 		std::string path;
+#ifndef GAME_OBJ_ECS
 		if (auto& mesh = m_cmesh.GetMesh()) {
 			if (auto& base = mesh->GetBaseSymbol()) {
 				auto& ceditor = base->GetUniqueComp<ee0::CompNodeEditor>();
 				path = ceditor.GetFilepath();
 			}
 		}
+#else
+		if (m_cmesh.mesh) {
+			if (auto& base = m_cmesh.mesh->GetBaseSymbol()) {
+				auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(*base);
+				path = ceditor.filepath;
+			}
+		}
+#endif // GAME_OBJ_ECS
 		sizer->Add(m_base_path = new wxTextCtrl(win, wxID_ANY, path,
 			wxDefaultPosition, wxSize(180, -1), wxTE_READONLY));
 
@@ -74,6 +107,7 @@ void WxCompMeshPanel::InitLayout()
 void WxCompMeshPanel::OnSetBasePath(wxCommandEvent& event)
 {
 	auto obj = CreateNodeFromFile();
+#ifndef GAME_OBJ_ECS
 	if (!obj) {
 		return;
 	}
@@ -84,6 +118,16 @@ void WxCompMeshPanel::OnSetBasePath(wxCommandEvent& event)
 
 	auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
 	m_base_path->SetValue(ceditor.GetFilepath());
+#else
+	if (obj.IsNull()) {
+		return;
+	}
+
+	m_cmesh.mesh = std::make_unique<pt2::Mesh<ecsx::Entity>>();
+
+	auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(obj);
+	m_base_path->SetValue(ceditor.filepath);
+#endif // GAME_OBJ_ECS
 }
 
 ee0::GameObj WxCompMeshPanel::CreateNodeFromFile()
@@ -91,18 +135,34 @@ ee0::GameObj WxCompMeshPanel::CreateNodeFromFile()
 	std::string filter = "*.png;*.jpg;*.bmp;*.pvr;*.pkm";
 	wxFileDialog dlg(this, wxT("Choose image"), wxEmptyString, filter);
 	if (dlg.ShowModal() != wxID_OK) {
+#ifndef GAME_OBJ_ECS
 		return nullptr;
+#else
+		return ee0::GameObj();
+#endif // GAME_OBJ_ECS
 	}
 
 	std::string filepath = dlg.GetPath().ToStdString();
+#ifndef GAME_OBJ_ECS
 	auto obj = ns::NodeFactory::Create(filepath);
 	if (!obj) {
 		return nullptr;
 	}
+#else
+	auto obj = es::EntityFactory::Create(m_world, filepath);
+	if (obj.IsNull()) {
+		return ee0::GameObj();
+	}
+#endif // GAME_OBJ_ECS
 
 	// editor
+#ifndef GAME_OBJ_ECS
 	auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
 	ceditor.SetFilepath(filepath);
+#else
+	auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(obj);
+	ceditor.filepath = filepath;
+#endif // GAME_OBJ_ECS
 
 	return obj;
 }

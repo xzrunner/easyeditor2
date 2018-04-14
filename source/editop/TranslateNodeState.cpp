@@ -58,7 +58,11 @@ bool TranslateNodeState::OnMouseRelease(int x, int y)
 	if (pos != m_first_pos)
 	{
 		sm::vec2 offset = pos - m_first_pos;
+#ifndef GAME_OBJ_ECS
 		m_record.Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, m_selection, offset));
+#else
+		m_record.Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, m_world, m_selection, offset));
+#endif // GAME_OBJ_ECS
 		ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 	}
 

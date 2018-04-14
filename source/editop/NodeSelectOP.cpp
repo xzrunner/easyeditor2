@@ -28,10 +28,9 @@ namespace ee2
 
 NodeSelectOP::NodeSelectOP(
 #ifdef GAME_OBJ_ECS
-	const ecsx::World& world
+	ecsx::World& world,
 #endif // GAME_OBJ_ECS
-	ee0::WxStagePage& stage
-)
+	ee0::WxStagePage& stage)
 	: ee0::NodeSelectOP(stage)
 #ifdef GAME_OBJ_ECS
 	, m_world(world)
@@ -274,7 +273,12 @@ void NodeSelectOP::QueryByRect(const ee0::GameObj& obj, const sm::rect& rect,
 
 void NodeSelectOP::BuildGroup()
 {
-	auto ao = std::make_shared<BuildGroupAO>(m_stage.GetSubjectMgr(), m_stage.GetSelection());
+	auto ao = std::make_shared<BuildGroupAO>(
+		m_stage.GetSubjectMgr(),
+#ifdef GAME_OBJ_ECS
+		m_world,
+#endif // GAME_OBJ_ECS
+		m_stage.GetSelection());
 	ao->Redo();
 	m_stage.GetImpl().GetEditRecord().Add(ao);
 	ee0::MsgHelper::SetEditorDirty(*m_stage.GetSubjectMgr(), true);
@@ -282,7 +286,12 @@ void NodeSelectOP::BuildGroup()
 
 void NodeSelectOP::BreakUpGroup()
 {
-	auto ao = std::make_shared<BreakUpAO>(m_stage.GetSubjectMgr(), m_stage.GetSelection());
+	auto ao = std::make_shared<BreakUpAO>(
+		m_stage.GetSubjectMgr(), 
+#ifdef GAME_OBJ_ECS
+		m_world,
+#endif // GAME_OBJ_ECS
+		m_stage.GetSelection());
 	ao->Redo();
 	m_stage.GetImpl().GetEditRecord().Add(ao);
 	ee0::MsgHelper::SetEditorDirty(*m_stage.GetSubjectMgr(), true);

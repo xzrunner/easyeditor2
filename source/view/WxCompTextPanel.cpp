@@ -5,8 +5,13 @@
 #include <ee0/WxColorGradientDlg.h>
 #include <ee0/ConfigFile.h>
 
+#ifndef GAME_OBJ_ECS
 #include <node0/SceneNode.h>
 #include <node2/CompBoundingBox.h>
+#else
+#include <ecsx/World.h>
+#include <entity2/CompBoundingBox.h>
+#endif // GAME_OBJ_ECS
 #include <sx/StringHelper.h>
 
 #include <wx/sizer.h>
@@ -34,10 +39,19 @@ const wxString OVER_LABEL_LABELS[] = {
 namespace ee2
 {
 
-WxCompTextPanel::WxCompTextPanel(wxWindow* parent, n2::CompText& ctext,
-	                             n0::SceneNode& obj, 
+WxCompTextPanel::WxCompTextPanel(wxWindow* parent, 
+#ifndef GAME_OBJ_ECS
+	                             n2::CompText& ctext,
+#else
+	                             ecsx::World& world,
+		                         e2::CompText& ctext,
+#endif // GAME_OBJ_ECS
+	                             const ee0::GameObj& obj, 
 	                             const ee0::SubjectMgrPtr& sub_mgr)
 	: ee0::WxCompPanel(parent, "Text")
+#ifdef GAME_OBJ_ECS
+	, m_world(world)
+#endif // GAME_OBJ_ECS
 	, m_ctext(ctext)
 	, m_obj(obj)
 	, m_sub_mgr(sub_mgr)
@@ -48,10 +62,17 @@ WxCompTextPanel::WxCompTextPanel(wxWindow* parent, n2::CompText& ctext,
 
 void WxCompTextPanel::RefreshNodeComp()
 {
-	auto& text = m_ctext.GetText();
-	auto& tb = text.tb;
+#ifndef GAME_OBJ_ECS
+	auto& tb = m_ctext.GetText().tb;
+#else
+	auto& tb = m_ctext.text.tb;
+#endif // GAME_OBJ_ECS
 
-	m_text->SetValue(text.text);
+#ifndef GAME_OBJ_ECS
+	m_text->SetValue(m_ctext.GetText().text);
+#else
+	m_text->SetValue(m_ctext.text.text);
+#endif // GAME_OBJ_ECS
 
 	m_width->SetValue(tb.width);
 	m_height->SetValue(tb.height);
@@ -80,8 +101,11 @@ void WxCompTextPanel::InitLayout()
 
 	wxSizer* pane_sizer = new wxBoxSizer(wxVERTICAL);
 
-	auto& text = m_ctext.GetText();
-	auto& tb = text.tb;
+#ifndef GAME_OBJ_ECS
+	auto& tb = m_ctext.GetText().tb;
+#else
+	auto& tb = m_ctext.text.tb;
+#endif // GAME_OBJ_ECS
 
 	static const wxSize INPUT_SIZE(65, 19);
 
@@ -90,7 +114,12 @@ void WxCompTextPanel::InitLayout()
 		wxStaticBox* bounding = new wxStaticBox(win, wxID_ANY, "String");
 		wxSizer* sizer = new wxStaticBoxSizer(bounding, wxHORIZONTAL);
 
-		sizer->Add(m_text = new wxTextCtrl(win, wxID_ANY, text.text, 
+#ifndef GAME_OBJ_ECS
+		auto& text = m_ctext.GetText().text;
+#else
+		auto& text = m_ctext.text.text;
+#endif // GAME_OBJ_ECS
+		sizer->Add(m_text = new wxTextCtrl(win, wxID_ANY, text,
 			wxDefaultPosition, wxSize(200, 60), wxTE_MULTILINE));
 		Connect(m_text->GetId(), wxEVT_COMMAND_TEXT_UPDATED,
 			wxCommandEventHandler(WxCompTextPanel::CommandEventHandler));
@@ -257,12 +286,19 @@ void WxCompTextPanel::InitLayout()
 
 void WxCompTextPanel::CommandEventHandler(wxCommandEvent& event)
 {
-	pt2::Text& text = m_ctext.GetText();
-	auto& tb = text.tb;
+#ifndef GAME_OBJ_ECS
+	auto& tb = m_ctext.GetText().tb;
+#else
+	auto& tb = m_ctext.text.tb;
+#endif // GAME_OBJ_ECS
 
 	int id = event.GetId();
 	if (id == m_text->GetId()) {
-		text.text = m_text->GetValue().ToStdString();
+#ifndef GAME_OBJ_ECS
+		m_ctext.GetText().text = m_text->GetValue().ToStdString();
+#else
+		m_ctext.text.text = m_text->GetValue().ToStdString();
+#endif // GAME_OBJ_ECS
 	} else if (id == m_width->GetId()) {
 		tb.width = m_width->GetValue();
 		UpdateBoundingBox(tb);
@@ -274,7 +310,7 @@ void WxCompTextPanel::CommandEventHandler(wxCommandEvent& event)
 	} else if (id == m_font_size->GetId()) {
 		tb.font_size = m_font_size->GetValue();
 	} else if (id == m_font_color->GetId()) {
-		ee0::WxColorGradientDlg dlg(this, m_ctext.GetText().tb.font_color);
+		ee0::WxColorGradientDlg dlg(this, tb.font_color);
 		if (dlg.ShowModal() == wxID_OK) 
 		{
 			tb.font_color = dlg.GetColor();
@@ -285,7 +321,7 @@ void WxCompTextPanel::CommandEventHandler(wxCommandEvent& event)
 	} else if (id == m_edge_size->GetId()) {
 		tb.edge_size = std::stof(m_edge_size->GetValue().ToStdString());
 	}  else if (id == m_edge_color->GetId()) {
-		ee0::WxColorGradientDlg dlg(this, m_ctext.GetText().tb.edge_color);
+		ee0::WxColorGradientDlg dlg(this, tb.edge_color);
 		if (dlg.ShowModal() == wxID_OK) 
 		{
 			tb.edge_color = dlg.GetColor();
@@ -310,8 +346,11 @@ void WxCompTextPanel::CommandEventHandler(wxCommandEvent& event)
 
 void WxCompTextPanel::SpinEventHandler(wxSpinEvent& event)
 {
-	pt2::Text& text = m_ctext.GetText();
-	auto& tb = text.tb;
+#ifndef GAME_OBJ_ECS
+	auto& tb = m_ctext.GetText().tb;
+#else
+	auto& tb = m_ctext.text.tb;
+#endif // GAME_OBJ_ECS
 
 	int id = event.GetId();
 	if (id == m_width->GetId()) {
@@ -347,8 +386,13 @@ void WxCompTextPanel::RefreshColorBtn(const pt2::Textbox& tb)
 
 void WxCompTextPanel::UpdateBoundingBox(const pt2::Textbox& tb)
 {
-	auto& cbb = m_obj.GetUniqueComp<n2::CompBoundingBox>();
-	cbb.SetSize(m_obj, sm::rect(tb.width, tb.height));
+#ifndef GAME_OBJ_ECS
+	auto& cbb = m_obj->GetUniqueComp<n2::CompBoundingBox>();
+	cbb.SetSize(*m_obj, sm::rect(tb.width, tb.height));
+#else
+	auto& cbb = m_world.GetComponent<e2::CompBoundingBox>(m_obj);
+	cbb.rect = sm::rect(tb.width, tb.height);
+#endif // GAME_OBJ_ECS
 }
 
 wxColour WxCompTextPanel::ToWxColor(const pt2::Color& col)

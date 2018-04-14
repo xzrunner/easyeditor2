@@ -23,7 +23,7 @@ class NodeSelectOP : public ee0::NodeSelectOP
 public:
 	NodeSelectOP(
 #ifdef GAME_OBJ_ECS
-		const ecsx::World& world,
+		ecsx::World& world,
 #endif // GAME_OBJ_ECS
 		ee0::WxStagePage& stage
 	);
@@ -50,7 +50,7 @@ private:
 
 private:
 #ifdef GAME_OBJ_ECS
-	const ecsx::World& m_world;
+	ecsx::World& m_world;
 #endif // GAME_OBJ_ECS
 
 	std::unique_ptr<ee0::EditOpState> m_draw_state = nullptr;

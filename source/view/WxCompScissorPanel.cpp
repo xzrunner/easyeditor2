@@ -3,7 +3,11 @@
 #include <ee0/SubjectMgr.h>
 #include <ee0/MessageID.h>
 
+#ifndef GAME_OBJ_ECS
 #include <node2/CompScissor.h>
+#else
+#include <entity2/CompScissor.h>
+#endif // GAME_OBJ_ECS
 
 #include <wx/sizer.h>
 #include <wx/stattext.h>
@@ -13,7 +17,11 @@ namespace ee2
 {
 
 WxCompScissorPanel::WxCompScissorPanel(wxWindow* parent, 
+#ifndef GAME_OBJ_ECS
 	                                   n2::CompScissor& cscissor, 
+#else
+		                               e2::CompScissor& cscissor, 
+#endif // GAME_OBJ_ECS
 	                                   const ee0::SubjectMgrPtr& sub_mgr)
 	: ee0::WxCompPanel(parent, "Scissor")
 	, m_cscissor(cscissor)
@@ -25,7 +33,11 @@ WxCompScissorPanel::WxCompScissorPanel(wxWindow* parent,
 
 void WxCompScissorPanel::RefreshNodeComp()
 {
+#ifndef GAME_OBJ_ECS
 	auto& rect = m_cscissor.GetRect();
+#else
+	auto& rect = m_cscissor.rect;
+#endif // GAME_OBJ_ECS
 
 	m_xmin->SetValue(std::to_string(rect.xmin));
 	m_ymin->SetValue(std::to_string(rect.ymin));
@@ -39,7 +51,11 @@ void WxCompScissorPanel::InitLayout()
 
 	wxSizer* pane_sizer = new wxBoxSizer(wxVERTICAL);
 
+#ifndef GAME_OBJ_ECS
 	auto& rect = m_cscissor.GetRect();
+#else
+	auto& rect = m_cscissor.rect;
+#endif // GAME_OBJ_ECS
 
 	static const wxSize INPUT_SIZE(65, 19);
 
@@ -98,7 +114,11 @@ void WxCompScissorPanel::EnterTextValue(wxCommandEvent& event)
 	m_ymax->GetValue().ToDouble(&d);
 	rect.ymax = d;
 
+#ifndef GAME_OBJ_ECS
 	m_cscissor.SetRect(rect);
+#else
+	m_cscissor.rect = rect;
+#endif // GAME_OBJ_ECS
 
 	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }

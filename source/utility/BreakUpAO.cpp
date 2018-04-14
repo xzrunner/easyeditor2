@@ -4,8 +4,15 @@
 namespace ee2
 {
 
-BreakUpAO::BreakUpAO(const ee0::SubjectMgrPtr& sub_mgr, const ee0::SelectionSet<ee0::GameObjWithPos>& selection)
+BreakUpAO::BreakUpAO(const ee0::SubjectMgrPtr& sub_mgr, 
+#ifdef GAME_OBJ_ECS
+	                 ecsx::World& world,
+#endif // GAME_OBJ_ECS
+	                 const ee0::SelectionSet<ee0::GameObjWithPos>& selection)
 	: m_sub_mgr(sub_mgr)
+#ifdef GAME_OBJ_ECS
+	, m_world(world)
+#endif // GAME_OBJ_ECS
 	, m_selection(selection)
 {
 }
@@ -16,7 +23,11 @@ void BreakUpAO::Undo()
 	std::vector<ee0::GameObjWithPos> objs;
 	CopyFromSelection(objs);
 
+#ifndef GAME_OBJ_ECS
 	NodeGroupHelper::BuildGroup(*m_sub_mgr, objs);
+#else
+	NodeGroupHelper::BuildGroup(m_world, *m_sub_mgr, objs);
+#endif // GAME_OBJ_ECS
 }
 
 void BreakUpAO::Redo()
@@ -27,8 +38,13 @@ void BreakUpAO::Redo()
 
 	printf("BreakUpAO::Redo count %d\n", objs.size());
 
-	for (auto& obj : objs) {
+	for (auto& obj : objs) 
+	{
+#ifndef GAME_OBJ_ECS
 		NodeGroupHelper::BreakUp(*m_sub_mgr, obj);
+#else
+		NodeGroupHelper::BreakUp(m_world, *m_sub_mgr, obj);
+#endif // GAME_OBJ_ECS
 	}
 }
 

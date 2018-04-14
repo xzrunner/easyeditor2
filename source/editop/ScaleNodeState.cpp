@@ -61,8 +61,14 @@ bool ScaleNodeState::OnMouseRelease(int x, int y)
 	offset = e2::SysTransform::GetPosition(m_world, m_obj) - m_first_pos;
 	new_scale = e2::SysTransform::GetScale(m_world, m_obj);
 #endif // GAME_OBJ_ECS
+
+#ifndef GAME_OBJ_ECS
 	comb->Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, m_obj, offset));
 	comb->Add(std::make_shared<ScaleNodeAO>(m_sub_mgr, m_obj, new_scale, m_first_scale));
+#else
+	comb->Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, m_world, m_obj, offset));
+	comb->Add(std::make_shared<ScaleNodeAO>(m_sub_mgr, m_world, m_obj, new_scale, m_first_scale));
+#endif // GAME_OBJ_ECS
 
 	m_record.Add(comb);
 

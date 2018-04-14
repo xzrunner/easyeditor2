@@ -92,7 +92,11 @@ bool OffsetNodeState::OnMouseRelease(int x, int y)
 #endif // GAME_OBJ_ECS
 
 	// record
+#ifndef GAME_OBJ_ECS
 	m_record.Add(std::make_shared<OffsetNodeAO>(m_sub_mgr, m_obj, new_offset, m_old_offset));
+#else
+	m_record.Add(std::make_shared<OffsetNodeAO>(m_sub_mgr, m_world, m_obj, new_offset, m_old_offset));
+#endif // GAME_OBJ_ECS
 	ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 
 	return false;

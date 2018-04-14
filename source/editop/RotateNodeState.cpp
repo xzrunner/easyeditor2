@@ -57,7 +57,11 @@ bool RotateNodeState::OnMouseRelease(int x, int y)
 #endif // GAME_OBJ_ECS
 		return true;
 	});
+#ifndef GAME_OBJ_ECS
 	m_record.Add(std::make_shared<RotateNodeAO>(m_sub_mgr, objs, m_angle));
+#else
+	m_record.Add(std::make_shared<RotateNodeAO>(m_sub_mgr, m_world, objs, m_angle));
+#endif // GAME_OBJ_ECS
 	ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 
 	return false;
