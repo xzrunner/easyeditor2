@@ -4,15 +4,8 @@
 #include <ee0/typedef.h>
 #include <ee0/GameObj.h>
 
-#ifndef GAME_OBJ_ECS
-#include <node2/CompText.h>
-#else
-#include <entity2/CompText.h>
-#endif // GAME_OBJ_ECS
-
 #ifdef GAME_OBJ_ECS
 namespace ecsx { class World; }
-namespace e2 { struct CompText; }
 #endif // GAME_OBJ_ECS
 namespace pt2 { class Textbox; class Color; }
 
@@ -30,11 +23,8 @@ class WxCompTextPanel : public ee0::WxCompPanel
 public:
 	WxCompTextPanel(
 		wxWindow* parent, 
-#ifndef GAME_OBJ_ECS
-		n2::CompText& ctext,
-#else
+#ifdef GAME_OBJ_ECS
 		ecsx::World& world,
-		e2::CompText& ctext,
 #endif // GAME_OBJ_ECS
 		const ee0::GameObj& obj,
 		const ee0::SubjectMgrPtr& sub_mgr
@@ -55,11 +45,8 @@ private:
 	static wxColour ToWxColor(const pt2::Color& col);
 
 private:
-#ifndef GAME_OBJ_ECS
-	n2::CompText&       m_ctext;
-#else
+#ifdef GAME_OBJ_ECS
 	ecsx::World&        m_world;
-	e2::CompText&       m_ctext;
 #endif // GAME_OBJ_ECS
 	const ee0::GameObj& m_obj;
 	ee0::SubjectMgrPtr  m_sub_mgr;

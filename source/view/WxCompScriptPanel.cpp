@@ -22,20 +22,16 @@ namespace ee2
 {
 
 WxCompScriptPanel::WxCompScriptPanel(wxWindow* parent, 
-#ifndef GAME_OBJ_ECS
-	                                 n2::CompScript& cscript,
-#else
-	                                 const ecsx::World& world,
-		                             e2::CompScript& cscript,
-#endif // GAME_OBJ_ECS
 	                                 const ee0::SubjectMgrPtr& sub_mgr,
+#ifdef GAME_OBJ_ECS
+	                                 const ecsx::World& world,
+#endif // GAME_OBJ_ECS
 	                                 const ee0::GameObj& obj)
 	: ee0::WxCompPanel(parent, "Script")
+	, m_sub_mgr(sub_mgr)
 #ifdef GAME_OBJ_ECS
 	, m_world(world)
 #endif // GAME_OBJ_ECS
-	, m_cscript(cscript)
-	, m_sub_mgr(sub_mgr)
 	, m_obj(obj)
 {
 	InitLayout();
@@ -107,8 +103,9 @@ void WxCompScriptPanel::OnSetFilepath(wxCommandEvent& event)
 
 		// todo
 #ifndef GAME_OBJ_ECS
-		m_cscript.SetFilepath(filepath);
-		m_cscript.Reload(m_obj);
+		auto& cscript = m_obj->GetUniqueComp<n2::CompScript>();
+		cscript.SetFilepath(filepath);
+		cscript.Reload(m_obj);
 #endif // GAME_OBJ_ECS
 	}
 }
@@ -117,9 +114,10 @@ void WxCompScriptPanel::OnReloadScript(wxCommandEvent& event)
 {
 	// todo
 #ifndef GAME_OBJ_ECS
+	auto& cscript = m_obj->GetUniqueComp<n2::CompScript>();
 	auto& ceditor = m_obj->GetUniqueComp<ee0::CompNodeEditor>();
-	m_cscript.SetFilepath(ceditor.GetFilepath());
-	m_cscript.Reload(m_obj);
+	cscript.SetFilepath(ceditor.GetFilepath());
+	cscript.Reload(m_obj);
 #endif // GAME_OBJ_ECS
 	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }

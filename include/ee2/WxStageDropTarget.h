@@ -4,9 +4,7 @@
 #include <ee0/GameObj.h>
 
 namespace ee0 { class WxLibraryPanel; class WxStagePage; }
-#ifdef GAME_OBJ_ECS
-namespace ecsx { class World; }
-#endif // GAME_OBJ_ECS
+ECS_WORLD_DECL
 
 namespace ee2
 {

@@ -2,12 +2,10 @@
 
 #include <ee0/WxCompPanel.h>
 #include <ee0/Config.h>
+#include <ee0/GameObj.h>
 
-#ifndef GAME_OBJ_ECS
-namespace n2 { class CompScale9; }
-#else
+#ifdef GAME_OBJ_ECS
 namespace ecsx { class World; }
-namespace e2 { struct CompScale9; }
 #endif // GAME_OBJ_ECS
 
 class wxTextCtrl;
@@ -20,13 +18,11 @@ class WxCompScale9Panel : public ee0::WxCompPanel
 public:
 	WxCompScale9Panel(
 		wxWindow* parent, 
-#ifndef GAME_OBJ_ECS
-		n2::CompScale9& cscale9
-#else
+#ifdef GAME_OBJ_ECS
 		ecsx::World& world,
-		e2::CompScale9& cscale9
 #endif // GAME_OBJ_ECS
-		);
+		const ee0::GameObj& obj
+	);
 
 	virtual void RefreshNodeComp() override;
 
@@ -36,12 +32,10 @@ private:
 	void UpdateSpinValue(wxSpinEvent& event);
 
 private:
-#ifndef GAME_OBJ_ECS
-	n2::CompScale9& m_cscale9;
-#else
-	ecsx::World&    m_world;
-	e2::CompScale9& m_cscale9;
+#ifdef GAME_OBJ_ECS
+	ecsx::World&        m_world;
 #endif // GAME_OBJ_ECS
+	const ee0::GameObj& m_obj;
 
 	wxSpinCtrl* m_width;
 	wxSpinCtrl* m_height;

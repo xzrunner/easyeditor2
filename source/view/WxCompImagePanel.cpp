@@ -3,9 +3,11 @@
 #ifndef GAME_OBJ_ECS
 #include <ee0/CompNodeEditor.h>
 #include <node0/SceneNode.h>
+#include <node2/CompImage.h>
 #else
 #include <ee0/CompEntityEditor.h>
 #include <ecsx/World.h>
+#include <entity2/CompImage.h>
 #endif // GAME_OBJ_ECS
 #include <facade/ResPool.h>
 #include <facade/Image.h>
@@ -20,18 +22,14 @@ namespace ee2
 {
 
 WxCompImagePanel::WxCompImagePanel(wxWindow* parent, 
-#ifndef GAME_OBJ_ECS
-	                               n2::CompImage& cimage,
-#else
+#ifdef GAME_OBJ_ECS
 	                               ecsx::World& world,
-	                               e2::CompImage& cimage,
 #endif // GAME_OBJ_ECS
 	                               const ee0::GameObj& obj)
 	: ee0::WxCompPanel(parent, "Image")
 #ifdef GAME_OBJ_ECS
 	, m_world(world)
 #endif // GAME_OBJ_ECS
-	, m_cimage(cimage)
 	, m_obj(obj)
 {
 	InitLayout();
@@ -92,9 +90,11 @@ void WxCompImagePanel::OnSetFilepath(wxCommandEvent& event)
 		auto& path = dlg.GetPath();
 		auto img = facade::ResPool::Instance().Fetch<facade::Image>(path.ToStdString());
 #ifndef GAME_OBJ_ECS
-		m_cimage.SetTexture(img->GetTexture());
+		auto& cimage = m_obj->GetSharedComp<n2::CompImage>();
+		cimage.SetTexture(img->GetTexture());
 #else
-		m_cimage.tex = img->GetTexture();
+		auto& cimage = m_world.GetComponent<e2::CompImage>(m_obj);
+		cimage.tex = img->GetTexture();
 #endif // GAME_OBJ_ECS
 	}
 }

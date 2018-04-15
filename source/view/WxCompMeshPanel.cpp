@@ -3,11 +3,13 @@
 #ifndef GAME_OBJ_ECS
 #include <ee0/CompNodeEditor.h>
 #include <node0/SceneNode.h>
+#include <node2/CompMesh.h>
 #include <node2/CompBoundingBox.h>
 #include <node2/CompTransform.h>
 #include <ns/NodeFactory.h>
 #else
 #include <ee0/CompEntityEditor.h>
+#include <entity2/CompMesh.h>
 #include <es/EntityFactory.h>
 #include <ecsx/World.h>
 #endif // GAME_OBJ_ECS
@@ -22,18 +24,14 @@ namespace ee2
 {
 
 WxCompMeshPanel::WxCompMeshPanel(wxWindow* parent, 
-#ifndef GAME_OBJ_ECS
-		                         n2::CompMesh& cmesh,
-#else
+#ifdef GAME_OBJ_ECS
 	                             ecsx::World& world,
-		                         e2::CompMesh& cmesh,
 #endif // GAME_OBJ_ECS
 	                             const ee0::GameObj& obj)
 	: ee0::WxCompPanel(parent, "Mesh")
 #ifdef GAME_OBJ_ECS
 	, m_world(world)
 #endif // GAME_OBJ_ECS
-	, m_cmesh(cmesh)
 	, m_obj(obj)
 {
 	InitLayout();
@@ -43,15 +41,19 @@ WxCompMeshPanel::WxCompMeshPanel(wxWindow* parent,
 void WxCompMeshPanel::RefreshNodeComp()
 {
 #ifndef GAME_OBJ_ECS
-	if (auto& mesh = m_cmesh.GetMesh()) {
+	auto& cmesh = m_obj->GetSharedComp<n2::CompMesh>();
+	if (auto& mesh = cmesh.GetMesh()) 
+	{
 		if (auto& base = mesh->GetBaseSymbol()) {
 			auto& ceditor = base->GetUniqueComp<ee0::CompNodeEditor>();
 			m_base_path->SetValue(ceditor.GetFilepath());
 		}
 	}
 #else
-	if (m_cmesh.mesh) {
-		if (auto& base = m_cmesh.mesh->GetBaseSymbol()) {
+	auto& cmesh = m_world.GetComponent<e2::CompMesh>(m_obj);
+	if (cmesh.mesh)
+	{
+		if (auto& base = cmesh.mesh->GetBaseSymbol()) {
 			auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(*base);
 			m_base_path->SetValue(ceditor.filepath);
 		}
@@ -73,15 +75,19 @@ void WxCompMeshPanel::InitLayout()
 
 		std::string path;
 #ifndef GAME_OBJ_ECS
-		if (auto& mesh = m_cmesh.GetMesh()) {
+		auto& cmesh = m_obj->GetSharedComp<n2::CompMesh>();
+		if (auto& mesh = cmesh.GetMesh()) 
+		{
 			if (auto& base = mesh->GetBaseSymbol()) {
 				auto& ceditor = base->GetUniqueComp<ee0::CompNodeEditor>();
 				path = ceditor.GetFilepath();
 			}
 		}
 #else
-		if (m_cmesh.mesh) {
-			if (auto& base = m_cmesh.mesh->GetBaseSymbol()) {
+		auto& cmesh = m_world.GetComponent<e2::CompMesh>(m_obj);
+		if (cmesh.mesh) 
+		{
+			if (auto& base = cmesh.mesh->GetBaseSymbol()) {
 				auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(*base);
 				path = ceditor.filepath;
 			}
@@ -112,9 +118,10 @@ void WxCompMeshPanel::OnSetBasePath(wxCommandEvent& event)
 		return;
 	}
 
+	auto& cmesh = m_obj->GetSharedComp<n2::CompMesh>();
 	auto mesh = std::make_unique<pt2::Mesh<n0::SceneNode>>();
 //	mesh->SetMesh(std::make_unique<pm::TrianglesMesh>);
-	m_cmesh.SetMesh(mesh);
+	cmesh.SetMesh(mesh);
 
 	auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
 	m_base_path->SetValue(ceditor.GetFilepath());
@@ -123,7 +130,8 @@ void WxCompMeshPanel::OnSetBasePath(wxCommandEvent& event)
 		return;
 	}
 
-	m_cmesh.mesh = std::make_unique<pt2::Mesh<ecsx::Entity>>();
+	auto& cmesh = m_world.GetComponent<e2::CompMesh>(m_obj);
+	cmesh.mesh = std::make_unique<pt2::Mesh<ecsx::Entity>>();
 
 	auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(obj);
 	m_base_path->SetValue(ceditor.filepath);

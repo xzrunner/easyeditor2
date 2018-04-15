@@ -7,9 +7,11 @@
 
 #ifndef GAME_OBJ_ECS
 #include <node0/SceneNode.h>
+#include <node2/CompText.h>
 #include <node2/CompBoundingBox.h>
 #else
 #include <ecsx/World.h>
+#include <entity2/CompText.h>
 #include <entity2/CompBoundingBox.h>
 #endif // GAME_OBJ_ECS
 #include <sx/StringHelper.h>
@@ -40,11 +42,8 @@ namespace ee2
 {
 
 WxCompTextPanel::WxCompTextPanel(wxWindow* parent, 
-#ifndef GAME_OBJ_ECS
-	                             n2::CompText& ctext,
-#else
+#ifdef GAME_OBJ_ECS
 	                             ecsx::World& world,
-		                         e2::CompText& ctext,
 #endif // GAME_OBJ_ECS
 	                             const ee0::GameObj& obj, 
 	                             const ee0::SubjectMgrPtr& sub_mgr)
@@ -52,7 +51,6 @@ WxCompTextPanel::WxCompTextPanel(wxWindow* parent,
 #ifdef GAME_OBJ_ECS
 	, m_world(world)
 #endif // GAME_OBJ_ECS
-	, m_ctext(ctext)
 	, m_obj(obj)
 	, m_sub_mgr(sub_mgr)
 {
@@ -63,15 +61,15 @@ WxCompTextPanel::WxCompTextPanel(wxWindow* parent,
 void WxCompTextPanel::RefreshNodeComp()
 {
 #ifndef GAME_OBJ_ECS
-	auto& tb = m_ctext.GetText().tb;
-#else
-	auto& tb = m_ctext.text.tb;
-#endif // GAME_OBJ_ECS
+	auto& ctext = m_obj->GetSharedComp<n2::CompText>();
+	auto& tb = ctext.GetText().tb;
 
-#ifndef GAME_OBJ_ECS
-	m_text->SetValue(m_ctext.GetText().text);
+	m_text->SetValue(ctext.GetText().text);
 #else
-	m_text->SetValue(m_ctext.text.text);
+	auto& ctext = m_world.GetComponent<e2::CompText>(m_obj);
+	auto& tb = ctext.text.tb;
+
+	m_text->SetValue(ctext.text.text);
 #endif // GAME_OBJ_ECS
 
 	m_width->SetValue(tb.width);
@@ -102,9 +100,11 @@ void WxCompTextPanel::InitLayout()
 	wxSizer* pane_sizer = new wxBoxSizer(wxVERTICAL);
 
 #ifndef GAME_OBJ_ECS
-	auto& tb = m_ctext.GetText().tb;
+	auto& ctext = m_obj->GetSharedComp<n2::CompText>();
+	auto& tb = ctext.GetText().tb;
 #else
-	auto& tb = m_ctext.text.tb;
+	auto& ctext = m_world.GetComponent<e2::CompText>(m_obj);
+	auto& tb = ctext.text.tb;
 #endif // GAME_OBJ_ECS
 
 	static const wxSize INPUT_SIZE(65, 19);
@@ -115,9 +115,9 @@ void WxCompTextPanel::InitLayout()
 		wxSizer* sizer = new wxStaticBoxSizer(bounding, wxHORIZONTAL);
 
 #ifndef GAME_OBJ_ECS
-		auto& text = m_ctext.GetText().text;
+		auto& text = ctext.GetText().text;
 #else
-		auto& text = m_ctext.text.text;
+		auto& text = ctext.text.text;
 #endif // GAME_OBJ_ECS
 		sizer->Add(m_text = new wxTextCtrl(win, wxID_ANY, text,
 			wxDefaultPosition, wxSize(200, 60), wxTE_MULTILINE));
@@ -287,17 +287,19 @@ void WxCompTextPanel::InitLayout()
 void WxCompTextPanel::CommandEventHandler(wxCommandEvent& event)
 {
 #ifndef GAME_OBJ_ECS
-	auto& tb = m_ctext.GetText().tb;
+	auto& ctext = m_obj->GetSharedComp<n2::CompText>();
+	auto& tb = ctext.GetText().tb;
 #else
-	auto& tb = m_ctext.text.tb;
+	auto& ctext = m_world.GetComponent<e2::CompText>(m_obj);
+	auto& tb = ctext.text.tb;
 #endif // GAME_OBJ_ECS
 
 	int id = event.GetId();
 	if (id == m_text->GetId()) {
 #ifndef GAME_OBJ_ECS
-		m_ctext.GetText().text = m_text->GetValue().ToStdString();
+		ctext.GetText().text = m_text->GetValue().ToStdString();
 #else
-		m_ctext.text.text = m_text->GetValue().ToStdString();
+		ctext.text.text = m_text->GetValue().ToStdString();
 #endif // GAME_OBJ_ECS
 	} else if (id == m_width->GetId()) {
 		tb.width = m_width->GetValue();
@@ -347,9 +349,11 @@ void WxCompTextPanel::CommandEventHandler(wxCommandEvent& event)
 void WxCompTextPanel::SpinEventHandler(wxSpinEvent& event)
 {
 #ifndef GAME_OBJ_ECS
-	auto& tb = m_ctext.GetText().tb;
+	auto& ctext = m_obj->GetSharedComp<n2::CompText>();
+	auto& tb = ctext.GetText().tb;
 #else
-	auto& tb = m_ctext.text.tb;
+	auto& ctext = m_world.GetComponent<e2::CompText>(m_obj);
+	auto& tb = ctext.text.tb;
 #endif // GAME_OBJ_ECS
 
 	int id = event.GetId();
