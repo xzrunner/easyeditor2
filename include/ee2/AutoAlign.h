@@ -7,9 +7,7 @@
 #include <vector>
 
 namespace ee0 { class NodeContainer; }
-#ifdef GAME_OBJ_ECS
-namespace ecsx { class World; }
-#endif // GAME_OBJ_ECS
+ECS_WORLD_DECL
 
 namespace ee2
 {
@@ -19,19 +17,8 @@ class AutoAlign
 public:
 	AutoAlign(ee0::NodeContainer& objs);
 
-	void Align(
-#ifdef GAME_OBJ_ECS
-		ecsx::World& world,
-#endif // GAME_OBJ_ECS
-		const std::vector<ee0::GameObj>& objs
-	);
-	void Align(
-#ifdef GAME_OBJ_ECS
-		ecsx::World& world,
-#endif // GAME_OBJ_ECS
-		const ee0::GameObj& src, 
-		const ee0::GameObj& dst
-	);
+	void Align(ECS_WORLD_PARAM const std::vector<ee0::GameObj>& objs);
+	void Align(ECS_WORLD_PARAM const ee0::GameObj& src, const ee0::GameObj& dst);
 
 	void Draw() const;
 

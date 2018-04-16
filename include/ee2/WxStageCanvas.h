@@ -8,9 +8,7 @@
 
 namespace ee0 { class WxStagePage; }
 namespace pt2 { class Camera; }
-#ifdef GAME_OBJ_ECS
-namespace ecsx { class World; }
-#endif // GAME_OBJ_ECS
+ECS_WORLD_DECL
 
 namespace ee2
 {
@@ -18,13 +16,8 @@ namespace ee2
 class WxStageCanvas : public ee0::WxStageCanvas, public ee0::Observer
 {
 public:
-	WxStageCanvas(
-		ee0::WxStagePage* stage,
-#ifdef GAME_OBJ_ECS
-		const ecsx::World& world,
-#endif // GAME_OBJ_ECS
-		const ee0::RenderContext* rc = nullptr, 
-		const ee0::WindowContext* wc = nullptr);
+	WxStageCanvas(ee0::WxStagePage* stage, ECS_WORLD_PARAM
+		const ee0::RenderContext* rc = nullptr, const ee0::WindowContext* wc = nullptr);
 	virtual ~WxStageCanvas();
 
 	virtual void OnNotify(uint32_t msg, const ee0::VariantSet& variants) override;
@@ -42,11 +35,9 @@ protected:
 protected:
 	ee0::WxStagePage* m_stage;
 
-private:
-#ifdef GAME_OBJ_ECS
-	const ecsx::World& m_world;
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_DEF
 
+private:
 	std::shared_ptr<pt2::Camera> m_cam = nullptr;
 
 }; // WxStageCanvas

@@ -25,16 +25,12 @@ namespace ee2
 OffsetNodeState::OffsetNodeState(pt2::Camera& cam, 
                                  ee0::EditRecord& record,
 	                             const ee0::SubjectMgrPtr& sub_mgr, 
-#ifdef GAME_OBJ_ECS
-	                             ecsx::World& world,
-#endif // GAME_OBJ_ECS
+	                             ECS_WORLD_PARAM
 	                             const ee0::GameObj& obj)
 	: m_cam(cam)
 	, m_record(record)
 	, m_sub_mgr(sub_mgr)
-#ifdef GAME_OBJ_ECS
-	, m_world(world)
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_ASSIGN
 	, m_obj(obj)
 {
 #ifndef GAME_OBJ_ECS
@@ -55,11 +51,7 @@ bool OffsetNodeState::OnMouseRelease(int x, int y)
 	float r = ArrangeNodeCfg::CTRL_NODE_RADIUS * s * 2;
 
 	sm::vec2 ctrl_nodes[8];
-#ifndef GAME_OBJ_ECS
-	NodeCtrlPoint::GetNodeCtrlPoints(m_obj, ctrl_nodes);
-#else
-	NodeCtrlPoint::GetNodeCtrlPoints(m_world, m_obj, ctrl_nodes);
-#endif // GAME_OBJ_ECS
+	NodeCtrlPoint::GetNodeCtrlPoints(ECS_WORLD_SELF_VAR m_obj, ctrl_nodes);
 	sm::vec2 fixed = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
 #ifndef GAME_OBJ_ECS
 	auto& ctrans = m_obj->GetUniqueComp<n2::CompTransform>();
@@ -92,11 +84,7 @@ bool OffsetNodeState::OnMouseRelease(int x, int y)
 #endif // GAME_OBJ_ECS
 
 	// record
-#ifndef GAME_OBJ_ECS
-	m_record.Add(std::make_shared<OffsetNodeAO>(m_sub_mgr, m_obj, new_offset, m_old_offset));
-#else
-	m_record.Add(std::make_shared<OffsetNodeAO>(m_sub_mgr, m_world, m_obj, new_offset, m_old_offset));
-#endif // GAME_OBJ_ECS
+	m_record.Add(std::make_shared<OffsetNodeAO>(m_sub_mgr, ECS_WORLD_SELF_VAR m_obj, new_offset, m_old_offset));
 	ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 
 	return false;

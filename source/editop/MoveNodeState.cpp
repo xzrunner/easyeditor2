@@ -14,15 +14,10 @@
 namespace ee2
 {
 
-MoveNodeState::MoveNodeState(pt2::Camera& cam, 
-#ifdef GAME_OBJ_ECS
-                             ecsx::World& world,
-#endif // GAME_OBJ_ECS
+MoveNodeState::MoveNodeState(pt2::Camera& cam, ECS_WORLD_PARAM
 	                         ee0::SelectionSet<ee0::GameObjWithPos>& selection)
 	: m_cam(cam)
-#ifdef GAME_OBJ_ECS
-	, m_world(world)
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_ASSIGN
 {
 	m_center.Set(0, 0);
 	m_objs.reserve(selection.Size());

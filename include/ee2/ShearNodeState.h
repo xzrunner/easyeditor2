@@ -5,9 +5,7 @@
 #include "ee2/NodeCtrlPoint.h"
 
 namespace pt2 { class Camera; }
-#ifdef GAME_OBJ_ECS
-namespace ecsx { class World; }
-#endif // GAME_OBJ_ECS
+ECS_WORLD_DECL
 
 namespace ee2
 {
@@ -15,13 +13,8 @@ namespace ee2
 class ShearNodeState : public ee0::EditOpState
 {
 public:
-	ShearNodeState(
-		pt2::Camera& cam,
-#ifdef GAME_OBJ_ECS
-		ecsx::World& world,
-#endif // GAME_OBJ_ECS
-		const ee0::GameObj& obj,
-		const NodeCtrlPoint::Node& ctrl_point);
+	ShearNodeState(pt2::Camera& cam, ECS_WORLD_PARAM 
+		const ee0::GameObj& obj, const NodeCtrlPoint::Node& ctrl_point);
 
 	virtual bool OnMouseRelease(int x, int y) override;
 	virtual	bool OnMouseDrag(int x, int y) override;
@@ -32,9 +25,7 @@ private:
 
 private:
 	pt2::Camera& m_cam;
-#ifdef GAME_OBJ_ECS
-	ecsx::World& m_world;
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_DEF
 
 	ee0::GameObj m_obj;
 

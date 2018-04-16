@@ -15,14 +15,10 @@ namespace ee2
 {
 
 EditableNodeAO::EditableNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
-#ifdef GAME_OBJ_ECS
-	                           const ecsx::World& world,
-#endif // GAME_OBJ_ECS
+	                           ECS_WORLD_PARAM
 	                           const std::vector<ee0::GameObj>& objs)
 	: m_sub_mgr(sub_mgr)
-#ifdef GAME_OBJ_ECS
-	, m_world(world)
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_ASSIGN
 	, m_objs(objs)
 {
 }

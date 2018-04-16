@@ -15,15 +15,11 @@ namespace ee2
 
 CopyPasteNodeState::CopyPasteNodeState(pt2::Camera& cam, 
 	                                   const ee0::SubjectMgrPtr& sub_mgr,
-#ifdef GAME_OBJ_ECS
-                                       ecsx::World& world,
-#endif // GAME_OBJ_ECS
+	                                   ECS_WORLD_PARAM
 	                                   ee0::SelectionSet<ee0::GameObjWithPos>& selection)
 	: m_cam(cam)
 	, m_sub_mgr(sub_mgr)
-#ifdef GAME_OBJ_ECS
-	, m_world(world)
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_ASSIGN
 {
 	m_objs.reserve(selection.Size());
 	selection.Traverse([&](const ee0::GameObjWithPos& opw)->bool

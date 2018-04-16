@@ -23,12 +23,8 @@
 namespace ee2
 {
 
-void NodeGroupHelper::BuildGroup(
-#ifdef GAME_OBJ_ECS
-	ecsx::World& world,
-#endif // GAME_OBJ_ECS
-	ee0::SubjectMgr& sub_mgr, 
-	const std::vector<ee0::GameObjWithPos>& objs)
+void NodeGroupHelper::BuildGroup(ECS_WORLD_PARAM ee0::SubjectMgr& sub_mgr, 
+	                             const std::vector<ee0::GameObjWithPos>& objs)
 {
 	if (objs.empty()) {
 		return;
@@ -105,12 +101,8 @@ void NodeGroupHelper::BuildGroup(
 	}
 }
 
-void NodeGroupHelper::BreakUp(
-#ifdef GAME_OBJ_ECS
-	ecsx::World& world,
-#endif // GAME_OBJ_ECS
-	ee0::SubjectMgr& sub_mgr, 
-	const ee0::GameObjWithPos& obj
+void NodeGroupHelper::BreakUp(ECS_WORLD_PARAM ee0::SubjectMgr& sub_mgr, 
+	                          const ee0::GameObjWithPos& obj
 )
 {
 #ifndef GAME_OBJ_ECS

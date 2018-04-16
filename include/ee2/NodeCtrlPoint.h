@@ -4,9 +4,7 @@
 
 #include <SM_Vector.h>
 
-#ifdef GAME_OBJ_ECS
-namespace ecsx { class World; }
-#endif // GAME_OBJ_ECS
+ECS_WORLD_DECL
 
 namespace ee2
 {
@@ -14,13 +12,7 @@ namespace ee2
 class NodeCtrlPoint
 {
 public:
-	static void GetNodeCtrlPoints(
-#ifdef GAME_OBJ_ECS
-		const ecsx::World& world,
-#endif // GAME_OBJ_ECS
-		const ee0::GameObj& obj, 
-		sm::vec2 pos[8]
-	);
+	static void GetNodeCtrlPoints(ECS_WORLD_PARAM const ee0::GameObj& obj, sm::vec2 pos[8]);
 
 	//// todo for perspective
 	//static void GetNodeCtrlPointsExt(const n0::SceneNode& obj, sm::vec2 objs[4]);

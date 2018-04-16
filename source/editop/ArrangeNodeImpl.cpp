@@ -45,19 +45,15 @@ namespace ee2
 ArrangeNodeImpl::ArrangeNodeImpl(pt2::Camera& cam, 
 	                             ee0::EditRecord& record,
 	                             const ee0::SubjectMgrPtr& sub_mgr,
-#ifdef GAME_OBJ_ECS
-	                             ecsx::World& world,
-#endif // GAME_OBJ_ECS
-	                             ee0::SelectionSet<ee0::GameObjWithPos>& selection, 
+	                             ECS_WORLD_PARAM
+	                             ee0::SelectionSet<ee0::GameObjWithPos>& selection,
 	                             ee0::NodeContainer& objs,
 	                             const ee0::KeysState& key_state,
 	                             const ArrangeNodeCfg& cfg)
 	: m_cam(cam)
 	, m_record(record)
 	, m_sub_mgr(sub_mgr)
-#ifdef GAME_OBJ_ECS
-	, m_world(world)
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_ASSIGN
 	, m_selection(selection)
 	, m_key_state(key_state)
 	, m_cfg(cfg)
@@ -209,11 +205,7 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 			return false;
 		});
 	}
-#ifndef GAME_OBJ_ECS
-	if (!selected) {
-#else
-	if (!selected.IsNull()) {
-#endif // GAME_OBJ_ECS
+	if (!GAME_OBJ_VALID(selected)) {
 		if (m_op_state) {
 			m_op_state->OnMousePress(x, y);
 		}
@@ -225,14 +217,7 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 	{
 		sm::vec2 offset = GetNodeOffset(selected);
 		if (sm::dis_pos_to_pos(offset, pos) < m_ctrl_node_radius) {
-			m_op_state = std::make_unique<OffsetNodeState>(
-				m_cam, 
-				m_record, 
-				m_sub_mgr, 
-#ifdef GAME_OBJ_ECS
-				m_world,
-#endif // GAME_OBJ_ECS
-				selected);
+			m_op_state = std::make_unique<OffsetNodeState>(m_cam, m_record, m_sub_mgr, ECS_WORLD_SELF_VAR selected);
 			return;
 		}
 	}
@@ -241,11 +226,7 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 	if (m_cfg.is_deform_open && !m_key_state.GetKeyState(WXK_SHIFT))
 	{
 		sm::vec2 ctrl_nodes[8];
-#ifndef GAME_OBJ_ECS
-		NodeCtrlPoint::GetNodeCtrlPoints(selected, ctrl_nodes);
-#else
-		NodeCtrlPoint::GetNodeCtrlPoints(m_world, selected, ctrl_nodes);
-#endif // GAME_OBJ_ECS
+		NodeCtrlPoint::GetNodeCtrlPoints(ECS_WORLD_SELF_VAR selected, ctrl_nodes);
 		for (int i = 0; i < 8; ++i)
 		{
 			if (sm::dis_pos_to_pos(ctrl_nodes[i], pos) < m_ctrl_node_radius)
@@ -253,15 +234,7 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 				NodeCtrlPoint::Node cn;
 				cn.pos = ctrl_nodes[i];
 				cn.type = NodeCtrlPoint::Type(i);
-				m_op_state = std::make_unique<ScaleNodeState>(
-					m_cam, 
-					m_record, 
-					m_sub_mgr, 
-#ifdef GAME_OBJ_ECS
-					m_world,
-#endif // GAME_OBJ_ECS
-					selected, 
-					cn);
+				m_op_state = std::make_unique<ScaleNodeState>(m_cam, m_record, m_sub_mgr, ECS_WORLD_SELF_VAR selected, cn);
 				return;
 			}
 		}
@@ -284,15 +257,7 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 	//}
 
 	// translate
-	m_op_state = std::make_unique<TranslateNodeState>(
-		m_cam, 
-		m_record, 
-		m_sub_mgr, 
-#ifdef GAME_OBJ_ECS
-		m_world,
-#endif // GAME_OBJ_ECS
-		m_selection, 
-		pos);
+	m_op_state = std::make_unique<TranslateNodeState>(m_cam, m_record, m_sub_mgr, ECS_WORLD_SELF_VAR m_selection, pos);
 
 	m_op_state->OnMousePress(x, y);
 }
@@ -307,15 +272,7 @@ void ArrangeNodeImpl::OnMouseLeftUp(int x, int y)
 
 	sm::vec2 pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
 	if (!m_selection.IsEmpty()) {
-		m_op_state = std::make_unique<TranslateNodeState>(
-			m_cam, 
-			m_record, 
-			m_sub_mgr, 
-#ifdef GAME_OBJ_ECS
-			m_world,
-#endif // GAME_OBJ_ECS
-			m_selection, 
-			pos);
+		m_op_state = std::make_unique<TranslateNodeState>(m_cam, m_record, m_sub_mgr, ECS_WORLD_SELF_VAR m_selection, pos);
 	}
 
 	if (m_cfg.is_auto_align_open &&
@@ -332,11 +289,7 @@ void ArrangeNodeImpl::OnMouseLeftUp(int x, int y)
 #endif // GAME_OBJ_ECS
 			return false;
 		});
-#ifndef GAME_OBJ_ECS
-		m_align.Align(objs);
-#else
-		m_align.Align(m_world, objs);
-#endif // GAME_OBJ_ECS
+		m_align.Align(ECS_WORLD_SELF_VAR objs);
 
 		m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 	}
@@ -372,11 +325,7 @@ void ArrangeNodeImpl::OnMouseRightDown(int x, int y)
 			return false;
 		});
 	}
-#ifndef GAME_OBJ_ECS
-	if (!selected) {
-#else
-	if (!selected.IsNull()) {
-#endif // GAME_OBJ_ECS
+	if (!GAME_OBJ_VALID(selected)) {
 		return;
 	}
 
@@ -384,11 +333,7 @@ void ArrangeNodeImpl::OnMouseRightDown(int x, int y)
 	if (m_cfg.is_deform_open)
 	{
 		sm::vec2 ctrl_nodes[8];
-#ifndef GAME_OBJ_ECS
-		NodeCtrlPoint::GetNodeCtrlPoints(selected, ctrl_nodes);
-#else
-		NodeCtrlPoint::GetNodeCtrlPoints(m_world, selected, ctrl_nodes);
-#endif // GAME_OBJ_ECS
+		NodeCtrlPoint::GetNodeCtrlPoints(ECS_WORLD_SELF_VAR selected, ctrl_nodes);
 		for (int i = 0; i < 8; ++i)
 		{
 			if (sm::dis_pos_to_pos(ctrl_nodes[i], pos) < m_ctrl_node_radius)
@@ -396,13 +341,7 @@ void ArrangeNodeImpl::OnMouseRightDown(int x, int y)
 				NodeCtrlPoint::Node cn;
 				cn.pos = ctrl_nodes[i];
 				cn.type = NodeCtrlPoint::Type(i);
-				m_op_state = std::make_unique<ShearNodeState>(
-					m_cam, 
-#ifdef GAME_OBJ_ECS
-					m_world,
-#endif // GAME_OBJ_ECS
-					selected, 
-					cn);
+				m_op_state = std::make_unique<ShearNodeState>(m_cam, ECS_WORLD_SELF_VAR selected, cn);
 				return;
 			}
 		}
@@ -410,15 +349,7 @@ void ArrangeNodeImpl::OnMouseRightDown(int x, int y)
 
 	// rotate
 	if (m_cfg.is_rotate_open) {
-		m_op_state = std::make_unique<RotateNodeState>(
-			m_cam, 
-			m_record, 
-			m_sub_mgr,
-#ifdef GAME_OBJ_ECS
-			m_world,
-#endif // GAME_OBJ_ECS
-			m_selection, 
-			pos);
+		m_op_state = std::make_unique<RotateNodeState>(m_cam, m_record, m_sub_mgr, ECS_WORLD_SELF_VAR m_selection, pos);
 	}
 }
 
@@ -504,15 +435,14 @@ void ArrangeNodeImpl::OnDraw(float cam_scale) const
 			return false;
 		});
 
+		GD_ASSERT(GAME_OBJ_VALID(selected), "null selected");
 #ifndef GAME_OBJ_ECS
-		GD_ASSERT(selected, "null selected");
 		auto& cbb = selected->GetUniqueComp<n2::CompBoundingBox>();
 		auto& ctrans = selected->GetUniqueComp<n2::CompTransform>();
 		auto& sz = cbb.GetSize();
 		float sx = ctrans.GetTrans().GetScale().x,
 			  sy = ctrans.GetTrans().GetScale().y;
 #else
-		GD_ASSERT(!selected.IsNull(), "null selected");
 		auto& cbb = m_world.GetComponent<e2::CompBoundingBox>(selected);
 		auto& sz = cbb.rect;
 		auto scale = e2::SysTransform::GetScale(m_world, selected);
@@ -546,11 +476,7 @@ void ArrangeNodeImpl::OnDraw(float cam_scale) const
 				else
 				{
 					sm::vec2 ctrl_nodes[8];
-#ifndef GAME_OBJ_ECS
-					NodeCtrlPoint::GetNodeCtrlPoints(selected, ctrl_nodes);
-#else
-					NodeCtrlPoint::GetNodeCtrlPoints(m_world, selected, ctrl_nodes);
-#endif // GAME_OBJ_ECS
+					NodeCtrlPoint::GetNodeCtrlPoints(ECS_WORLD_SELF_VAR selected, ctrl_nodes);
 					for (int i = 0; i < 4; ++i) {
 						pt2::PrimitiveDraw::SetColor(pt2::Color(51, 204, 51));
 						pt2::PrimitiveDraw::Circle(nullptr, ctrl_nodes[i], m_ctrl_node_radius, false);
@@ -598,11 +524,7 @@ ee0::GameObj ArrangeNodeImpl::QueryEditedNode(const sm::vec2& pos) const
 			return false;
 		});
 	}
-#ifndef GAME_OBJ_ECS
-	if (!selected) {
-#else
-	if (!selected.IsNull()) {
-#endif // GAME_OBJ_ECS
+	if (!GAME_OBJ_VALID(selected)) {
 		return ret;
 	}
 
@@ -617,11 +539,7 @@ ee0::GameObj ArrangeNodeImpl::QueryEditedNode(const sm::vec2& pos) const
 	if (m_cfg.is_deform_open && !m_key_state.GetKeyState(WXK_SHIFT))
 	{
 		sm::vec2 ctrl_nodes[8];
-#ifndef GAME_OBJ_ECS
-		NodeCtrlPoint::GetNodeCtrlPoints(selected, ctrl_nodes);
-#else
-		NodeCtrlPoint::GetNodeCtrlPoints(m_world, selected, ctrl_nodes);
-#endif // GAME_OBJ_ECS
+		NodeCtrlPoint::GetNodeCtrlPoints(ECS_WORLD_SELF_VAR selected, ctrl_nodes);
 		for (int i = 0; i < 8; ++i) {
 			if (sm::dis_pos_to_pos(ctrl_nodes[i], pos) < m_ctrl_node_radius) {
 				return selected;
@@ -693,17 +611,10 @@ void ArrangeNodeImpl::OnSpaceKeyDown()
 		// record
 		std::vector<ee0::GameObj> objs;
 		objs.push_back(obj);
-#ifndef GAME_OBJ_ECS
-		comb->Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, obj, - pos));
-		comb->Add(std::make_shared<RotateNodeAO>(m_sub_mgr, objs, - angle));
-		comb->Add(std::make_shared<ScaleNodeAO>(m_sub_mgr, obj, sm::vec2(1, 1), scale));
-		comb->Add(std::make_shared<ShearNodeAO>(m_sub_mgr, obj, sm::vec2(0, 0), shear));
-#else
-		comb->Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, m_world, obj, -pos));
-		comb->Add(std::make_shared<RotateNodeAO>(m_sub_mgr, m_world, objs, -angle));
-		comb->Add(std::make_shared<ScaleNodeAO>(m_sub_mgr, m_world, obj, sm::vec2(1, 1), scale));
-		comb->Add(std::make_shared<ShearNodeAO>(m_sub_mgr, m_world, obj, sm::vec2(0, 0), shear));
-#endif // GAME_OBJ_ECS
+		comb->Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, ECS_WORLD_SELF_VAR obj, - pos));
+		comb->Add(std::make_shared<RotateNodeAO>(m_sub_mgr, ECS_WORLD_SELF_VAR objs, - angle));
+		comb->Add(std::make_shared<ScaleNodeAO>(m_sub_mgr, ECS_WORLD_SELF_VAR obj, sm::vec2(1, 1), scale));
+		comb->Add(std::make_shared<ShearNodeAO>(m_sub_mgr, ECS_WORLD_SELF_VAR obj, sm::vec2(0, 0), shear));
 
 #ifndef GAME_OBJ_ECS
 		ctrans.SetPosition(*obj, sm::vec2(0, 0));

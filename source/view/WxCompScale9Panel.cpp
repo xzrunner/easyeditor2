@@ -14,16 +14,9 @@
 namespace ee2
 {
 
-WxCompScale9Panel::WxCompScale9Panel(wxWindow* parent, 
-#ifdef GAME_OBJ_ECS
-                                     ecsx::World& world,
-#endif // GAME_OBJ_ECS
-	                                 const ee0::GameObj& obj
-)
+WxCompScale9Panel::WxCompScale9Panel(wxWindow* parent, ECS_WORLD_PARAM const ee0::GameObj& obj)
 	: ee0::WxCompPanel(parent, "Scale9")
-#ifdef GAME_OBJ_ECS
-	, m_world(world)
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_ASSIGN
 	, m_obj(obj)
 {
 	InitLayout();
@@ -95,19 +88,11 @@ void WxCompScale9Panel::UpdateSpinValue(wxSpinEvent& event)
 	int id = event.GetId();
 	if (id == m_width->GetId()) 
 	{
-#ifndef GAME_OBJ_ECS
-		cscale9.SetWidth(m_width->GetValue());
-#else
-		cscale9.SetWidth(m_world, m_width->GetValue());
-#endif // GAME_OBJ_ECS
+		cscale9.SetWidth(ECS_WORLD_SELF_VAR m_width->GetValue());
 	} 
 	else if (id == m_height->GetId()) 
 	{
-#ifndef GAME_OBJ_ECS
-		cscale9.SetHeight(m_height->GetValue());
-#else
-		cscale9.SetHeight(m_world, m_height->GetValue());
-#endif // GAME_OBJ_ECS
+		cscale9.SetHeight(ECS_WORLD_SELF_VAR m_height->GetValue());
 	}
 }
 

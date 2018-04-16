@@ -14,16 +14,12 @@ namespace ee2
 {
 
 ScaleNodeAO::ScaleNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
-#ifdef GAME_OBJ_ECS
-	                     ecsx::World& world,
-#endif // GAME_OBJ_ECS
+	                     ECS_WORLD_PARAM
 	                     const ee0::GameObj& obj,
 	                     const sm::vec2& new_scale, 
 	                     const sm::vec2& old_scale)
 	: m_sub_mgr(sub_mgr)
-#ifdef GAME_OBJ_ECS
-	, m_world(world)
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_ASSIGN
 	, m_obj(obj)
 	, m_new_scale(new_scale)
 	, m_old_scale(old_scale)

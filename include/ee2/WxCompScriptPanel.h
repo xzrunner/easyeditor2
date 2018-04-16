@@ -4,9 +4,7 @@
 #include <ee0/typedef.h>
 #include <ee0/GameObj.h>
 
-#ifdef GAME_OBJ_ECS
-namespace ecsx { class World; }
-#endif // GAME_OBJ_ECS
+ECS_WORLD_DECL
 
 class wxTextCtrl;
 
@@ -16,14 +14,8 @@ namespace ee2
 class WxCompScriptPanel : public ee0::WxCompPanel
 {
 public:
-	WxCompScriptPanel(
-		wxWindow* parent,
-		const ee0::SubjectMgrPtr& sub_mgr, 
-#ifdef GAME_OBJ_ECS
-		const ecsx::World& world,
-#endif // GAME_OBJ_ECS
-		const ee0::GameObj& obj
-	);
+	WxCompScriptPanel(wxWindow* parent, const ee0::SubjectMgrPtr& sub_mgr, 
+		ECS_WORLD_PARAM const ee0::GameObj& obj);
 
 	virtual void RefreshNodeComp() override;
 
@@ -34,9 +26,7 @@ private:
 	void OnReloadScript(wxCommandEvent& event);
 
 private:
-#ifdef GAME_OBJ_ECS
-	const ecsx::World& m_world;
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_DEF
 	ee0::SubjectMgrPtr m_sub_mgr;
 	ee0::GameObj       m_obj;
 

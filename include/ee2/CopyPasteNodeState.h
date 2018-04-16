@@ -10,9 +10,7 @@
 #include <vector>
 
 namespace pt2 { class Camera; }
-#ifdef GAME_OBJ_ECS
-namespace ecsx { class World; }
-#endif // GAME_OBJ_ECS
+ECS_WORLD_DECL
 
 namespace ee2
 {
@@ -20,14 +18,8 @@ namespace ee2
 class CopyPasteNodeState : public ee0::EditOpState
 {
 public:
-	CopyPasteNodeState(
-		pt2::Camera& cam, 
-		const ee0::SubjectMgrPtr& sub_mgr,
-#ifdef GAME_OBJ_ECS
-		ecsx::World& world, 
-#endif // GAME_OBJ_ECS
-		ee0::SelectionSet<ee0::GameObjWithPos>& selection
-	);
+	CopyPasteNodeState(pt2::Camera& cam, const ee0::SubjectMgrPtr& sub_mgr,
+		ECS_WORLD_PARAM ee0::SelectionSet<ee0::GameObjWithPos>& selection);
 
 	virtual bool OnMousePress(int x, int y) override;
 	virtual bool OnMouseDrag(int x, int y) override;
@@ -35,9 +27,7 @@ public:
 private:
 	pt2::Camera&       m_cam;
 	ee0::SubjectMgrPtr m_sub_mgr;
-#ifdef GAME_OBJ_ECS
-	ecsx::World&       m_world;
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_DEF
 
 	sm::vec2 m_last_pos;
 

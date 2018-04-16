@@ -22,17 +22,13 @@ namespace ee2
 ScaleNodeState::ScaleNodeState(pt2::Camera& cam, 
 	                           ee0::EditRecord& record,
 	                           const ee0::SubjectMgrPtr& sub_mgr, 
-#ifdef GAME_OBJ_ECS
-	                           ecsx::World& world,
-#endif // GAME_OBJ_ECS
+	                           ECS_WORLD_PARAM
 	                           const ee0::GameObj& obj,
 	                           const NodeCtrlPoint::Node& ctrl_point)
 	: m_cam(cam)
 	, m_record(record)
 	, m_sub_mgr(sub_mgr)
-#ifdef GAME_OBJ_ECS
-	, m_world(world)
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_ASSIGN
 	, m_obj(obj)
 	, m_ctrl_point(ctrl_point)
 {
@@ -93,11 +89,7 @@ void ScaleNodeState::Scale(const sm::vec2& curr)
 #endif // GAME_OBJ_ECS
 
 	sm::vec2 ctrls[8];
-#ifndef GAME_OBJ_ECS
-	NodeCtrlPoint::GetNodeCtrlPoints(m_obj, ctrls);
-#else
-	NodeCtrlPoint::GetNodeCtrlPoints(m_world, m_obj, ctrls);
-#endif // GAME_OBJ_ECS
+	NodeCtrlPoint::GetNodeCtrlPoints(ECS_WORLD_SELF_VAR m_obj, ctrls);
 	
 	sm::vec2 ori = ctrls[m_ctrl_point.type];
 #ifndef GAME_OBJ_ECS

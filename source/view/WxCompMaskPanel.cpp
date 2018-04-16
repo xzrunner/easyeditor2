@@ -24,15 +24,10 @@
 namespace ee2
 {
 
-WxCompMaskPanel::WxCompMaskPanel(wxWindow* parent, 
-#ifdef GAME_OBJ_ECS
-	                             ecsx::World& world,
-#endif // GAME_OBJ_ECS
+WxCompMaskPanel::WxCompMaskPanel(wxWindow* parent, ECS_WORLD_PARAM
 	                             const ee0::GameObj& obj)
 	: ee0::WxCompPanel(parent, "Mask")
-#ifdef GAME_OBJ_ECS
-	, m_world(world)
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_ASSIGN
 	, m_obj(obj)
 {
 	InitLayout();
@@ -156,21 +151,17 @@ void WxCompMaskPanel::InitLayout()
 void WxCompMaskPanel::OnSetBasePath(wxCommandEvent& event)
 {
 	auto obj = CreateNodeFromFile();
-#ifndef GAME_OBJ_ECS
-	if (!obj) {
+	if (!GAME_OBJ_VALID(obj)) {
 		return;
 	}
 
+#ifndef GAME_OBJ_ECS
 	auto& cmask = m_obj->GetSharedComp<n2::CompMask>();
 	cmask.SetBaseNode(obj);
 
 	auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
 	m_base_path->SetValue(ceditor.GetFilepath());
 #else
-	if (obj.IsNull()) {
-		return;
-	}
-
 	auto& cmask = m_world.GetComponent<e2::CompMask>(m_obj);
 	cmask.base = obj;
 
@@ -182,11 +173,11 @@ void WxCompMaskPanel::OnSetBasePath(wxCommandEvent& event)
 void WxCompMaskPanel::OnSetMaskPath(wxCommandEvent& event)
 {
 	auto obj = CreateNodeFromFile();
-#ifndef GAME_OBJ_ECS
-	if (!obj) {
+	if (!GAME_OBJ_VALID(obj)) {
 		return;
 	}
 
+#ifndef GAME_OBJ_ECS
 	auto& cmask = m_obj->GetSharedComp<n2::CompMask>();
 	cmask.SetMaskNode(obj);
 
@@ -196,10 +187,6 @@ void WxCompMaskPanel::OnSetMaskPath(wxCommandEvent& event)
 	auto& cbb = m_obj->GetUniqueComp<n2::CompBoundingBox>();
 	cbb.SetSize(*m_obj, obj->GetUniqueComp<n2::CompBoundingBox>().GetSize());
 #else
-	if (obj.IsNull()) {
-		return;
-	}
-
 	auto& cmask = m_world.GetComponent<e2::CompMask>(m_obj);
 	cmask.mask = obj;
 
@@ -216,25 +203,18 @@ ee0::GameObj WxCompMaskPanel::CreateNodeFromFile()
 	std::string filter = "*.png;*.jpg;*.bmp;*.pvr;*.pkm";
 	wxFileDialog dlg(this, wxT("Choose image"), wxEmptyString, filter);
 	if (dlg.ShowModal() != wxID_OK) {
-#ifndef GAME_OBJ_ECS
-		return nullptr;
-#else
-		return ee0::GameObj();
-#endif // GAME_OBJ_ECS
+		return GAME_OBJ_NULL;
 	}
 
 	std::string filepath = dlg.GetPath().ToStdString();
 #ifndef GAME_OBJ_ECS
 	auto obj = ns::NodeFactory::Create(filepath);
-	if (!obj) {
-		return nullptr;
-	}
 #else
 	auto obj = es::EntityFactory::Create(m_world, filepath);
-	if (obj.IsNull()) {
-		return ee0::GameObj();
+#endif // GAME_OBJ_ECS	
+	if (!GAME_OBJ_VALID(obj)) {
+		return GAME_OBJ_NULL;
 	}
-#endif // GAME_OBJ_ECS
 
 	// editor
 #ifndef GAME_OBJ_ECS

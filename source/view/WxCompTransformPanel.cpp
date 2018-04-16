@@ -25,15 +25,11 @@ namespace ee2
 
 WxCompTransformPanel::WxCompTransformPanel(wxWindow* parent, 
 	                                       const ee0::SubjectMgrPtr& sub_mgr,
-#ifdef GAME_OBJ_ECS
-	                                       ecsx::World& world,
-#endif // GAME_OBJ_ECS
+	                                       ECS_WORLD_PARAM
 	                                       const ee0::GameObjWithPos& opw)
 	: ee0::WxCompPanel(parent, "Transform")
 	, m_sub_mgr(sub_mgr)
-#ifdef GAME_OBJ_ECS
-	, m_world(world)
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_ASSIGN
 	, m_nwp(opw)
 {
 	InitLayout();

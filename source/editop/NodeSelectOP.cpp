@@ -26,15 +26,9 @@
 namespace ee2
 {
 
-NodeSelectOP::NodeSelectOP(
-#ifdef GAME_OBJ_ECS
-	ecsx::World& world,
-#endif // GAME_OBJ_ECS
-	ee0::WxStagePage& stage)
+NodeSelectOP::NodeSelectOP(ECS_WORLD_PARAM ee0::WxStagePage& stage)
 	: ee0::NodeSelectOP(stage)
-#ifdef GAME_OBJ_ECS
-	, m_world(world)
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_ASSIGN
 	, m_draw_state_disable(false)
 {
 	auto cam = std::dynamic_pointer_cast<WxStageCanvas>(m_stage.GetImpl().GetCanvas())->GetCamera();
@@ -168,11 +162,7 @@ ee0::GameObj NodeSelectOP::QueryByPos(int screen_x, int screen_y) const
 	m_stage.Traverse([&](const ee0::GameObj& obj)->bool
 	{
 		auto query = QueryByPos(obj, pos);
-#ifndef GAME_OBJ_ECS
-		if (query) 
-#else
-		if (!query.IsNull())
-#endif // GAME_OBJ_ECS
+		if (GAME_OBJ_VALID(query))
 		{
 			m_draw_state_disable = true;
 			ret = query;
@@ -240,11 +230,7 @@ ee0::GameObj NodeSelectOP::QueryByPos(const ee0::GameObj& obj, const sm::vec2& p
 	}
 #endif // GAME_OBJ_ECS
 
-#ifndef GAME_OBJ_ECS
-	return nullptr;
-#else
-	return ee0::GameObj();
-#endif // GAME_OBJ_ECS
+	return GAME_OBJ_NULL;
 }
 
 void NodeSelectOP::QueryByRect(const ee0::GameObj& obj, const sm::rect& rect, 

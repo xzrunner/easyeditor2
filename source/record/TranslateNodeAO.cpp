@@ -14,15 +14,11 @@ namespace ee2
 {
 
 TranslateNodeAO::TranslateNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
-#ifdef GAME_OBJ_ECS
-	                             ecsx::World& world,
-#endif // GAME_OBJ_ECS
-	                             const ee0::SelectionSet<ee0::GameObjWithPos>& selection, 
+	                             ECS_WORLD_PARAM
+	                             const ee0::SelectionSet<ee0::GameObjWithPos>& selection,
 	                             const sm::vec2& offset)
 	: m_sub_mgr(sub_mgr)
-#ifdef GAME_OBJ_ECS
-	, m_world(world)
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_ASSIGN
 	, m_offset(offset)
 {
 	m_objs.reserve(selection.Size());
@@ -37,30 +33,22 @@ TranslateNodeAO::TranslateNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
 }
 
 TranslateNodeAO::TranslateNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
-#ifdef GAME_OBJ_ECS
-	                             ecsx::World& world,
-#endif // GAME_OBJ_ECS
+	                             ECS_WORLD_PARAM
 	                             const ee0::GameObj& obj, 
 	                             const sm::vec2& offset)
 	: m_sub_mgr(sub_mgr)
-#ifdef GAME_OBJ_ECS
-	, m_world(world)
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_ASSIGN
 	, m_offset(offset)
 {
 	m_objs.push_back(obj);
 }
 
 TranslateNodeAO::TranslateNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
-#ifdef GAME_OBJ_ECS
-	                             ecsx::World& world,
-#endif // GAME_OBJ_ECS
+	                             ECS_WORLD_PARAM
 	                             const std::vector<ee0::GameObj>& objs,
 	                             const sm::vec2& offset)
 	: m_sub_mgr(sub_mgr)
-#ifdef GAME_OBJ_ECS
-	, m_world(world)
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_ASSIGN
 	, m_offset(offset)
 	, m_objs(objs)
 {

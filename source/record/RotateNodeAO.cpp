@@ -15,16 +15,12 @@ namespace ee2
 {
 
 RotateNodeAO::RotateNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
-#ifdef GAME_OBJ_ECS
-	                       ecsx::World& world,
-#endif // GAME_OBJ_ECS
+	                       ECS_WORLD_PARAM
 	                       const std::vector<ee0::GameObj>& objs, 
 	                       const sm::vec2& start, 
 	                       const sm::vec2& end)
 	: m_sub_mgr(sub_mgr)
-#ifdef GAME_OBJ_ECS
-	, m_world(world)
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_ASSIGN
 	, m_inited(true)
 	, m_start(start)
 	, m_end(end)
@@ -34,15 +30,11 @@ RotateNodeAO::RotateNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
 }
 
 RotateNodeAO::RotateNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
-#ifdef GAME_OBJ_ECS
-	                       ecsx::World& world,
-#endif // GAME_OBJ_ECS
+	                       ECS_WORLD_PARAM
 	                       const std::vector<ee0::GameObj>& objs, 
 	                       float angle)
 	: m_sub_mgr(sub_mgr)
-#ifdef GAME_OBJ_ECS
-	, m_world(world)
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_ASSIGN
 	, m_inited(false)
 	, m_angle(angle)
 	, m_objs(objs)

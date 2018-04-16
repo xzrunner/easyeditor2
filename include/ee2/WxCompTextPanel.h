@@ -4,9 +4,7 @@
 #include <ee0/typedef.h>
 #include <ee0/GameObj.h>
 
-#ifdef GAME_OBJ_ECS
-namespace ecsx { class World; }
-#endif // GAME_OBJ_ECS
+ECS_WORLD_DECL
 namespace pt2 { class Textbox; class Color; }
 
 class wxTextCtrl;
@@ -21,14 +19,8 @@ namespace ee2
 class WxCompTextPanel : public ee0::WxCompPanel
 {
 public:
-	WxCompTextPanel(
-		wxWindow* parent, 
-#ifdef GAME_OBJ_ECS
-		ecsx::World& world,
-#endif // GAME_OBJ_ECS
-		const ee0::GameObj& obj,
-		const ee0::SubjectMgrPtr& sub_mgr
-	);
+	WxCompTextPanel(wxWindow* parent, ECS_WORLD_PARAM
+		const ee0::GameObj& obj, const ee0::SubjectMgrPtr& sub_mgr);
 
 	virtual void RefreshNodeComp() override;
 
@@ -45,9 +37,7 @@ private:
 	static wxColour ToWxColor(const pt2::Color& col);
 
 private:
-#ifdef GAME_OBJ_ECS
-	ecsx::World&        m_world;
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_DEF
 	const ee0::GameObj& m_obj;
 	ee0::SubjectMgrPtr  m_sub_mgr;
 

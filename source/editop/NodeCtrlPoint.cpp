@@ -15,13 +15,7 @@
 namespace ee2
 {
 
-void NodeCtrlPoint::GetNodeCtrlPoints(
-#ifdef GAME_OBJ_ECS
-	const ecsx::World& world,
-#endif // GAME_OBJ_ECS
-	const ee0::GameObj& obj, 
-	sm::vec2 pos[8]
-)
+void NodeCtrlPoint::GetNodeCtrlPoints(ECS_WORLD_PARAM const ee0::GameObj& obj, sm::vec2 pos[8])
 {
 #ifndef GAME_OBJ_ECS
 	auto& cbb = obj->GetUniqueComp<n2::CompBoundingBox>();

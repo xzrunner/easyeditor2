@@ -9,9 +9,7 @@
 
 namespace ee0 { class EditRecord; }
 namespace pt2 { class Camera; }
-#ifdef GAME_OBJ_ECS
-namespace ecsx { class World; }
-#endif // GAME_OBJ_ECS
+ECS_WORLD_DECL
 
 namespace ee2
 {
@@ -19,13 +17,8 @@ namespace ee2
 class TranslateNodeState : public ee0::EditOpState
 {
 public:
-	TranslateNodeState(
-		pt2::Camera& cam, 
-		ee0::EditRecord& record, 
-		const ee0::SubjectMgrPtr& sub_mgr, 
-#ifdef GAME_OBJ_ECS
-		ecsx::World& world,
-#endif // GAME_OBJ_ECS
+	TranslateNodeState(pt2::Camera& cam, ee0::EditRecord& record, 
+		const ee0::SubjectMgrPtr& sub_mgr,  ECS_WORLD_PARAM
 		const ee0::SelectionSet<ee0::GameObjWithPos>& selection,
 		const sm::vec2& first_pos);
 
@@ -43,9 +36,7 @@ private:
 
 	ee0::EditRecord&   m_record;
 	ee0::SubjectMgrPtr m_sub_mgr;
-#ifdef GAME_OBJ_ECS
-	ecsx::World&       m_world;
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_DEF
 
 	const ee0::SelectionSet<ee0::GameObjWithPos>& m_selection;
 

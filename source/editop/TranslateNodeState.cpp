@@ -20,17 +20,13 @@ namespace ee2
 TranslateNodeState::TranslateNodeState(pt2::Camera& cam, 
 	                                   ee0::EditRecord& record,
 	                                   const ee0::SubjectMgrPtr& sub_mgr,
-#ifdef GAME_OBJ_ECS
-	                                   ecsx::World& world,
-#endif // GAME_OBJ_ECS
+	                                   ECS_WORLD_PARAM
 		                               const ee0::SelectionSet<ee0::GameObjWithPos>& selection,
 		                               const sm::vec2& first_pos)
 	: m_cam(cam)
 	, m_record(record)
 	, m_sub_mgr(sub_mgr)
-#ifdef GAME_OBJ_ECS
-	, m_world(world)
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_ASSIGN
 	, m_selection(selection)
 	, m_dirty(false)
 {
@@ -58,11 +54,7 @@ bool TranslateNodeState::OnMouseRelease(int x, int y)
 	if (pos != m_first_pos)
 	{
 		sm::vec2 offset = pos - m_first_pos;
-#ifndef GAME_OBJ_ECS
-		m_record.Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, m_selection, offset));
-#else
-		m_record.Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, m_world, m_selection, offset));
-#endif // GAME_OBJ_ECS
+		m_record.Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, ECS_WORLD_SELF_VAR m_selection, offset));
 		ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 	}
 

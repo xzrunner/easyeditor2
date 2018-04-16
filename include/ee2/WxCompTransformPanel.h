@@ -4,9 +4,7 @@
 #include <ee0/typedef.h>
 #include <ee0/GameObj.h>
 
-#ifdef GAME_OBJ_ECS
-namespace ecsx { class World; }
-#endif // GAME_OBJ_ECS
+ECS_WORLD_DECL
 
 class wxTextCtrl;
 
@@ -16,14 +14,8 @@ namespace ee2
 class WxCompTransformPanel : public ee0::WxCompPanel
 {
 public:
-	WxCompTransformPanel(
-		wxWindow* parent, 
-		const ee0::SubjectMgrPtr& sub_mgr, 
-#ifdef GAME_OBJ_ECS
-		ecsx::World& world,
-#endif // GAME_OBJ_ECS
-		const ee0::GameObjWithPos& opw
-	);
+	WxCompTransformPanel(wxWindow* parent, const ee0::SubjectMgrPtr& sub_mgr, 
+		ECS_WORLD_PARAM const ee0::GameObjWithPos& opw);
 
 	virtual void RefreshNodeComp() override;
 
@@ -40,9 +32,7 @@ private:
 
 private:
 	ee0::SubjectMgrPtr  m_sub_mgr;
-#ifdef GAME_OBJ_ECS
-	ecsx::World&        m_world;
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_DEF
 	ee0::GameObjWithPos m_nwp;
 
 	wxTextCtrl *m_pos_x, *m_pos_y;

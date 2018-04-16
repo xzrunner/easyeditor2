@@ -4,15 +4,10 @@
 namespace ee2
 {
 
-BuildGroupAO::BuildGroupAO(const ee0::SubjectMgrPtr& sub_mgr, 
-#ifdef GAME_OBJ_ECS
-	                       ecsx::World& world,
-#endif // GAME_OBJ_ECS
+BuildGroupAO::BuildGroupAO(const ee0::SubjectMgrPtr& sub_mgr, ECS_WORLD_PARAM
 	                       const ee0::SelectionSet<ee0::GameObjWithPos>& selection)
 	: m_sub_mgr(sub_mgr)
-#ifdef GAME_OBJ_ECS
-	, m_world(world)
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_ASSIGN
 	, m_selection(selection)
 {
 }
@@ -25,11 +20,7 @@ void BuildGroupAO::Undo()
 
 	for (auto& obj : objs) 
 	{
-#ifndef GAME_OBJ_ECS
-		NodeGroupHelper::BreakUp(*m_sub_mgr, obj);
-#else
-		NodeGroupHelper::BreakUp(m_world, *m_sub_mgr, obj);
-#endif // GAME_OBJ_ECS
+		NodeGroupHelper::BreakUp(ECS_WORLD_SELF_VAR *m_sub_mgr, obj);
 	}
 }
 
@@ -39,11 +30,7 @@ void BuildGroupAO::Redo()
 	std::vector<ee0::GameObjWithPos> objs;
 	CopyFromSelection(objs);
 
-#ifndef GAME_OBJ_ECS
-	NodeGroupHelper::BuildGroup(*m_sub_mgr, objs);
-#else
-	NodeGroupHelper::BuildGroup(m_world, *m_sub_mgr, objs);
-#endif // GAME_OBJ_ECS
+	NodeGroupHelper::BuildGroup(ECS_WORLD_SELF_VAR *m_sub_mgr, objs);
 }
 
 void BuildGroupAO::CopyFromSelection(std::vector<ee0::GameObjWithPos>& objs) const

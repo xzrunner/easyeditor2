@@ -15,61 +15,36 @@ namespace ee2
 
 ArrangeNodeOP::ArrangeNodeOP(ee0::WxStagePage& stage, 
 	                         pt2::Camera& cam,
-#ifdef GAME_OBJ_ECS
-	                         ecsx::World& world,
-#endif // GAME_OBJ_ECS
+	                         ECS_WORLD_PARAM
 	                         const ArrangeNodeCfg& cfg,
 	                         const std::shared_ptr<ee0::EditOP>& prev_op)
 	: m_cam(cam)
-#ifdef GAME_OBJ_ECS
-	, m_world(world)
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_ASSIGN
 {
-	m_impl = std::make_unique<ArrangeNodeImpl>(
-		cam, 
-		stage.GetImpl().GetEditRecord(), 
-		stage.GetSubjectMgr(), 
-#ifdef GAME_OBJ_ECS
-		m_world,
-#endif // GAME_OBJ_ECS
-		stage.GetSelection(), 
-		stage, 
-		stage.GetImpl().GetKeyState(), 
-		cfg);
+	m_impl = std::make_unique<ArrangeNodeImpl>(cam, stage.GetImpl().GetEditRecord(), stage.GetSubjectMgr(), 
+		ECS_WORLD_VAR stage.GetSelection(), stage, stage.GetImpl().GetKeyState(), cfg);
 
 	if (prev_op) {
 		SetPrevEditOP(prev_op);
 	} else {
-#ifndef GAME_OBJ_ECS
-		SetPrevEditOP(std::make_shared<NodeSelectOP>(stage));
-#else
-		SetPrevEditOP(std::make_shared<NodeSelectOP>(m_world, stage));
-#endif // GAME_OBJ_ECS
+		SetPrevEditOP(std::make_shared<NodeSelectOP>(ECS_WORLD_VAR stage));
 	}
 }
 
 ArrangeNodeOP::ArrangeNodeOP(ee0::WxStagePage& stage,
 	                         pt2::Camera& cam,
-#ifdef GAME_OBJ_ECS
-	                         ecsx::World& world,
-#endif // GAME_OBJ_ECS
+	                         ECS_WORLD_PARAM
 	                         std::unique_ptr<ArrangeNodeImpl>& impl,
 	                         const std::shared_ptr<ee0::EditOP>& prev_op)
 	: m_cam(cam)
-#ifdef GAME_OBJ_ECS
-	, m_world(world)
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_ASSIGN
 {
 	m_impl = std::move(impl);
 
 	if (prev_op) {
 		SetPrevEditOP(prev_op);
 	} else {
-#ifndef GAME_OBJ_ECS
-		SetPrevEditOP(std::make_shared<NodeSelectOP>(stage));
-#else
-		SetPrevEditOP(std::make_shared<NodeSelectOP>(m_world, stage));
-#endif // GAME_OBJ_ECS
+		SetPrevEditOP(std::make_shared<NodeSelectOP>(ECS_WORLD_VAR stage));
 	}
 }
 

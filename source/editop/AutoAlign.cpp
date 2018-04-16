@@ -24,11 +24,7 @@ AutoAlign::AutoAlign(ee0::NodeContainer& objs)
 {
 }
 
-void AutoAlign::Align(
-#ifdef GAME_OBJ_ECS
-	ecsx::World& world,
-#endif // GAME_OBJ_ECS
-	const std::vector<ee0::GameObj>& objs)
+void AutoAlign::Align(ECS_WORLD_PARAM const std::vector<ee0::GameObj>& objs)
 {
 	m_hor[0].Set(0, 0);
 	m_hor[1].Set(0, 0);
@@ -149,30 +145,15 @@ void AutoAlign::Align(
 		return true;
 	});
 
-#ifndef GAME_OBJ_ECS
-	if (hor_nearest) {
-		Align(hor_nearest, objs[0]);
+	if (GAME_OBJ_VALID(hor_nearest)) {
+		Align(ECS_WORLD_VAR hor_nearest, objs[0]);
 	}
-	if (ver_nearest && ver_nearest != hor_nearest) {
-		Align(ver_nearest, objs[0]);
+	if (GAME_OBJ_VALID(ver_nearest) && ver_nearest != hor_nearest) {
+		Align(ECS_WORLD_VAR ver_nearest, objs[0]);
 	}
-#else
-	if (!hor_nearest.IsNull()) {
-		Align(world, hor_nearest, objs[0]);
-	}
-	if (!ver_nearest.IsNull() && ver_nearest != hor_nearest) {
-		Align(world, ver_nearest, objs[0]);
-	}
-#endif // GAME_OBJ_ECS
 }
 
-void AutoAlign::Align(
-#ifdef GAME_OBJ_ECS
-	ecsx::World& world,
-#endif // GAME_OBJ_ECS
-	const ee0::GameObj& src, 
-	const ee0::GameObj& dst
-)
+void AutoAlign::Align(ECS_WORLD_PARAM const ee0::GameObj& src, const ee0::GameObj& dst)
 {
 	const float DIS = 5;
 	const float LEN = 400;

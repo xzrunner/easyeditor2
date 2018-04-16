@@ -5,14 +5,10 @@ namespace ee2
 {
 
 BreakUpAO::BreakUpAO(const ee0::SubjectMgrPtr& sub_mgr, 
-#ifdef GAME_OBJ_ECS
-	                 ecsx::World& world,
-#endif // GAME_OBJ_ECS
+	                 ECS_WORLD_PARAM
 	                 const ee0::SelectionSet<ee0::GameObjWithPos>& selection)
 	: m_sub_mgr(sub_mgr)
-#ifdef GAME_OBJ_ECS
-	, m_world(world)
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_ASSIGN
 	, m_selection(selection)
 {
 }
@@ -23,11 +19,7 @@ void BreakUpAO::Undo()
 	std::vector<ee0::GameObjWithPos> objs;
 	CopyFromSelection(objs);
 
-#ifndef GAME_OBJ_ECS
-	NodeGroupHelper::BuildGroup(*m_sub_mgr, objs);
-#else
-	NodeGroupHelper::BuildGroup(m_world, *m_sub_mgr, objs);
-#endif // GAME_OBJ_ECS
+	NodeGroupHelper::BuildGroup(ECS_WORLD_SELF_VAR *m_sub_mgr, objs);
 }
 
 void BreakUpAO::Redo()
@@ -38,13 +30,8 @@ void BreakUpAO::Redo()
 
 	printf("BreakUpAO::Redo count %d\n", objs.size());
 
-	for (auto& obj : objs) 
-	{
-#ifndef GAME_OBJ_ECS
-		NodeGroupHelper::BreakUp(*m_sub_mgr, obj);
-#else
-		NodeGroupHelper::BreakUp(m_world, *m_sub_mgr, obj);
-#endif // GAME_OBJ_ECS
+	for (auto& obj : objs) {
+		NodeGroupHelper::BreakUp(ECS_WORLD_SELF_VAR *m_sub_mgr, obj);
 	}
 }
 
@@ -56,5 +43,4 @@ void BreakUpAO::CopyFromSelection(std::vector<ee0::GameObjWithPos>& objs) const
 		return true;
 	});
 }
-
 }

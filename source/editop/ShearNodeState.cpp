@@ -17,15 +17,11 @@ namespace ee2
 {
 
 ShearNodeState::ShearNodeState(pt2::Camera& cam, 
-#ifdef GAME_OBJ_ECS
-	                           ecsx::World& world,
-#endif // GAME_OBJ_ECS
+	                           ECS_WORLD_PARAM
 	                           const ee0::GameObj& obj,
 	                           const NodeCtrlPoint::Node& ctrl_point)
 	: m_cam(cam)
-#ifdef GAME_OBJ_ECS
-	, m_world(world)
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_ASSIGN
 	, m_obj(obj)
 	, m_ctrl_point(ctrl_point)
 {
@@ -60,11 +56,7 @@ void ShearNodeState::Shear(const sm::vec2& curr)
 	// fix pos
 	sm::vec2 pos;
 	sm::vec2 ctrls[8];
-#ifndef GAME_OBJ_ECS
-	NodeCtrlPoint::GetNodeCtrlPoints(m_obj, ctrls);
-#else
-	NodeCtrlPoint::GetNodeCtrlPoints(m_world, m_obj, ctrls);
-#endif // GAME_OBJ_ECS
+	NodeCtrlPoint::GetNodeCtrlPoints(ECS_WORLD_SELF_VAR m_obj, ctrls);
 	if (m_ctrl_point.type == NodeCtrlPoint::UP) {
 		sm::get_foot_of_perpendicular(ctrls[NodeCtrlPoint::LEFT_UP], ctrls[NodeCtrlPoint::RIGHT_UP], curr, &pos);
 	} else if (m_ctrl_point.type == NodeCtrlPoint::DOWN) {

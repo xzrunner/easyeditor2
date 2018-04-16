@@ -31,17 +31,11 @@ const uint32_t MESSAGES[] =
 namespace ee2
 {
 
-WxStageCanvas::WxStageCanvas(ee0::WxStagePage* stage, 
-#ifdef GAME_OBJ_ECS
-	                         const ecsx::World& world,
-#endif // GAME_OBJ_ECS
-                             const ee0::RenderContext* rc, 
-	                         const ee0::WindowContext* wc)
+WxStageCanvas::WxStageCanvas(ee0::WxStagePage* stage, ECS_WORLD_PARAM
+                             const ee0::RenderContext* rc, const ee0::WindowContext* wc)
 	: ee0::WxStageCanvas(stage, stage->GetImpl(), rc, wc, HAS_2D)
 	, m_stage(stage)
-#ifdef GAME_OBJ_ECS
-	, m_world(world)
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_ASSIGN
 {
 	m_cam = std::make_shared<pt2::OrthoCamera>();
 

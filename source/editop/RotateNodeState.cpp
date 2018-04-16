@@ -21,17 +21,13 @@ namespace ee2
 RotateNodeState::RotateNodeState(pt2::Camera& cam, 
 	                             ee0::EditRecord& record,
 	                             const ee0::SubjectMgrPtr& sub_mgr,
-#ifdef GAME_OBJ_ECS
-                                 ecsx::World& world,
-#endif // GAME_OBJ_ECS
+	                             ECS_WORLD_PARAM
 	                             ee0::SelectionSet<ee0::GameObjWithPos>& selection,
 	                             const sm::vec2& first_pos)
 	: m_cam(cam)
 	, m_record(record)
 	, m_sub_mgr(sub_mgr)
-#ifdef GAME_OBJ_ECS
-	, m_world(world)
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_ASSIGN
 	, m_selection(selection)
 	, m_angle(0)
 {
@@ -57,11 +53,7 @@ bool RotateNodeState::OnMouseRelease(int x, int y)
 #endif // GAME_OBJ_ECS
 		return true;
 	});
-#ifndef GAME_OBJ_ECS
-	m_record.Add(std::make_shared<RotateNodeAO>(m_sub_mgr, objs, m_angle));
-#else
-	m_record.Add(std::make_shared<RotateNodeAO>(m_sub_mgr, m_world, objs, m_angle));
-#endif // GAME_OBJ_ECS
+	m_record.Add(std::make_shared<RotateNodeAO>(m_sub_mgr, ECS_WORLD_SELF_VAR objs, m_angle));
 	ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 
 	return false;

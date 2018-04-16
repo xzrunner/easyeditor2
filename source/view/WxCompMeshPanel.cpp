@@ -23,15 +23,9 @@
 namespace ee2
 {
 
-WxCompMeshPanel::WxCompMeshPanel(wxWindow* parent, 
-#ifdef GAME_OBJ_ECS
-	                             ecsx::World& world,
-#endif // GAME_OBJ_ECS
-	                             const ee0::GameObj& obj)
+WxCompMeshPanel::WxCompMeshPanel(wxWindow* parent, ECS_WORLD_PARAM const ee0::GameObj& obj)
 	: ee0::WxCompPanel(parent, "Mesh")
-#ifdef GAME_OBJ_ECS
-	, m_world(world)
-#endif // GAME_OBJ_ECS
+	ECS_WORLD_SELF_ASSIGN
 	, m_obj(obj)
 {
 	InitLayout();
@@ -113,11 +107,10 @@ void WxCompMeshPanel::InitLayout()
 void WxCompMeshPanel::OnSetBasePath(wxCommandEvent& event)
 {
 	auto obj = CreateNodeFromFile();
-#ifndef GAME_OBJ_ECS
-	if (!obj) {
+	if (!GAME_OBJ_VALID(obj)) {
 		return;
 	}
-
+#ifndef GAME_OBJ_ECS
 	auto& cmesh = m_obj->GetSharedComp<n2::CompMesh>();
 	auto mesh = std::make_unique<pt2::Mesh<n0::SceneNode>>();
 //	mesh->SetMesh(std::make_unique<pm::TrianglesMesh>);
@@ -126,10 +119,6 @@ void WxCompMeshPanel::OnSetBasePath(wxCommandEvent& event)
 	auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
 	m_base_path->SetValue(ceditor.GetFilepath());
 #else
-	if (obj.IsNull()) {
-		return;
-	}
-
 	auto& cmesh = m_world.GetComponent<e2::CompMesh>(m_obj);
 	cmesh.mesh = std::make_unique<pt2::Mesh<ecsx::Entity>>();
 
@@ -143,25 +132,18 @@ ee0::GameObj WxCompMeshPanel::CreateNodeFromFile()
 	std::string filter = "*.png;*.jpg;*.bmp;*.pvr;*.pkm";
 	wxFileDialog dlg(this, wxT("Choose image"), wxEmptyString, filter);
 	if (dlg.ShowModal() != wxID_OK) {
-#ifndef GAME_OBJ_ECS
-		return nullptr;
-#else
-		return ee0::GameObj();
-#endif // GAME_OBJ_ECS
+		return GAME_OBJ_NULL;
 	}
 
 	std::string filepath = dlg.GetPath().ToStdString();
 #ifndef GAME_OBJ_ECS
 	auto obj = ns::NodeFactory::Create(filepath);
-	if (!obj) {
-		return nullptr;
-	}
 #else
 	auto obj = es::EntityFactory::Create(m_world, filepath);
-	if (obj.IsNull()) {
-		return ee0::GameObj();
-	}
 #endif // GAME_OBJ_ECS
+	if (!GAME_OBJ_VALID(obj)) {
+		return GAME_OBJ_NULL;
+	}
 
 	// editor
 #ifndef GAME_OBJ_ECS
