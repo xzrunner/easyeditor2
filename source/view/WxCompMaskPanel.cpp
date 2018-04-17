@@ -56,13 +56,13 @@ void WxCompMaskPanel::RefreshNodeComp()
 	if (!base.IsNull()) 
 	{
 		auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(base);
-		m_base_path->SetValue(ceditor.filepath);
+		m_base_path->SetValue(*ceditor.filepath);
 	}
 	auto& mask = cmask.mask;
 	if (!mask.IsNull())
 	{
 		auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(mask);
-		m_mask_path->SetValue(ceditor.filepath);
+		m_mask_path->SetValue(*ceditor.filepath);
 	}
 #endif // GAME_OBJ_ECS
 }
@@ -96,7 +96,7 @@ void WxCompMaskPanel::InitLayout()
 		if (!cmask.base.IsNull())
 		{
 			auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(cmask.base);
-			path = ceditor.filepath;
+			path = *ceditor.filepath;
 		}
 #endif // GAME_OBJ_ECS
 		sizer->Add(m_base_path = new wxTextCtrl(win, wxID_ANY, path,
@@ -128,7 +128,7 @@ void WxCompMaskPanel::InitLayout()
 		if (!cmask.mask.IsNull())
 		{
 			auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(cmask.mask);
-			path = ceditor.filepath;
+			path = *ceditor.filepath;
 		}
 #endif // GAME_OBJ_ECS
 		sizer->Add(m_mask_path = new wxTextCtrl(win, wxID_ANY, path,
@@ -166,7 +166,7 @@ void WxCompMaskPanel::OnSetBasePath(wxCommandEvent& event)
 	cmask.base = obj;
 
 	auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(obj);
-	m_base_path->SetValue(ceditor.filepath);
+	m_base_path->SetValue(*ceditor.filepath);
 #endif // GAME_OBJ_ECS
 }
 
@@ -191,7 +191,7 @@ void WxCompMaskPanel::OnSetMaskPath(wxCommandEvent& event)
 	cmask.mask = obj;
 
 	auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(obj);
-	m_mask_path->SetValue(ceditor.filepath);
+	m_mask_path->SetValue(*ceditor.filepath);
 
 	auto& cbb = m_world.GetComponent<e2::CompBoundingBox>(m_obj);
 	cbb.rect = m_world.GetComponent<e2::CompBoundingBox>(obj).rect;
@@ -222,7 +222,7 @@ ee0::GameObj WxCompMaskPanel::CreateNodeFromFile()
 	ceditor.SetFilepath(filepath);
 #else
 	auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(obj);
-	ceditor.filepath = filepath;
+	ceditor.filepath = std::make_unique<std::string>(filepath);
 #endif // GAME_OBJ_ECS
 
 	return obj;

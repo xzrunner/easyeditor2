@@ -49,7 +49,7 @@ void WxCompMeshPanel::RefreshNodeComp()
 	{
 		if (auto& base = cmesh.mesh->GetBaseSymbol()) {
 			auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(*base);
-			m_base_path->SetValue(ceditor.filepath);
+			m_base_path->SetValue(*ceditor.filepath);
 		}
 	}
 #endif // GAME_OBJ_ECS
@@ -83,7 +83,7 @@ void WxCompMeshPanel::InitLayout()
 		{
 			if (auto& base = cmesh.mesh->GetBaseSymbol()) {
 				auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(*base);
-				path = ceditor.filepath;
+				path = *ceditor.filepath;
 			}
 		}
 #endif // GAME_OBJ_ECS
@@ -123,7 +123,7 @@ void WxCompMeshPanel::OnSetBasePath(wxCommandEvent& event)
 	cmesh.mesh = std::make_unique<pt2::Mesh<ecsx::Entity>>();
 
 	auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(obj);
-	m_base_path->SetValue(ceditor.filepath);
+	m_base_path->SetValue(*ceditor.filepath);
 #endif // GAME_OBJ_ECS
 }
 
@@ -151,7 +151,7 @@ ee0::GameObj WxCompMeshPanel::CreateNodeFromFile()
 	ceditor.SetFilepath(filepath);
 #else
 	auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(obj);
-	ceditor.filepath = filepath;
+	ceditor.filepath = std::make_unique<std::string>(filepath);
 #endif // GAME_OBJ_ECS
 
 	return obj;

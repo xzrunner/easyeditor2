@@ -39,7 +39,7 @@ void WxCompImagePanel::RefreshNodeComp()
 	m_filepath->SetValue(ceditor.GetFilepath());
 #else
 	auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(m_obj);
-	m_filepath->SetValue(ceditor.filepath);
+	m_filepath->SetValue(*ceditor.filepath);
 #endif // GAME_OBJ_ECS
 }
 
@@ -58,7 +58,7 @@ void WxCompImagePanel::InitLayout()
 		auto& filepath = ceditor.GetFilepath();
 #else
 		auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(m_obj);
-		auto& filepath = ceditor.filepath;
+		auto& filepath = *ceditor.filepath;
 #endif // GAME_OBJ_ECS
 		sizer->Add(m_filepath = new wxTextCtrl(win, wxID_ANY, filepath,
 			wxDefaultPosition, wxSize(180, -1), wxTE_READONLY));

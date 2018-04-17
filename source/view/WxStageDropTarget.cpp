@@ -119,7 +119,7 @@ void WxStageDropTarget::InitNodeComp(const ee0::GameObj& obj,
 
 	// editor
 	auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(obj);
-	ceditor.filepath = filepath;
+	//ceditor.filepath = filepath;
 #endif // GAME_OBJ_ECS
 }
 

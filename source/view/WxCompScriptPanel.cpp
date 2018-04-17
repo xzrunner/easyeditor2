@@ -37,7 +37,7 @@ void WxCompScriptPanel::RefreshNodeComp()
 #ifndef GAME_OBJ_ECS
 	auto& filepath = m_obj->GetUniqueComp<ee0::CompNodeEditor>().GetFilepath();
 #else
-	auto& filepath = m_world.GetComponent<ee0::CompEntityEditor>(m_obj).filepath;
+	auto& filepath = *m_world.GetComponent<ee0::CompEntityEditor>(m_obj).filepath;
 #endif // GAME_OBJ_ECS
 	m_filepath->SetValue(filepath);
 }
@@ -55,7 +55,7 @@ void WxCompScriptPanel::InitLayout()
 #ifndef GAME_OBJ_ECS
 		auto& filepath = m_obj->GetUniqueComp<ee0::CompNodeEditor>().GetFilepath();
 #else
-		auto& filepath = m_world.GetComponent<ee0::CompEntityEditor>(m_obj).filepath;
+		auto& filepath = *m_world.GetComponent<ee0::CompEntityEditor>(m_obj).filepath;
 #endif // GAME_OBJ_ECS
 		sizer->Add(m_filepath = new wxTextCtrl(win, wxID_ANY, filepath,
 			wxDefaultPosition, wxSize(180, -1), wxTE_READONLY));
@@ -92,7 +92,8 @@ void WxCompScriptPanel::OnSetFilepath(wxCommandEvent& event)
 #ifndef GAME_OBJ_ECS
 		m_obj->GetUniqueComp<ee0::CompNodeEditor>().SetFilepath(filepath);
 #else
-		m_world.GetComponent<ee0::CompEntityEditor>(m_obj).filepath = filepath;
+		m_world.GetComponent<ee0::CompEntityEditor>(m_obj).filepath 
+			= std::make_unique<std::string>(filepath);
 #endif // GAME_OBJ_ECS
 
 		// todo

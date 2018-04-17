@@ -46,7 +46,7 @@ void NodeGroupHelper::BuildGroup(ECS_WORLD_PARAM ee0::SubjectMgr& sub_mgr,
 #else
 	auto& ccomplex = world.GetComponent<e2::CompComplex>(obj);
 	for (auto& obj : objs) {
-		ccomplex.children.push_back(obj);
+		ccomplex.children->push_back(obj);
 	}
 #endif // GAME_OBJ_ECS
 
@@ -64,7 +64,7 @@ void NodeGroupHelper::BuildGroup(ECS_WORLD_PARAM ee0::SubjectMgr& sub_mgr,
 	obj->AddUniqueComp<n2::CompBoundingBox>(bounding);
 #else
 	sm::rect bounding;
-	auto& children = ccomplex.children;
+	auto& children = *ccomplex.children;
 	for (auto& child : children) {
 		e2::SysBoundingBox::Combine(bounding, world, child);
 	}
@@ -121,7 +121,7 @@ void NodeGroupHelper::BreakUp(ECS_WORLD_PARAM ee0::SubjectMgr& sub_mgr,
 #ifndef GAME_OBJ_ECS
 	auto& children = ccomplex.GetAllChildren();
 #else
-	auto& children = ccomplex.children;
+	auto& children = *ccomplex.children;
 #endif // GAME_OBJ_ECS
 
 	// transform
