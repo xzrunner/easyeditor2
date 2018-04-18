@@ -11,7 +11,7 @@
 #include <ee0/CompEntityEditor.h>
 #include <entity2/CompMesh.h>
 #include <es/EntityFactory.h>
-#include <ecsx/World.h>
+#include <entity0/World.h>
 #endif // GAME_OBJ_ECS
 
 #include <wx/sizer.h>
@@ -120,7 +120,7 @@ void WxCompMeshPanel::OnSetBasePath(wxCommandEvent& event)
 	m_base_path->SetValue(ceditor.GetFilepath());
 #else
 	auto& cmesh = m_world.GetComponent<e2::CompMesh>(m_obj);
-	cmesh.mesh = std::make_unique<pt2::Mesh<ecsx::Entity>>();
+	cmesh.mesh = std::make_unique<pt2::Mesh<e0::Entity>>();
 
 	auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(obj);
 	m_base_path->SetValue(*ceditor.filepath);

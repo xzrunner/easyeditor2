@@ -12,7 +12,7 @@
 #include <node2/CompBoundingBox.h>
 #else
 #include <ee0/CompEntityEditor.h>
-#include <ecsx/World.h>
+#include <entity0/World.h>
 #include <entity2/CompComplex.h>
 #include <entity2/CompBoundingBox.h>
 #include <entity2/SysBoundingBox.h>

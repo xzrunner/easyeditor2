@@ -8,7 +8,7 @@
 #include <node0/SceneNode.h>
 #else
 #include <ee0/CompEntityEditor.h>
-#include <ecsx/World.h>
+#include <entity0/World.h>
 #endif // GAME_OBJ_ECS
 namespace ee2
 {

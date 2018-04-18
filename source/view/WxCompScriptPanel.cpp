@@ -9,7 +9,7 @@
 #include <node2/CompScript.h>
 #else
 #include <ee0/CompEntityEditor.h>
-#include <ecsx/World.h>
+#include <entity0/World.h>
 #include <entity2/CompScript.h>
 #endif // GAME_OBJ_ECS
 

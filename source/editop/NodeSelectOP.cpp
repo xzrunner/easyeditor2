@@ -15,7 +15,7 @@
 #include <node2/CompBoundingBox.h>
 #include <node2/CompTransform.h>
 #else
-#include <ecsx/World.h>
+#include <entity0/World.h>
 #include <entity2/CompBoundingBox.h>
 #endif // GAME_OBJ_ECS
 #include <SM_Test.h>

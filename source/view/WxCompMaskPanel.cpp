@@ -8,7 +8,7 @@
 #include <node2/CompTransform.h>
 #include <ns/NodeFactory.h>
 #else
-#include <ecsx/World.h>
+#include <entity0/World.h>
 #include <entity2/CompMask.h>
 #include <entity2/CompBoundingBox.h>
 #include <es/EntityFactory.h>

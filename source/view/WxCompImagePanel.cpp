@@ -6,7 +6,7 @@
 #include <node2/CompImage.h>
 #else
 #include <ee0/CompEntityEditor.h>
-#include <ecsx/World.h>
+#include <entity0/World.h>
 #include <entity2/CompImage.h>
 #endif // GAME_OBJ_ECS
 #include <facade/ResPool.h>

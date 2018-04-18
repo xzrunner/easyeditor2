@@ -12,7 +12,7 @@
 #include <node2/CompSharedPatch.h>
 #include <node2/EditOp.h>
 #else
-#include <ecsx/World.h>
+#include <entity0/World.h>
 #include <entity2/SysTransform.h>
 #endif // GAME_OBJ_ECS
 
