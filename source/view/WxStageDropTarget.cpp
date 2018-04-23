@@ -101,8 +101,8 @@ void WxStageDropTarget::InitNodeComp(const ee0::GameObj& obj,
 	                                 const sm::vec2& pos,
 	                                 const std::string& filepath)
 {
-#ifndef GAME_OBJ_ECS
 	// transform
+#ifndef GAME_OBJ_ECS
 	auto& ctrans = obj->GetUniqueComp<n2::CompTransform>();
 	// todo
 	//auto parent = obj->GetParent();
@@ -113,13 +113,17 @@ void WxStageDropTarget::InitNodeComp(const ee0::GameObj& obj,
 	//	ctrans.SetPosition(obj, pos);
 	//}
 	ctrans.SetPosition(*obj, pos);
-
-	// editor
-	auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
-	ceditor.SetFilepath(filepath);
 #else
 	e2::SysTransform::SetPosition(m_world, obj, pos);
+#endif // GAME_OBJ_ECS
 
+	// editor
+#ifndef GAME_OBJ_ECS
+	auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
+	ceditor.SetFilepath(filepath);
+
+	ceditor.SetID(m_stage->FetchObjID());
+#else
 	// editor
 	auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(obj);
 	//ceditor.filepath = filepath;

@@ -160,6 +160,8 @@ void WxCompMaskPanel::OnSetBasePath(wxCommandEvent& event)
 	cmask.SetBaseNode(obj);
 
 	auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
+	ceditor.SetID(0);
+	ceditor.SetName("base");
 	m_base_path->SetValue(ceditor.GetFilepath());
 #else
 	auto& cmask = m_world.GetComponent<e2::CompMask>(m_obj);
@@ -182,6 +184,8 @@ void WxCompMaskPanel::OnSetMaskPath(wxCommandEvent& event)
 	cmask.SetMaskNode(obj);
 
 	auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
+	ceditor.SetID(1);
+	ceditor.SetName("mask");
 	m_mask_path->SetValue(ceditor.GetFilepath());
 
 	auto& cbb = m_obj->GetUniqueComp<n2::CompBoundingBox>();

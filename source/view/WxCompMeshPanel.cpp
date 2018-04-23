@@ -149,6 +149,8 @@ ee0::GameObj WxCompMeshPanel::CreateNodeFromFile()
 #ifndef GAME_OBJ_ECS
 	auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
 	ceditor.SetFilepath(filepath);
+	ceditor.SetID(0);
+	ceditor.SetName("base");
 #else
 	auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(obj);
 	ceditor.filepath = std::make_unique<std::string>(filepath);
