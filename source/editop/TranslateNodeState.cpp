@@ -3,7 +3,6 @@
 
 #include <ee0/CameraHelper.h>
 #include <ee0/KeyType.h>
-#include <ee0/EditRecord.h>
 #include <ee0/MsgHelper.h>
 
 #ifndef GAME_OBJ_ECS
@@ -18,13 +17,11 @@ namespace ee2
 {
 
 TranslateNodeState::TranslateNodeState(pt2::Camera& cam, 
-	                                   ee0::EditRecord& record,
 	                                   const ee0::SubjectMgrPtr& sub_mgr,
 	                                   ECS_WORLD_PARAM
 		                               const ee0::SelectionSet<ee0::GameObjWithPos>& selection,
 		                               const sm::vec2& first_pos)
 	: m_cam(cam)
-	, m_record(record)
 	, m_sub_mgr(sub_mgr)
 	ECS_WORLD_SELF_ASSIGN
 	, m_selection(selection)
@@ -54,7 +51,9 @@ bool TranslateNodeState::OnMouseRelease(int x, int y)
 	if (pos != m_first_pos)
 	{
 		sm::vec2 offset = pos - m_first_pos;
-		m_record.Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, ECS_WORLD_SELF_VAR m_selection, offset));
+		auto aop = std::make_shared<TranslateNodeAO>(m_sub_mgr, ECS_WORLD_SELF_VAR m_selection, offset);
+		ee0::MsgHelper::AddAtomicOP(*m_sub_mgr, aop);
+
 		ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 	}
 

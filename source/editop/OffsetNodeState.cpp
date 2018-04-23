@@ -4,7 +4,6 @@
 #include "ee2/OffsetNodeAO.h"
 
 #include <ee0/CameraHelper.h>
-#include <ee0/EditRecord.h>
 #include <ee0/MsgHelper.h>
 
 #ifndef GAME_OBJ_ECS
@@ -23,12 +22,10 @@ namespace ee2
 {
 
 OffsetNodeState::OffsetNodeState(pt2::Camera& cam, 
-                                 ee0::EditRecord& record,
 	                             const ee0::SubjectMgrPtr& sub_mgr, 
 	                             ECS_WORLD_PARAM
 	                             const ee0::GameObj& obj)
 	: m_cam(cam)
-	, m_record(record)
 	, m_sub_mgr(sub_mgr)
 	ECS_WORLD_SELF_ASSIGN
 	, m_obj(obj)
@@ -84,7 +81,9 @@ bool OffsetNodeState::OnMouseRelease(int x, int y)
 #endif // GAME_OBJ_ECS
 
 	// record
-	m_record.Add(std::make_shared<OffsetNodeAO>(m_sub_mgr, ECS_WORLD_SELF_VAR m_obj, new_offset, m_old_offset));
+	auto aop = std::make_shared<OffsetNodeAO>(m_sub_mgr, ECS_WORLD_SELF_VAR m_obj, new_offset, m_old_offset);
+	ee0::MsgHelper::AddAtomicOP(*m_sub_mgr, aop);
+
 	ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 
 	return false;

@@ -259,28 +259,28 @@ void NodeSelectOP::QueryByRect(const ee0::GameObj& obj, const sm::rect& rect,
 
 void NodeSelectOP::BuildGroup()
 {
+	auto& sub_mgr = m_stage.GetSubjectMgr();
+
 	auto ao = std::make_shared<BuildGroupAO>(
-		m_stage.GetSubjectMgr(),
-#ifdef GAME_OBJ_ECS
-		m_world,
-#endif // GAME_OBJ_ECS
-		m_stage.GetSelection());
+		sub_mgr, ECS_WORLD_SELF_VAR m_stage.GetSelection()
+	);
 	ao->Redo();
-	m_stage.GetImpl().GetEditRecord().Add(ao);
-	ee0::MsgHelper::SetEditorDirty(*m_stage.GetSubjectMgr(), true);
+	ee0::MsgHelper::AddAtomicOP(*sub_mgr, ao);
+
+	ee0::MsgHelper::SetEditorDirty(*sub_mgr, true);
 }
 
 void NodeSelectOP::BreakUpGroup()
 {
+	auto& sub_mgr = m_stage.GetSubjectMgr();
+
 	auto ao = std::make_shared<BreakUpAO>(
-		m_stage.GetSubjectMgr(), 
-#ifdef GAME_OBJ_ECS
-		m_world,
-#endif // GAME_OBJ_ECS
-		m_stage.GetSelection());
+		sub_mgr, ECS_WORLD_SELF_VAR m_stage.GetSelection()
+	);
 	ao->Redo();
-	m_stage.GetImpl().GetEditRecord().Add(ao);
-	ee0::MsgHelper::SetEditorDirty(*m_stage.GetSubjectMgr(), true);
+	ee0::MsgHelper::AddAtomicOP(*sub_mgr, ao);
+
+	ee0::MsgHelper::SetEditorDirty(*sub_mgr, true);
 }
 
 }

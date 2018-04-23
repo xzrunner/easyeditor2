@@ -4,7 +4,6 @@
 #include "ee2/ScaleNodeAO.h"
 
 #include <ee0/CameraHelper.h>
-#include <ee0/EditRecord.h>
 #include <ee0/MsgHelper.h>
 
 #include <SM_Calc.h>
@@ -20,13 +19,11 @@ namespace ee2
 {
 
 ScaleNodeState::ScaleNodeState(pt2::Camera& cam, 
-	                           ee0::EditRecord& record,
 	                           const ee0::SubjectMgrPtr& sub_mgr, 
 	                           ECS_WORLD_PARAM
 	                           const ee0::GameObj& obj,
 	                           const NodeCtrlPoint::Node& ctrl_point)
 	: m_cam(cam)
-	, m_record(record)
 	, m_sub_mgr(sub_mgr)
 	ECS_WORLD_SELF_ASSIGN
 	, m_obj(obj)
@@ -66,7 +63,7 @@ bool ScaleNodeState::OnMouseRelease(int x, int y)
 	comb->Add(std::make_shared<ScaleNodeAO>(m_sub_mgr, m_world, m_obj, new_scale, m_first_scale));
 #endif // GAME_OBJ_ECS
 
-	m_record.Add(comb);
+	ee0::MsgHelper::AddAtomicOP(*m_sub_mgr, comb);
 
 	ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 

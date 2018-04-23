@@ -7,7 +7,6 @@
 
 #include <SM_Vector.h>
 
-namespace ee0 { class EditRecord; }
 namespace pt2 { class Camera; }
 ECS_WORLD_DECL
 
@@ -17,9 +16,8 @@ namespace ee2
 class TranslateNodeState : public ee0::EditOpState
 {
 public:
-	TranslateNodeState(pt2::Camera& cam, ee0::EditRecord& record, 
-		const ee0::SubjectMgrPtr& sub_mgr,  ECS_WORLD_PARAM
-		const ee0::SelectionSet<ee0::GameObjWithPos>& selection,
+	TranslateNodeState(pt2::Camera& cam, const ee0::SubjectMgrPtr& sub_mgr, 
+		ECS_WORLD_PARAM const ee0::SelectionSet<ee0::GameObjWithPos>& selection, 
 		const sm::vec2& first_pos);
 
 	virtual bool OnMousePress(int x, int y) override;
@@ -34,7 +32,6 @@ private:
 private:
 	pt2::Camera& m_cam;
 
-	ee0::EditRecord&   m_record;
 	ee0::SubjectMgrPtr m_sub_mgr;
 	ECS_WORLD_SELF_DEF
 

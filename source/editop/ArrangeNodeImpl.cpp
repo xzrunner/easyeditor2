@@ -23,7 +23,6 @@
 #include <ee0/SubjectMgr.h>
 #include <ee0/MessageID.h>
 #include <ee0/MsgHelper.h>
-#include <ee0/EditRecord.h>
 
 #include <guard/check.h>
 #include <SM_Calc.h>
@@ -43,7 +42,6 @@ namespace ee2
 {
 
 ArrangeNodeImpl::ArrangeNodeImpl(pt2::Camera& cam, 
-	                             ee0::EditRecord& record,
 	                             const ee0::SubjectMgrPtr& sub_mgr,
 	                             ECS_WORLD_PARAM
 	                             ee0::SelectionSet<ee0::GameObjWithPos>& selection,
@@ -51,7 +49,6 @@ ArrangeNodeImpl::ArrangeNodeImpl(pt2::Camera& cam,
 	                             const ee0::KeysState& key_state,
 	                             const ArrangeNodeCfg& cfg)
 	: m_cam(cam)
-	, m_record(record)
 	, m_sub_mgr(sub_mgr)
 	ECS_WORLD_SELF_ASSIGN
 	, m_selection(selection)
@@ -217,7 +214,7 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 	{
 		sm::vec2 offset = GetNodeOffset(selected);
 		if (sm::dis_pos_to_pos(offset, pos) < m_ctrl_node_radius) {
-			m_op_state = std::make_unique<OffsetNodeState>(m_cam, m_record, m_sub_mgr, ECS_WORLD_SELF_VAR selected);
+			m_op_state = std::make_unique<OffsetNodeState>(m_cam, m_sub_mgr, ECS_WORLD_SELF_VAR selected);
 			return;
 		}
 	}
@@ -234,7 +231,7 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 				NodeCtrlPoint::Node cn;
 				cn.pos = ctrl_nodes[i];
 				cn.type = NodeCtrlPoint::Type(i);
-				m_op_state = std::make_unique<ScaleNodeState>(m_cam, m_record, m_sub_mgr, ECS_WORLD_SELF_VAR selected, cn);
+				m_op_state = std::make_unique<ScaleNodeState>(m_cam, m_sub_mgr, ECS_WORLD_SELF_VAR selected, cn);
 				return;
 			}
 		}
@@ -257,7 +254,7 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 	//}
 
 	// translate
-	m_op_state = std::make_unique<TranslateNodeState>(m_cam, m_record, m_sub_mgr, ECS_WORLD_SELF_VAR m_selection, pos);
+	m_op_state = std::make_unique<TranslateNodeState>(m_cam, m_sub_mgr, ECS_WORLD_SELF_VAR m_selection, pos);
 
 	m_op_state->OnMousePress(x, y);
 }
@@ -272,7 +269,7 @@ void ArrangeNodeImpl::OnMouseLeftUp(int x, int y)
 
 	sm::vec2 pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
 	if (!m_selection.IsEmpty()) {
-		m_op_state = std::make_unique<TranslateNodeState>(m_cam, m_record, m_sub_mgr, ECS_WORLD_SELF_VAR m_selection, pos);
+		m_op_state = std::make_unique<TranslateNodeState>(m_cam, m_sub_mgr, ECS_WORLD_SELF_VAR m_selection, pos);
 	}
 
 	if (m_cfg.is_auto_align_open &&
@@ -349,7 +346,7 @@ void ArrangeNodeImpl::OnMouseRightDown(int x, int y)
 
 	// rotate
 	if (m_cfg.is_rotate_open) {
-		m_op_state = std::make_unique<RotateNodeState>(m_cam, m_record, m_sub_mgr, ECS_WORLD_SELF_VAR m_selection, pos);
+		m_op_state = std::make_unique<RotateNodeState>(m_cam, m_sub_mgr, ECS_WORLD_SELF_VAR m_selection, pos);
 	}
 }
 
@@ -631,7 +628,7 @@ void ArrangeNodeImpl::OnSpaceKeyDown()
 		return true;
 	});
 
-	m_record.Add(comb);
+	ee0::MsgHelper::AddAtomicOP(*m_sub_mgr, comb);
 	ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 
 	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
@@ -663,7 +660,9 @@ void ArrangeNodeImpl::OnDeleteKeyDown()
 		return true;
 	});
 
-	m_record.Add(std::make_shared<DeleteNodeAO>(m_sub_mgr, objs));
+	auto aop = std::make_shared<DeleteNodeAO>(m_sub_mgr, objs);
+	ee0::MsgHelper::AddAtomicOP(*m_sub_mgr, aop);
+
 	ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 
 	m_sub_mgr->NotifyObservers(ee0::MSG_NODE_SELECTION_CLEAR);
@@ -673,7 +672,7 @@ void ArrangeNodeImpl::UpOneLayer()
 {
 	auto ao = std::make_shared<UpLayerNodeAO>(m_sub_mgr, m_selection);
 	ao->Redo();
-	m_record.Add(ao);
+	ee0::MsgHelper::AddAtomicOP(*m_sub_mgr, ao);
 	ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 }
 
@@ -681,7 +680,7 @@ void ArrangeNodeImpl::DownOneLayer()
 {
 	auto ao = std::make_shared<DownLayerNodeAO>(m_sub_mgr, m_selection);
 	ao->Redo();
-	m_record.Add(ao);
+	ee0::MsgHelper::AddAtomicOP(*m_sub_mgr, ao);
 	ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 }
 

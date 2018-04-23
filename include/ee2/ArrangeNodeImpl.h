@@ -9,7 +9,7 @@
 
 #include <wx/menu.h>
 
-namespace ee0 { class EditRecord; class EditOpState; class KeysState; }
+namespace ee0 { class EditOpState; class KeysState; }
 namespace pt2 { class Camera; }
 
 namespace ee2
@@ -24,9 +24,8 @@ class SpriteSelection;
 class ArrangeNodeImpl
 {
 public:
-	ArrangeNodeImpl(pt2::Camera& cam, ee0::EditRecord& record, 
-		const ee0::SubjectMgrPtr& sub_mgr, ECS_WORLD_PARAM
-		ee0::SelectionSet<ee0::GameObjWithPos>& selection,
+	ArrangeNodeImpl(pt2::Camera& cam, const ee0::SubjectMgrPtr& sub_mgr, 
+		ECS_WORLD_PARAM ee0::SelectionSet<ee0::GameObjWithPos>& selection,
 		ee0::NodeContainer& objs, const ee0::KeysState& key_state,
 		const ArrangeNodeCfg& cfg = ArrangeNodeCfg());
 	virtual ~ArrangeNodeImpl() = default;
@@ -71,7 +70,6 @@ private:
 private:
 	pt2::Camera& m_cam;
 
-	ee0::EditRecord&   m_record;
 	ee0::SubjectMgrPtr m_sub_mgr;
 	ECS_WORLD_SELF_DEF
 

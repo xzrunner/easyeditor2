@@ -86,12 +86,15 @@ void WxStageDropTarget::OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& f
 
 void WxStageDropTarget::InsertNode(ee0::GameObj& obj)
 {
-	bool succ = ee0::MsgHelper::InsertNode(*m_stage->GetSubjectMgr(), obj);
+	auto& sub_mgr = *m_stage->GetSubjectMgr();
+
+	bool succ = ee0::MsgHelper::InsertNode(sub_mgr, obj);
 	GD_ASSERT(succ, "no MSG_INSERT_SCENE_NODE");
 
-	m_stage->GetImpl().GetEditRecord().Add(std::make_shared<InsertNodeAO>(
-		m_stage->GetSubjectMgr(), obj));
-	ee0::MsgHelper::SetEditorDirty(*m_stage->GetSubjectMgr(), true);
+	auto aop = std::make_shared<InsertNodeAO>(m_stage->GetSubjectMgr(), obj);
+	ee0::MsgHelper::AddAtomicOP(sub_mgr, aop);
+
+	ee0::MsgHelper::SetEditorDirty(sub_mgr, true);
 }
 
 void WxStageDropTarget::InitNodeComp(const ee0::GameObj& obj, 

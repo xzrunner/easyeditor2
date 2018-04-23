@@ -82,4 +82,20 @@ void TranslateNodeAO::Redo()
 	}
 }
 
+std::string TranslateNodeAO::ToString() const
+{
+	if (m_objs.size() == 0) {
+		return "";
+	} else if (m_objs.size() == 1) {
+		return "translate 1 game obj";
+	} else {
+		return "translate " + std::to_string(m_objs.size()) + " game objs";
+	}
+}
+
+std::string TranslateNodeAO::ToScript() const
+{
+	return "zz";
+}
+
 }

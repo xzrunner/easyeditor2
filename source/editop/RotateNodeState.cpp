@@ -3,7 +3,6 @@
 
 #include <ee0/CameraHelper.h>
 #include <ee0/MsgHelper.h>
-#include <ee0/EditRecord.h>
 #include <ee0/MsgHelper.h>
 
 #include <SM_Calc.h>
@@ -19,13 +18,11 @@ namespace ee2
 {
 
 RotateNodeState::RotateNodeState(pt2::Camera& cam, 
-	                             ee0::EditRecord& record,
 	                             const ee0::SubjectMgrPtr& sub_mgr,
 	                             ECS_WORLD_PARAM
 	                             ee0::SelectionSet<ee0::GameObjWithPos>& selection,
 	                             const sm::vec2& first_pos)
 	: m_cam(cam)
-	, m_record(record)
 	, m_sub_mgr(sub_mgr)
 	ECS_WORLD_SELF_ASSIGN
 	, m_selection(selection)
@@ -53,7 +50,11 @@ bool RotateNodeState::OnMouseRelease(int x, int y)
 #endif // GAME_OBJ_ECS
 		return true;
 	});
-	m_record.Add(std::make_shared<RotateNodeAO>(m_sub_mgr, ECS_WORLD_SELF_VAR objs, m_angle));
+
+	// record
+	auto aop = std::make_shared<RotateNodeAO>(m_sub_mgr, ECS_WORLD_SELF_VAR objs, m_angle);
+	ee0::MsgHelper::AddAtomicOP(*m_sub_mgr, aop);
+
 	ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 
 	return false;
