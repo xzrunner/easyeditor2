@@ -93,9 +93,4 @@ std::string TranslateNodeAO::ToString() const
 	}
 }
 
-std::string TranslateNodeAO::ToScript() const
-{
-	return "zz";
-}
-
 }

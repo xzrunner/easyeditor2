@@ -53,4 +53,9 @@ void EditableNodeAO::Redo()
 	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
 
+std::string EditableNodeAO::ToString() const
+{
+	return "changed editable";
+}
+
 }

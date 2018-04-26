@@ -31,4 +31,15 @@ void InsertNodeAO::Redo()
 	}
 }
 
+std::string InsertNodeAO::ToString() const
+{
+	if (m_objs.size() == 0) {
+		return "";
+	} else if (m_objs.size() == 1) {
+		return "insert 1 game obj";
+	} else {
+		return "insert " + std::to_string(m_objs.size()) + " game objs";
+	}
+}
+
 }

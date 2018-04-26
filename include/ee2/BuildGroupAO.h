@@ -19,6 +19,8 @@ public:
 	virtual void Undo() override;
 	virtual void Redo() override;
 
+	virtual std::string ToString() const { return "build group"; }
+
 private:
 	void CopyFromSelection(std::vector<ee0::GameObjWithPos>& objs) const;
 

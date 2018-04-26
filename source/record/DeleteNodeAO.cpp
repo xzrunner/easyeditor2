@@ -25,4 +25,15 @@ void DeleteNodeAO::Redo()
 	}
 }
 
+std::string DeleteNodeAO::ToString() const
+{
+	if (m_objs.size() == 0) {
+		return "";
+	} else if (m_objs.size() == 1) {
+		return "delete 1 game obj";
+	} else {
+		return "delete " + std::to_string(m_objs.size()) + " game objs";
+	}
+}
+
 }

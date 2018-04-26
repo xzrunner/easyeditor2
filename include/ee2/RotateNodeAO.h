@@ -24,6 +24,8 @@ public:
 	virtual void Undo() override;
 	virtual void Redo() override;
 
+	virtual std::string ToString() const { return "rotate game obj"; }
+
 private:
 	ee0::SubjectMgrPtr m_sub_mgr;
 	ECS_WORLD_SELF_DEF

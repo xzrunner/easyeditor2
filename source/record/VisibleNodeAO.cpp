@@ -52,4 +52,9 @@ void VisibleNodeAO::Redo()
 	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
 
+std::string VisibleNodeAO::ToString() const
+{
+	return "changed visible";
+}
+
 }
