@@ -41,20 +41,23 @@ ScaleNodeState::ScaleNodeState(pt2::Camera& cam,
 
 bool ScaleNodeState::OnMouseRelease(int x, int y)
 {
-	// record
-	auto comb = std::make_shared<CombineAO>();
-
-	sm::vec2 offset;
-	sm::vec2 new_scale;
+	sm::vec2 new_pos, new_scale;
 #ifndef GAME_OBJ_ECS
 	auto& ctrans = m_obj->GetUniqueComp<n2::CompTransform>();
-	offset = ctrans.GetTrans().GetPosition() - m_first_pos;
+	new_pos = ctrans.GetTrans().GetPosition();
 	new_scale = ctrans.GetTrans().GetScale();
 #else
-	offset = e2::SysTransform::GetPosition(m_world, m_obj) - m_first_pos;
+	new_pos = e2::SysTransform::GetPosition(m_world, m_obj);
 	new_scale = e2::SysTransform::GetScale(m_world, m_obj);
 #endif // GAME_OBJ_ECS
 
+	if (new_pos == m_first_pos && new_scale == m_first_scale) {
+		return false;
+	}
+
+	// record
+	auto comb = std::make_shared<CombineAO>();
+	auto offset = new_pos - m_first_pos;
 #ifndef GAME_OBJ_ECS
 	comb->Add(std::make_shared<TranslateNodeAO>(m_sub_mgr, m_obj, offset));
 	comb->Add(std::make_shared<ScaleNodeAO>(m_sub_mgr, m_obj, new_scale, m_first_scale));

@@ -46,16 +46,17 @@ bool TranslateNodeState::OnMouseRelease(int x, int y)
 
 	m_dirty = false;
 
-	// record
 	auto pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
-	if (pos != m_first_pos)
-	{
-		sm::vec2 offset = pos - m_first_pos;
-		auto aop = std::make_shared<TranslateNodeAO>(m_sub_mgr, ECS_WORLD_SELF_VAR m_selection, offset);
-		ee0::MsgHelper::AddAtomicOP(*m_sub_mgr, aop);
-
-		ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
+	if (pos == m_first_pos) {
+		return false;
 	}
+
+	// record
+	sm::vec2 offset = pos - m_first_pos;
+	auto aop = std::make_shared<TranslateNodeAO>(m_sub_mgr, ECS_WORLD_SELF_VAR m_selection, offset);
+	ee0::MsgHelper::AddAtomicOP(*m_sub_mgr, aop);
+
+	ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 
 	return false;
 }

@@ -80,6 +80,10 @@ bool OffsetNodeState::OnMouseRelease(int x, int y)
 	e2::SysTransform::SetOffset(m_world, m_obj, new_offset);
 #endif // GAME_OBJ_ECS
 
+	if (new_offset == m_old_offset) {
+		return false;
+	}
+
 	// record
 	auto aop = std::make_shared<OffsetNodeAO>(m_sub_mgr, ECS_WORLD_SELF_VAR m_obj, new_offset, m_old_offset);
 	ee0::MsgHelper::AddAtomicOP(*m_sub_mgr, aop);

@@ -51,6 +51,10 @@ bool RotateNodeState::OnMouseRelease(int x, int y)
 		return true;
 	});
 
+	if (m_angle == 0) {
+		return false;
+	}
+
 	// record
 	auto aop = std::make_shared<RotateNodeAO>(m_sub_mgr, ECS_WORLD_SELF_VAR objs, m_angle);
 	ee0::MsgHelper::AddAtomicOP(*m_sub_mgr, aop);
