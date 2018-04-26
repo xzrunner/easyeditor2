@@ -122,7 +122,9 @@ void WxStageDropTarget::InitNodeComp(const ee0::GameObj& obj,
 	auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
 	ceditor.SetFilepath(filepath);
 
-	ceditor.SetID(m_stage->FetchObjID());
+	auto id = m_stage->FetchObjID();
+	ceditor.SetID(id);
+	ceditor.SetName("_obj" + std::to_string(id));
 #else
 	// editor
 	auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(obj);
