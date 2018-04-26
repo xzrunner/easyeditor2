@@ -21,8 +21,7 @@ ArrangeNodeOP::ArrangeNodeOP(ee0::WxStagePage& stage,
 	: m_cam(cam)
 	ECS_WORLD_SELF_ASSIGN
 {
-	m_impl = std::make_unique<ArrangeNodeImpl>(cam, stage.GetSubjectMgr(), 
-		ECS_WORLD_VAR stage.GetSelection(), stage, stage.GetImpl().GetKeyState(), cfg);
+	m_impl = std::make_unique<ArrangeNodeImpl>(stage, cam, ECS_WORLD_VAR cfg);
 
 	if (prev_op) {
 		SetPrevEditOP(prev_op);

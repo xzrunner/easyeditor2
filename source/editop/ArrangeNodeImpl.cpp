@@ -18,11 +18,13 @@
 #include "ee2/UpLayerNodeAO.h"
 
 #include <ee0/KeysState.h>
+#include <ee0/RightPopupMenu.h>
 #include <ee0/KeyType.h>
 #include <ee0/CameraHelper.h>
 #include <ee0/SubjectMgr.h>
 #include <ee0/MessageID.h>
 #include <ee0/MsgHelper.h>
+#include <ee0/WxStagePage.h>
 
 #include <guard/check.h>
 #include <SM_Calc.h>
@@ -41,22 +43,18 @@
 namespace ee2
 {
 
-ArrangeNodeImpl::ArrangeNodeImpl(pt2::Camera& cam, 
-	                             const ee0::SubjectMgrPtr& sub_mgr,
-	                             ECS_WORLD_PARAM
-	                             ee0::SelectionSet<ee0::GameObjWithPos>& selection,
-	                             ee0::NodeContainer& objs,
-	                             const ee0::KeysState& key_state,
+ArrangeNodeImpl::ArrangeNodeImpl(ee0::WxStagePage& stage, 
+	                             pt2::Camera& cam, 
+		                         ECS_WORLD_PARAM 
 	                             const ArrangeNodeCfg& cfg)
-	: m_cam(cam)
-	, m_sub_mgr(sub_mgr)
+	: m_stage(stage)
+	, m_cam(cam)
+	, m_sub_mgr(stage.GetSubjectMgr())
 	ECS_WORLD_SELF_ASSIGN
-	, m_selection(selection)
-	, m_key_state(key_state)
+	, m_selection(stage.GetSelection())
 	, m_cfg(cfg)
-	, m_align(objs)
+	, m_align(stage)
 	, m_ctrl_node_radius(ArrangeNodeCfg::CTRL_NODE_RADIUS)
-//	, m_popup(wnd, stage, sprites_impl, sprites_impl->GetSpriteSelection())
 {
 	m_align.SetOpen(cfg.is_auto_align_open);
 
@@ -66,7 +64,7 @@ ArrangeNodeImpl::ArrangeNodeImpl(pt2::Camera& cam,
 
 bool ArrangeNodeImpl::OnKeyDown(int keycode)
 {
-	if (m_key_state.GetKeyState(WXK_SHIFT) && OnSpriteShortcutKey(keycode)) {
+	if (m_stage.GetImpl().GetKeyState().GetKeyState(WXK_SHIFT) && OnSpriteShortcutKey(keycode)) {
 		return true;
 	}
 
@@ -95,12 +93,7 @@ bool ArrangeNodeImpl::OnKeyDown(int keycode)
 		break;
 	case 'm' : case 'M':
 		ret = true;
-		m_op_state = std::make_unique<MoveNodeState>(
-			m_cam, 
-#ifdef GAME_OBJ_ECS
-			m_world,
-#endif // GAME_OBJ_ECS
-			m_selection);
+		m_op_state = std::make_unique<MoveNodeState>(m_cam, ECS_WORLD_SELF_VAR m_selection);
 		break;
 	case WXK_SPACE:
 		ret = true;
@@ -178,12 +171,7 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 	// copy & paste
 	if (wxGetKeyState(WXK_ALT)) {
 		m_op_state = std::make_unique<CopyPasteNodeState>(
-			m_cam, 
-			m_sub_mgr, 
-#ifdef GAME_OBJ_ECS
-			m_world,
-#endif // GAME_OBJ_ECS
-			m_selection);
+			m_cam, m_sub_mgr, ECS_WORLD_SELF_VAR m_selection);
 	}
 
 #ifndef GAME_OBJ_ECS
@@ -220,7 +208,7 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 	}
 
 	// scale
-	if (m_cfg.is_deform_open && !m_key_state.GetKeyState(WXK_SHIFT))
+	if (m_cfg.is_deform_open && !m_stage.GetImpl().GetKeyState().GetKeyState(WXK_SHIFT))
 	{
 		sm::vec2 ctrl_nodes[8];
 		NodeCtrlPoint::GetNodeCtrlPoints(ECS_WORLD_SELF_VAR selected, ctrl_nodes);
@@ -238,7 +226,7 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 	}
 
 	//// perspective
-	//if (m_cfg.is_deform_open && m_key_state.GetKeyState(WXK_SHIFT))
+	//if (m_cfg.is_deform_open && m_stage.GetImpl().GetKeyState().GetKeyState(WXK_SHIFT))
 	//{
 	//	sm::vec2 ctrl_point[4];
 	//	NodeCtrlPoint::GetNodeCtrlPointsExt(*selected, ctrl_point);
@@ -361,8 +349,7 @@ void ArrangeNodeImpl::OnMouseRightUp(int x, int y)
 	{
 		wxMenu menu;
 		SetRightPopupMenu(menu, x, y);
-		// todo popup menu
-//		m_stage->PopupMenu(&menu, x, y);
+		m_stage.PopupMenu(&menu, x, y);
 	}
 	else if (m_op_state)
 	{
@@ -409,8 +396,7 @@ void ArrangeNodeImpl::OnMouseDrag(int x, int y)
 
 void ArrangeNodeImpl::OnPopMenuSelected(int type)
 {
-	// todo popup menu
-	//m_popup.OnRightPopupMenu(type);
+	m_stage.GetImpl().GetPopupMenu().OnRightPopupMenu(type);
 }
 
 void ArrangeNodeImpl::OnDraw(float cam_scale) const
@@ -461,7 +447,7 @@ void ArrangeNodeImpl::OnDraw(float cam_scale) const
 		{
 			if (m_cfg.is_deform_open)
 			{
-				if (m_key_state.GetKeyState(WXK_SHIFT)) 
+				if (m_stage.GetImpl().GetKeyState().GetKeyState(WXK_SHIFT))
 				{
 					//sm::vec2 ctrl_nodes[4];
 					//NodeCtrlPoint::GetNodeCtrlPointsExt(*selected, ctrl_nodes);
@@ -533,7 +519,7 @@ ee0::GameObj ArrangeNodeImpl::QueryEditedNode(const sm::vec2& pos) const
 		}
 	}
 
-	if (m_cfg.is_deform_open && !m_key_state.GetKeyState(WXK_SHIFT))
+	if (m_cfg.is_deform_open && !m_stage.GetImpl().GetKeyState().GetKeyState(WXK_SHIFT))
 	{
 		sm::vec2 ctrl_nodes[8];
 		NodeCtrlPoint::GetNodeCtrlPoints(ECS_WORLD_SELF_VAR selected, ctrl_nodes);
@@ -636,8 +622,7 @@ void ArrangeNodeImpl::OnSpaceKeyDown()
 
 void ArrangeNodeImpl::SetRightPopupMenu(wxMenu& menu, int x, int y)
 {
-	// todo popup
-//	m_popup.SetRightPopupMenu(menu, x, y);
+	m_stage.GetImpl().GetPopupMenu().SetRightPopupMenu(menu, x, y);
 }
 
 void ArrangeNodeImpl::OnDeleteKeyDown()

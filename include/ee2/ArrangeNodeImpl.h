@@ -9,7 +9,7 @@
 
 #include <wx/menu.h>
 
-namespace ee0 { class EditOpState; class KeysState; }
+namespace ee0 { class WxStagePage; class EditOpState; }
 namespace pt2 { class Camera; }
 
 namespace ee2
@@ -24,10 +24,8 @@ class SpriteSelection;
 class ArrangeNodeImpl
 {
 public:
-	ArrangeNodeImpl(pt2::Camera& cam, const ee0::SubjectMgrPtr& sub_mgr, 
-		ECS_WORLD_PARAM ee0::SelectionSet<ee0::GameObjWithPos>& selection,
-		ee0::NodeContainer& objs, const ee0::KeysState& key_state,
-		const ArrangeNodeCfg& cfg = ArrangeNodeCfg());
+	ArrangeNodeImpl(ee0::WxStagePage& stage, pt2::Camera& cam, 
+		ECS_WORLD_PARAM const ArrangeNodeCfg& cfg = ArrangeNodeCfg());
 	virtual ~ArrangeNodeImpl() = default;
 
 	virtual bool OnKeyDown(int key_code);
@@ -68,14 +66,13 @@ private:
 	bool OnSpriteShortcutKey(int keycode);
 
 private:
-	pt2::Camera& m_cam;
+	ee0::WxStagePage& m_stage;
+	pt2::Camera&      m_cam;
 
 	ee0::SubjectMgrPtr m_sub_mgr;
 	ECS_WORLD_SELF_DEF
 
 	ee0::SelectionSet<ee0::GameObjWithPos>& m_selection;
-
-	const ee0::KeysState& m_key_state;
 
 	const ArrangeNodeCfg m_cfg;
 
@@ -86,8 +83,6 @@ private:
 	sm::vec2 m_left_down_pos, m_right_down_pos;
 
 	mutable float m_ctrl_node_radius;
-
-//	RightPopupMenu m_popup;
 
 }; // ArrangeNodeImpl
 
