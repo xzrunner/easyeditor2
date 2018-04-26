@@ -33,6 +33,7 @@
     <ClInclude Include="..\..\..\include\ee2\OffsetNodeAO.h" />
     <ClInclude Include="..\..\..\include\ee2\OffsetNodeState.h" />
     <ClInclude Include="..\..\..\include\ee2\DownLayerNodeAO.h" />
+    <ClInclude Include="..\..\..\include\ee2\RightPopupMenu.h" />
     <ClInclude Include="..\..\..\include\ee2\RotateNodeAO.h" />
     <ClInclude Include="..\..\..\include\ee2\RotateNodeState.h" />
     <ClInclude Include="..\..\..\include\ee2\ScaleNodeAO.h" />
@@ -70,6 +71,7 @@
     <ClCompile Include="..\..\..\source\editop\MoveNodeState.cpp" />
     <ClCompile Include="..\..\..\source\editop\NodeSelectOP.cpp" />
     <ClCompile Include="..\..\..\source\editop\OffsetNodeState.cpp" />
+    <ClCompile Include="..\..\..\source\editop\RightPopupMenu.cpp" />
     <ClCompile Include="..\..\..\source\editop\RotateNodeState.cpp" />
     <ClCompile Include="..\..\..\source\editop\ScaleNodeState.cpp" />
     <ClCompile Include="..\..\..\source\editop\ShearNodeState.cpp" />
@@ -109,7 +111,7 @@
     <ProjectGuid>{58699389-F675-489E-A912-C9110D8D6E3D}</ProjectGuid>
     <RootNamespace>easyeditor2</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
