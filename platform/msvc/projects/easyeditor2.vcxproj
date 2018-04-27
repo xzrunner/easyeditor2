@@ -33,7 +33,6 @@
     <ClInclude Include="..\..\..\include\ee2\OffsetNodeAO.h" />
     <ClInclude Include="..\..\..\include\ee2\OffsetNodeState.h" />
     <ClInclude Include="..\..\..\include\ee2\DownLayerNodeAO.h" />
-    <ClInclude Include="..\..\..\include\ee2\RightPopupMenu.h" />
     <ClInclude Include="..\..\..\include\ee2\RotateNodeAO.h" />
     <ClInclude Include="..\..\..\include\ee2\RotateNodeState.h" />
     <ClInclude Include="..\..\..\include\ee2\ScaleNodeAO.h" />
@@ -71,7 +70,6 @@
     <ClCompile Include="..\..\..\source\editop\MoveNodeState.cpp" />
     <ClCompile Include="..\..\..\source\editop\NodeSelectOP.cpp" />
     <ClCompile Include="..\..\..\source\editop\OffsetNodeState.cpp" />
-    <ClCompile Include="..\..\..\source\editop\RightPopupMenu.cpp" />
     <ClCompile Include="..\..\..\source\editop\RotateNodeState.cpp" />
     <ClCompile Include="..\..\..\source\editop\ScaleNodeState.cpp" />
     <ClCompile Include="..\..\..\source\editop\ShearNodeState.cpp" />
