@@ -19,6 +19,7 @@ public:
 	virtual void Redo() override;
 
 	virtual std::string ToString() const;
+	virtual std::string ToScript() const;
 
 private:
 	ee0::SubjectMgrPtr m_sub_mgr;
