@@ -7,9 +7,10 @@
 #ifndef GAME_OBJ_ECS
 #include <ee0/CompNodeEditor.h>
 #include <node0/SceneNode.h>
-#include <node2/CompComplex.h>
+#include <node0/CompComplex.h>
 #include <node2/CompTransform.h>
 #include <node2/CompBoundingBox.h>
+#include <node2/AABBSystem.h>
 #else
 #include <ee0/CompEntityEditor.h>
 #include <entity0/World.h>
@@ -39,7 +40,7 @@ void NodeGroupHelper::BuildGroup(ECS_WORLD_PARAM ee0::SubjectMgr& sub_mgr,
 
 	// complex
 #ifndef GAME_OBJ_ECS
-	auto& ccomplex = obj->AddSharedComp<n2::CompComplex>();
+	auto& ccomplex = obj->AddSharedComp<n0::CompComplex>();
 	for (auto& obj : objs) {
 		ccomplex.AddChild(obj.GetNode());
 	}
@@ -52,16 +53,16 @@ void NodeGroupHelper::BuildGroup(ECS_WORLD_PARAM ee0::SubjectMgr& sub_mgr,
 
 	// aabb
 #ifndef GAME_OBJ_ECS
-	auto bounding = ccomplex.GetBounding();
-	auto center = bounding.Center();
+	auto aabb = n2::AABBSystem::GetBounding(ccomplex);
+	auto center = aabb.Center();
 	auto& children = ccomplex.GetAllChildren();
 	for (auto& child : children)
 	{
 		auto& ctrans = child->GetUniqueComp<n2::CompTransform>();
 		ctrans.SetPosition(*child, ctrans.GetTrans().GetPosition() - center);
 	}
-	bounding.Translate(-center);
-	obj->AddUniqueComp<n2::CompBoundingBox>(bounding);
+	aabb.Translate(-center);
+	obj->AddUniqueComp<n2::CompBoundingBox>(aabb);
 #else
 	sm::rect bounding;
 	auto& children = *ccomplex.children;
@@ -106,10 +107,10 @@ void NodeGroupHelper::BreakUp(ECS_WORLD_PARAM ee0::SubjectMgr& sub_mgr,
 )
 {
 #ifndef GAME_OBJ_ECS
-	if (!obj.GetNode()->HasSharedComp<n2::CompComplex>()) {
+	if (!obj.GetNode()->HasSharedComp<n0::CompComplex>()) {
 		return;
 	}
-	auto& ccomplex = obj.GetNode()->GetSharedComp<n2::CompComplex>();
+	auto& ccomplex = obj.GetNode()->GetSharedComp<n0::CompComplex>();
 #else
 	if (!world.HasComponent<e2::CompComplex>(obj)) {
 		return;

@@ -11,7 +11,7 @@
 #ifndef GAME_OBJ_ECS
 #include <node0/SceneNode.h>
 #include <node0/SceneTreeHelper.h>
-#include <node2/CompComplex.h>
+#include <node0/CompComplex.h>
 #include <node2/CompBoundingBox.h>
 #include <node2/CompTransform.h>
 #else
@@ -213,12 +213,12 @@ ee0::GameObj NodeSelectOP::QueryByPos(const ee0::GameObj& obj, const sm::vec2& p
 #endif // GAME_OBJ_ECS
 
 #ifndef GAME_OBJ_ECS
-	if (obj->HasSharedComp<n2::CompComplex>())
+	if (obj->HasSharedComp<n0::CompComplex>())
 	{
 		auto mt = obj->GetUniqueComp<n2::CompTransform>().GetTrans().GetMatrix().Inverted();
 		sm::vec2 child_pos = mt * pos;
 
-		auto& ccomplex = obj->GetSharedComp<n2::CompComplex>();
+		auto& ccomplex = obj->GetSharedComp<n0::CompComplex>();
 		auto& children = ccomplex.GetAllChildren();
 		for (auto& child : children) 
 		{
