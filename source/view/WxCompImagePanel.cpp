@@ -1,8 +1,8 @@
 #include "ee2/WxCompImagePanel.h"
 
 #ifndef GAME_OBJ_ECS
-#include <ee0/CompNodeEditor.h>
 #include <node0/SceneNode.h>
+#include <node0/CompIdentity.h>
 #include <node2/CompImage.h>
 #else
 #include <ee0/CompEntityEditor.h>
@@ -21,7 +21,7 @@
 namespace ee2
 {
 
-WxCompImagePanel::WxCompImagePanel(wxWindow* parent, 
+WxCompImagePanel::WxCompImagePanel(wxWindow* parent,
 	                               ECS_WORLD_PARAM
 	                               const ee0::GameObj& obj)
 	: ee0::WxCompPanel(parent, "Image")
@@ -35,8 +35,8 @@ WxCompImagePanel::WxCompImagePanel(wxWindow* parent,
 void WxCompImagePanel::RefreshNodeComp()
 {
 #ifndef GAME_OBJ_ECS
-	auto& ceditor = m_obj->GetUniqueComp<ee0::CompNodeEditor>();
-	m_filepath->SetValue(ceditor.GetFilepath());
+	auto& cid = m_obj->GetUniqueComp<n0::CompIdentity>();
+	m_filepath->SetValue(cid.GetFilepath());
 #else
 	auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(m_obj);
 	m_filepath->SetValue(*ceditor.filepath);
@@ -54,8 +54,8 @@ void WxCompImagePanel::InitLayout()
 		wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
 
 #ifndef GAME_OBJ_ECS
-		auto& ceditor = m_obj->GetUniqueComp<ee0::CompNodeEditor>();
-		auto& filepath = ceditor.GetFilepath();
+		auto& cid = m_obj->GetUniqueComp<n0::CompIdentity>();
+		auto& filepath = cid.GetFilepath();
 #else
 		auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(m_obj);
 		auto& filepath = *ceditor.filepath;
@@ -67,12 +67,12 @@ void WxCompImagePanel::InitLayout()
 
 		wxButton* btn = new wxButton(win, wxID_ANY, wxT("..."), wxDefaultPosition, wxSize(25, 25));
 		sizer->Add(btn);
-		Connect(btn->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, 
+		Connect(btn->GetId(), wxEVT_COMMAND_BUTTON_CLICKED,
 			wxCommandEventHandler(WxCompImagePanel::OnSetFilepath));
 
 		pane_sizer->Add(sizer);
 	}
-	
+
 	win->SetSizer(pane_sizer);
 	pane_sizer->SetSizeHints(win);
 }

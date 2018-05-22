@@ -4,8 +4,8 @@
 #include <ee0/MessageID.h>
 
 #ifndef GAME_OBJ_ECS
-#include <ee0/CompNodeEditor.h>
 #include <node0/SceneNode.h>
+#include <node0/CompIdentity.h>
 #include <node2/CompScript.h>
 #else
 #include <ee0/CompEntityEditor.h>
@@ -35,7 +35,7 @@ WxCompScriptPanel::WxCompScriptPanel(wxWindow* parent, const ee0::SubjectMgrPtr&
 void WxCompScriptPanel::RefreshNodeComp()
 {
 #ifndef GAME_OBJ_ECS
-	auto& filepath = m_obj->GetUniqueComp<ee0::CompNodeEditor>().GetFilepath();
+	auto& filepath = m_obj->GetUniqueComp<n0::CompIdentity>().GetFilepath();
 #else
 	auto& filepath = *m_world.GetComponent<ee0::CompEntityEditor>(m_obj).filepath;
 #endif // GAME_OBJ_ECS
@@ -53,7 +53,7 @@ void WxCompScriptPanel::InitLayout()
 		wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
 
 #ifndef GAME_OBJ_ECS
-		auto& filepath = m_obj->GetUniqueComp<ee0::CompNodeEditor>().GetFilepath();
+		auto& filepath = m_obj->GetUniqueComp<n0::CompIdentity>().GetFilepath();
 #else
 		auto& filepath = *m_world.GetComponent<ee0::CompEntityEditor>(m_obj).filepath;
 #endif // GAME_OBJ_ECS
@@ -64,7 +64,7 @@ void WxCompScriptPanel::InitLayout()
 
 		wxButton* btn = new wxButton(win, wxID_ANY, wxT("..."), wxDefaultPosition, wxSize(25, 25));
 		sizer->Add(btn);
-		Connect(btn->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, 
+		Connect(btn->GetId(), wxEVT_COMMAND_BUTTON_CLICKED,
 			wxCommandEventHandler(WxCompScriptPanel::OnSetFilepath));
 
 		pane_sizer->Add(sizer);
@@ -77,7 +77,7 @@ void WxCompScriptPanel::InitLayout()
 
 		pane_sizer->Add(btn, 0, wxALIGN_CENTER_HORIZONTAL);
 	}
-	
+
 	win->SetSizer(pane_sizer);
 	pane_sizer->SetSizeHints(win);
 }
@@ -90,9 +90,9 @@ void WxCompScriptPanel::OnSetFilepath(wxCommandEvent& event)
 	{
 		auto filepath = dlg.GetPath().ToStdString();
 #ifndef GAME_OBJ_ECS
-		m_obj->GetUniqueComp<ee0::CompNodeEditor>().SetFilepath(filepath);
+		m_obj->GetUniqueComp<n0::CompIdentity>().SetFilepath(filepath);
 #else
-		m_world.GetComponent<ee0::CompEntityEditor>(m_obj).filepath 
+		m_world.GetComponent<ee0::CompEntityEditor>(m_obj).filepath
 			= std::make_unique<std::string>(filepath);
 #endif // GAME_OBJ_ECS
 
@@ -110,8 +110,8 @@ void WxCompScriptPanel::OnReloadScript(wxCommandEvent& event)
 	// todo
 #ifndef GAME_OBJ_ECS
 	auto& cscript = m_obj->GetUniqueComp<n2::CompScript>();
-	auto& ceditor = m_obj->GetUniqueComp<ee0::CompNodeEditor>();
-	cscript.SetFilepath(ceditor.GetFilepath());
+	auto& cid = m_obj->GetUniqueComp<n0::CompIdentity>();
+	cscript.SetFilepath(cid.GetFilepath());
 	cscript.Reload(m_obj);
 #endif // GAME_OBJ_ECS
 	m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);

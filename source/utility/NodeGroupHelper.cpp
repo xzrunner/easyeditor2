@@ -8,6 +8,7 @@
 #include <ee0/CompNodeEditor.h>
 #include <node0/SceneNode.h>
 #include <node0/CompComplex.h>
+#include <node0/CompIdentity.h>
 #include <node2/CompTransform.h>
 #include <node2/CompBoundingBox.h>
 #include <node2/AABBSystem.h>
@@ -24,7 +25,7 @@
 namespace ee2
 {
 
-void NodeGroupHelper::BuildGroup(ECS_WORLD_PARAM ee0::SubjectMgr& sub_mgr, 
+void NodeGroupHelper::BuildGroup(ECS_WORLD_PARAM ee0::SubjectMgr& sub_mgr,
 	                             const std::vector<ee0::GameObjWithPos>& objs)
 {
 	if (objs.empty()) {
@@ -89,6 +90,7 @@ void NodeGroupHelper::BuildGroup(ECS_WORLD_PARAM ee0::SubjectMgr& sub_mgr,
 	// editor
 #ifndef GAME_OBJ_ECS
 	obj->AddUniqueComp<ee0::CompNodeEditor>();
+	obj->AddUniqueComp<n0::CompIdentity>();
 #else
 	world.AddComponent<ee0::CompEntityEditor>(obj);
 #endif // GAME_OBJ_ECS
@@ -102,7 +104,7 @@ void NodeGroupHelper::BuildGroup(ECS_WORLD_PARAM ee0::SubjectMgr& sub_mgr,
 	}
 }
 
-void NodeGroupHelper::BreakUp(ECS_WORLD_PARAM ee0::SubjectMgr& sub_mgr, 
+void NodeGroupHelper::BreakUp(ECS_WORLD_PARAM ee0::SubjectMgr& sub_mgr,
 	                          const ee0::GameObjWithPos& obj
 )
 {
@@ -135,7 +137,7 @@ void NodeGroupHelper::BreakUp(ECS_WORLD_PARAM ee0::SubjectMgr& sub_mgr,
 		ctrans.SetSRT(*child, csrt);
 	}
 #else
-	for (auto& child : children) 
+	for (auto& child : children)
 	{
 		auto pos = e2::SysTransform::GetPosition(world, obj) + e2::SysTransform::GetPosition(world, child);
 		e2::SysTransform::SetPosition(world, child, pos);

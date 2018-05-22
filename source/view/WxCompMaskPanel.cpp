@@ -1,8 +1,8 @@
 #include "ee2/WxCompMaskPanel.h"
 
 #ifndef GAME_OBJ_ECS
-#include <ee0/CompNodeEditor.h>
 #include <node0/SceneNode.h>
+#include <node0/CompIdentity.h>
 #include <node2/CompMask.h>
 #include <node2/CompBoundingBox.h>
 #include <node2/CompTransform.h>
@@ -41,19 +41,19 @@ void WxCompMaskPanel::RefreshNodeComp()
 	auto& base = cmask.GetBaseNode();
 	if (base)
 	{
-		auto& ceditor = base->GetUniqueComp<ee0::CompNodeEditor>();
-		m_base_path->SetValue(ceditor.GetFilepath());
+		auto& cid = base->GetUniqueComp<n0::CompIdentity>();
+		m_base_path->SetValue(cid.GetFilepath());
 	}
 	auto& mask = cmask.GetMaskNode();
 	if (mask)
 	{
-		auto& ceditor = mask->GetUniqueComp<ee0::CompNodeEditor>();
-		m_mask_path->SetValue(ceditor.GetFilepath());
+		auto& cid = base->GetUniqueComp<n0::CompIdentity>();
+		m_mask_path->SetValue(cid.GetFilepath());
 	}
 #else
 	auto& cmask = m_world.GetComponent<e2::CompMask>(m_obj);
 	auto& base = cmask.base;
-	if (!base.IsNull()) 
+	if (!base.IsNull())
 	{
 		auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(base);
 		m_base_path->SetValue(*ceditor.filepath);
@@ -87,10 +87,10 @@ void WxCompMaskPanel::InitLayout()
 
 		std::string path;
 #ifndef GAME_OBJ_ECS
-		if (auto obj = cmask.GetBaseNode()) 
+		if (auto obj = cmask.GetBaseNode())
 		{
-			auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
-			path = ceditor.GetFilepath();
+			auto& cid = obj->GetUniqueComp<n0::CompIdentity>();
+			path = cid.GetFilepath();
 		}
 #else
 		if (!cmask.base.IsNull())
@@ -119,10 +119,10 @@ void WxCompMaskPanel::InitLayout()
 
 		std::string path;
 #ifndef GAME_OBJ_ECS
-		if (auto obj = cmask.GetMaskNode()) 
+		if (auto obj = cmask.GetMaskNode())
 		{
-			auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
-			path = ceditor.GetFilepath();
+			auto& cid = obj->GetUniqueComp<n0::CompIdentity>();
+			path = cid.GetFilepath();
 		}
 #else
 		if (!cmask.mask.IsNull())
@@ -159,10 +159,10 @@ void WxCompMaskPanel::OnSetBasePath(wxCommandEvent& event)
 	auto& cmask = m_obj->GetSharedComp<n2::CompMask>();
 	cmask.SetBaseNode(obj);
 
-	auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
-	ceditor.SetID(0);
-	ceditor.SetName("base");
-	m_base_path->SetValue(ceditor.GetFilepath());
+	auto& cid = obj->GetUniqueComp<n0::CompIdentity>();
+	cid.SetID(0);
+	cid.SetName("base");
+	m_base_path->SetValue(cid.GetFilepath());
 #else
 	auto& cmask = m_world.GetComponent<e2::CompMask>(m_obj);
 	cmask.base = obj;
@@ -183,10 +183,10 @@ void WxCompMaskPanel::OnSetMaskPath(wxCommandEvent& event)
 	auto& cmask = m_obj->GetSharedComp<n2::CompMask>();
 	cmask.SetMaskNode(obj);
 
-	auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
-	ceditor.SetID(1);
-	ceditor.SetName("mask");
-	m_mask_path->SetValue(ceditor.GetFilepath());
+	auto& cid = obj->GetUniqueComp<n0::CompIdentity>();
+	cid.SetID(1);
+	cid.SetName("mask");
+	m_mask_path->SetValue(cid.GetFilepath());
 
 	auto& cbb = m_obj->GetUniqueComp<n2::CompBoundingBox>();
 	cbb.SetSize(*m_obj, obj->GetUniqueComp<n2::CompBoundingBox>().GetSize());
@@ -215,15 +215,15 @@ ee0::GameObj WxCompMaskPanel::CreateNodeFromFile()
 	auto obj = ns::NodeFactory::Create(filepath);
 #else
 	auto obj = es::EntityFactory::Create(m_world, filepath);
-#endif // GAME_OBJ_ECS	
+#endif // GAME_OBJ_ECS
 	if (!GAME_OBJ_VALID(obj)) {
 		return GAME_OBJ_NULL;
 	}
 
 	// editor
 #ifndef GAME_OBJ_ECS
-	auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
-	ceditor.SetFilepath(filepath);
+	auto& cid = obj->GetUniqueComp<n0::CompIdentity>();
+	cid.SetFilepath(filepath);
 #else
 	auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(obj);
 	ceditor.filepath = std::make_unique<std::string>(filepath);

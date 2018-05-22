@@ -8,9 +8,7 @@
 #include <ee0/WxDropTarget.h>
 #include <ee0/WxLibraryPanel.h>
 #include <ee0/WxLibraryItem.h>
-#ifndef GAME_OBJ_ECS
-#include <ee0/CompNodeEditor.h>
-#else
+#ifdef GAME_OBJ_ECS
 #include <ee0/CompEntityEditor.h>
 #endif // GAME_OBJ_ECS
 #include <ee0/MsgHelper.h>
@@ -20,6 +18,7 @@
 #include <guard/check.h>
 #ifndef GAME_OBJ_ECS
 #include <node0/SceneNode.h>
+#include <node0/CompIdentity.h>
 #include <node2/CompTransform.h>
 #include <ns/NodeFactory.h>
 #else
@@ -32,8 +31,8 @@
 namespace ee2
 {
 
-WxStageDropTarget::WxStageDropTarget(ECS_WORLD_PARAM 
-	                                 ee0::WxLibraryPanel* library, 
+WxStageDropTarget::WxStageDropTarget(ECS_WORLD_PARAM
+	                                 ee0::WxLibraryPanel* library,
 	                                 ee0::WxStagePage* stage)
 	: WxDropTarget()
 	, m_library(library)
@@ -97,7 +96,7 @@ void WxStageDropTarget::InsertNode(ee0::GameObj& obj)
 	ee0::MsgHelper::SetEditorDirty(sub_mgr, true);
 }
 
-void WxStageDropTarget::InitNodeComp(const ee0::GameObj& obj, 
+void WxStageDropTarget::InitNodeComp(const ee0::GameObj& obj,
 	                                 const sm::vec2& pos,
 	                                 const std::string& filepath)
 {
@@ -119,12 +118,12 @@ void WxStageDropTarget::InitNodeComp(const ee0::GameObj& obj,
 
 	// editor
 #ifndef GAME_OBJ_ECS
-	auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
-	ceditor.SetFilepath(filepath);
+	auto& cid = obj->GetUniqueComp<n0::CompIdentity>();
+	cid.SetFilepath(filepath);
 
 	auto id = m_stage->FetchObjID();
-	ceditor.SetID(id);
-	ceditor.SetName("_obj" + std::to_string(id));
+	cid.SetID(id);
+	cid.SetName("_obj" + std::to_string(id));
 #else
 	// editor
 	auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(obj);
