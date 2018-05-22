@@ -4,8 +4,9 @@
 #include <ee0/MessageID.h>
 
 #ifndef GAME_OBJ_ECS
-#include <ee0/CompNodeEditor.h>
 #include <node0/SceneNode.h>
+#include <node0/NodeFlagsHelper.h>
+#include <node0/NodeFlags.h>
 #else
 #include <ee0/CompEntityEditor.h>
 #include <entity0/World.h>
@@ -25,11 +26,11 @@ EditableNodeAO::EditableNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
 
 void EditableNodeAO::Undo()
 {
-	for (auto& obj : m_objs) 
+	for (auto& obj : m_objs)
 	{
 #ifndef GAME_OBJ_ECS
-		auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
-		ceditor.SetEditable(!ceditor.IsEditable());
+		n0::NodeFlagsHelper::SetFlag<n0::NodeNotEditable>(
+			*obj, !n0::NodeFlagsHelper::GetFlag<n0::NodeNotEditable>(*obj));
 #else
 		auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(obj);
 		ceditor.editable = !ceditor.editable;
@@ -40,11 +41,11 @@ void EditableNodeAO::Undo()
 
 void EditableNodeAO::Redo()
 {
-	for (auto& obj : m_objs) 
+	for (auto& obj : m_objs)
 	{
 #ifndef GAME_OBJ_ECS
-		auto& ceditor = obj->GetUniqueComp<ee0::CompNodeEditor>();
-		ceditor.SetEditable(!ceditor.IsEditable());
+		n0::NodeFlagsHelper::SetFlag<n0::NodeNotEditable>(
+			*obj, !n0::NodeFlagsHelper::GetFlag<n0::NodeNotEditable>(*obj));
 #else
 		auto& ceditor = m_world.GetComponent<ee0::CompEntityEditor>(obj);
 		ceditor.editable = !ceditor.editable;

@@ -5,7 +5,6 @@
 #include <ee0/MessageID.h>
 
 #ifndef GAME_OBJ_ECS
-#include <ee0/CompNodeEditor.h>
 #include <node0/SceneNode.h>
 #include <node0/CompComplex.h>
 #include <node0/CompIdentity.h>
@@ -89,7 +88,6 @@ void NodeGroupHelper::BuildGroup(ECS_WORLD_PARAM ee0::SubjectMgr& sub_mgr,
 
 	// editor
 #ifndef GAME_OBJ_ECS
-	obj->AddUniqueComp<ee0::CompNodeEditor>();
 	obj->AddUniqueComp<n0::CompIdentity>();
 #else
 	world.AddComponent<ee0::CompEntityEditor>(obj);
