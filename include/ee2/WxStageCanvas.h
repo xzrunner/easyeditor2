@@ -30,7 +30,7 @@ protected:
 	virtual void OnDrawSprites() const override;
 
 	virtual void DrawBackground() const;
-	virtual void DrawNodes() const;
+	virtual void DrawForeground() const;
 
 protected:
 	ee0::WxStagePage* m_stage;

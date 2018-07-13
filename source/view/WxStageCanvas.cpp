@@ -75,7 +75,7 @@ void WxStageCanvas::OnSize(int w, int h)
 void WxStageCanvas::OnDrawSprites() const
 {
 	DrawBackground();
-	DrawNodes();
+	DrawForeground();
 
 	auto& op = m_stage->GetImpl().GetEditOP();
 	if (op) {
@@ -90,7 +90,7 @@ void WxStageCanvas::DrawBackground() const
 	pt2::PrimitiveDraw::Cross(nullptr, sm::vec2(0, 0), EDGE, EDGE);
 }
 
-void WxStageCanvas::DrawNodes() const
+void WxStageCanvas::DrawForeground() const
 {
 	ee0::VariantSet vars;
 	ee0::Variant var;
@@ -98,11 +98,11 @@ void WxStageCanvas::DrawNodes() const
 	var.m_val.l = ee0::WxStagePage::TRAV_DRAW;
 	vars.SetVariant("type", var);
 
-	m_stage->Traverse([&](const ee0::GameObj& obj)->bool 
+	m_stage->Traverse([&](const ee0::GameObj& obj)->bool
 	{
 #ifndef GAME_OBJ_ECS
 		n2::RenderParams rp;
-		if (obj->HasUniqueComp<n2::CompUniquePatch>()) 
+		if (obj->HasUniqueComp<n2::CompUniquePatch>())
 		{
 			auto patch = &obj->GetUniqueComp<n2::CompUniquePatch>();
 			patch->Rewind();
