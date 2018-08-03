@@ -17,7 +17,7 @@
 namespace ee2
 {
 
-RotateNodeState::RotateNodeState(pt2::Camera& cam, 
+RotateNodeState::RotateNodeState(pt0::Camera& cam, 
 	                             const ee0::SubjectMgrPtr& sub_mgr,
 	                             ECS_WORLD_PARAM
 	                             ee0::SelectionSet<ee0::GameObjWithPos>& selection,

@@ -16,7 +16,7 @@
 namespace ee2
 {
 
-ShearNodeState::ShearNodeState(pt2::Camera& cam, 
+ShearNodeState::ShearNodeState(pt0::Camera& cam, 
 	                           ECS_WORLD_PARAM
 	                           const ee0::GameObj& obj,
 	                           const NodeCtrlPoint::Node& ctrl_point)

@@ -44,7 +44,7 @@ namespace ee2
 {
 
 ArrangeNodeImpl::ArrangeNodeImpl(ee0::WxStagePage& stage, 
-	                             pt2::Camera& cam, 
+	                             pt0::Camera& cam, 
 		                         ECS_WORLD_PARAM 
 	                             const ArrangeNodeCfg& cfg)
 	: m_stage(stage)

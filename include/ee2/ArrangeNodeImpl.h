@@ -10,7 +10,7 @@
 #include <wx/menu.h>
 
 namespace ee0 { class WxStagePage; class EditOpState; }
-namespace pt2 { class Camera; }
+namespace pt0 { class Camera; }
 
 namespace ee2
 {
@@ -24,7 +24,7 @@ class SpriteSelection;
 class ArrangeNodeImpl
 {
 public:
-	ArrangeNodeImpl(ee0::WxStagePage& stage, pt2::Camera& cam, 
+	ArrangeNodeImpl(ee0::WxStagePage& stage, pt0::Camera& cam, 
 		ECS_WORLD_PARAM const ArrangeNodeCfg& cfg = ArrangeNodeCfg());
 	virtual ~ArrangeNodeImpl() = default;
 
@@ -67,7 +67,7 @@ private:
 
 private:
 	ee0::WxStagePage& m_stage;
-	pt2::Camera&      m_cam;
+	pt0::Camera&      m_cam;
 
 	ee0::SubjectMgrPtr m_sub_mgr;
 	ECS_WORLD_SELF_DEF

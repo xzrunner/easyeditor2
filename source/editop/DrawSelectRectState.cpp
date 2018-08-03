@@ -10,7 +10,7 @@
 namespace ee2
 {
 
-DrawSelectRectState::DrawSelectRectState(pt2::Camera& cam, const ee0::SubjectMgrPtr& sub_mgr)
+DrawSelectRectState::DrawSelectRectState(pt0::Camera& cam, const ee0::SubjectMgrPtr& sub_mgr)
 	: m_cam(cam)
 	, m_sub_mgr(sub_mgr)
 {

@@ -5,14 +5,14 @@
 #include <ee0/SubjectMgr.h>
 #include <ee0/MessageID.h>
 
-#include <painting2/Camera.h>
+#include <painting0/Camera.h>
 
 #include <wx/defs.h>
 
 namespace ee2
 {
 
-CamControlOP::CamControlOP(pt2::Camera& cam, const ee0::SubjectMgrPtr& sub_mgr, uint32_t flag)
+CamControlOP::CamControlOP(pt0::Camera& cam, const ee0::SubjectMgrPtr& sub_mgr, uint32_t flag)
 	: m_cam(cam)
 	, m_sub_mgr(sub_mgr)
 	, m_flag(flag)

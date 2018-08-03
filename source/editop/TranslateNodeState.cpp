@@ -16,7 +16,7 @@
 namespace ee2
 {
 
-TranslateNodeState::TranslateNodeState(pt2::Camera& cam, 
+TranslateNodeState::TranslateNodeState(pt0::Camera& cam, 
 	                                   const ee0::SubjectMgrPtr& sub_mgr,
 	                                   ECS_WORLD_PARAM
 		                               const ee0::SelectionSet<ee0::GameObjWithPos>& selection,

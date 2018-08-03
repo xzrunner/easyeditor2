@@ -7,7 +7,7 @@
 
 #include <SM_Vector.h>
 
-namespace pt2 { class Camera; }
+namespace pt0 { class Camera; }
 ECS_WORLD_DECL
 
 namespace ee2
@@ -16,7 +16,7 @@ namespace ee2
 class TranslateNodeState : public ee0::EditOpState
 {
 public:
-	TranslateNodeState(pt2::Camera& cam, const ee0::SubjectMgrPtr& sub_mgr, 
+	TranslateNodeState(pt0::Camera& cam, const ee0::SubjectMgrPtr& sub_mgr, 
 		ECS_WORLD_PARAM const ee0::SelectionSet<ee0::GameObjWithPos>& selection, 
 		const sm::vec2& first_pos);
 
@@ -30,7 +30,7 @@ private:
 	void Translate(const sm::vec2& offset);
 
 private:
-	pt2::Camera& m_cam;
+	pt0::Camera& m_cam;
 
 	ee0::SubjectMgrPtr m_sub_mgr;
 	ECS_WORLD_SELF_DEF

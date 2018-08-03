@@ -4,7 +4,7 @@
 #include <ee0/typedef.h>
 
 namespace ee0 { class EditOpState; }
-namespace pt2 { class Camera; }
+namespace pt0 { class Camera; }
 
 namespace ee2
 {
@@ -19,7 +19,7 @@ public:
 	static const uint32_t DEFAULT_FLAG     = MOUSE_MOVE_FOCUS | LEFT_TAP;
 
 public:
-	CamControlOP(pt2::Camera& cam, const ee0::SubjectMgrPtr& sub_mgr,
+	CamControlOP(pt0::Camera& cam, const ee0::SubjectMgrPtr& sub_mgr,
 		uint32_t flag = DEFAULT_FLAG);
 
 	virtual bool OnKeyDown(int key_code) override;
@@ -36,7 +36,7 @@ private:
 	void ChangeEditOpState(const ee0::EditOpStatePtr& state);
 
 protected:
-	pt2::Camera&       m_cam;
+	pt0::Camera&       m_cam;
 	ee0::SubjectMgrPtr m_sub_mgr;
 
 private:

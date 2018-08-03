@@ -9,7 +9,7 @@
 
 #include <vector>
 
-namespace pt2 { class Camera; }
+namespace pt0 { class Camera; }
 ECS_WORLD_DECL
 
 namespace ee2
@@ -20,13 +20,13 @@ class SpriteSelection;
 class MoveNodeState : public ee0::EditOpState
 {
 public:
-	MoveNodeState(pt2::Camera& cam, ECS_WORLD_PARAM
+	MoveNodeState(pt0::Camera& cam, ECS_WORLD_PARAM
 		ee0::SelectionSet<ee0::GameObjWithPos>& selection);
 
 	virtual bool OnMouseMove(int x, int y) override;
 
 private:
-	pt2::Camera& m_cam;
+	pt0::Camera& m_cam;
 	ECS_WORLD_SELF_DEF
 
 	std::vector<ee0::GameObj> m_objs;

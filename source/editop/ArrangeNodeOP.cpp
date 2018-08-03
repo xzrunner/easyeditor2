@@ -6,7 +6,6 @@
 #include <ee0/WxStagePage.h>
 
 #include <guard/check.h>
-#include <painting2/Camera.h>
 #include <painting2/OrthoCamera.h>
 
 namespace ee2
@@ -14,7 +13,7 @@ namespace ee2
 
 
 ArrangeNodeOP::ArrangeNodeOP(ee0::WxStagePage& stage, 
-	                         pt2::Camera& cam,
+	                         pt0::Camera& cam,
 	                         ECS_WORLD_PARAM
 	                         const ArrangeNodeCfg& cfg,
 	                         const std::shared_ptr<ee0::EditOP>& prev_op)
@@ -31,7 +30,7 @@ ArrangeNodeOP::ArrangeNodeOP(ee0::WxStagePage& stage,
 }
 
 ArrangeNodeOP::ArrangeNodeOP(ee0::WxStagePage& stage,
-	                         pt2::Camera& cam,
+	                         pt0::Camera& cam,
 	                         ECS_WORLD_PARAM
 	                         std::unique_ptr<ArrangeNodeImpl>& impl,
 	                         const std::shared_ptr<ee0::EditOP>& prev_op)
@@ -146,7 +145,7 @@ bool ArrangeNodeOP::OnDraw() const
 	}
 
 	float cam_scale = 1;
-	if (m_cam.Type() == pt2::CAM_ORTHO2D) {
+	if (m_cam.TypeID() == pt0::GetCamTypeID<pt2::OrthoCamera>()) {
 		cam_scale = static_cast<pt2::OrthoCamera&>(m_cam).GetScale();
 	}
 

@@ -14,7 +14,7 @@
 namespace ee2
 {
 
-MoveNodeState::MoveNodeState(pt2::Camera& cam, ECS_WORLD_PARAM
+MoveNodeState::MoveNodeState(pt0::Camera& cam, ECS_WORLD_PARAM
 	                         ee0::SelectionSet<ee0::GameObjWithPos>& selection)
 	: m_cam(cam)
 	ECS_WORLD_SELF_ASSIGN

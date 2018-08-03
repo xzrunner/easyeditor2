@@ -15,13 +15,12 @@
 #include <entity2/SysTransform.h>
 #endif // GAME_OBJ_ECS
 #include <SM_Calc.h>
-#include <painting2/Camera.h>
 #include <painting2/OrthoCamera.h>
 
 namespace ee2
 {
 
-OffsetNodeState::OffsetNodeState(pt2::Camera& cam, 
+OffsetNodeState::OffsetNodeState(pt0::Camera& cam, 
 	                             const ee0::SubjectMgrPtr& sub_mgr, 
 	                             ECS_WORLD_PARAM
 	                             const ee0::GameObj& obj)
@@ -41,7 +40,7 @@ OffsetNodeState::OffsetNodeState(pt2::Camera& cam,
 bool OffsetNodeState::OnMouseRelease(int x, int y)
 {
 	float s = 1;
-	if (m_cam.Type() == pt2::CAM_ORTHO2D) {
+	if (m_cam.TypeID() == pt0::GetCamTypeID<pt2::OrthoCamera>()) {
 		s = static_cast<pt2::OrthoCamera&>(m_cam).GetScale();
 	}
 

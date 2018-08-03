@@ -18,7 +18,7 @@
 namespace ee2
 {
 
-ScaleNodeState::ScaleNodeState(pt2::Camera& cam, 
+ScaleNodeState::ScaleNodeState(pt0::Camera& cam, 
 	                           const ee0::SubjectMgrPtr& sub_mgr, 
 	                           ECS_WORLD_PARAM
 	                           const ee0::GameObj& obj,
