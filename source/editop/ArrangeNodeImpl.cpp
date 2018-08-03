@@ -44,11 +44,11 @@ namespace ee2
 {
 
 ArrangeNodeImpl::ArrangeNodeImpl(ee0::WxStagePage& stage, 
-	                             pt0::Camera& cam, 
+	                             const std::shared_ptr<pt0::Camera>& camera, 
 		                         ECS_WORLD_PARAM 
 	                             const ArrangeNodeCfg& cfg)
 	: m_stage(stage)
-	, m_cam(cam)
+	, m_camera(camera)
 	, m_sub_mgr(stage.GetSubjectMgr())
 	ECS_WORLD_SELF_ASSIGN
 	, m_selection(stage.GetSelection())
@@ -93,7 +93,7 @@ bool ArrangeNodeImpl::OnKeyDown(int keycode)
 		break;
 	case 'm' : case 'M':
 		ret = true;
-		m_op_state = std::make_unique<MoveNodeState>(m_cam, ECS_WORLD_SELF_VAR m_selection);
+		m_op_state = std::make_unique<MoveNodeState>(m_camera, ECS_WORLD_SELF_VAR m_selection);
 		break;
 	case WXK_SPACE:
 		ret = true;
@@ -155,7 +155,7 @@ void ArrangeNodeImpl::OnChar(int keycode)
 
 void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 {
-	sm::vec2 pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
+	sm::vec2 pos = ee0::CameraHelper::TransPosScreenToProject(*m_camera, x, y);
 	m_left_down_pos = pos;
 
 	m_align.SetInvisible();
@@ -171,7 +171,7 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 	// copy & paste
 	if (wxGetKeyState(WXK_ALT)) {
 		m_op_state = std::make_unique<CopyPasteNodeState>(
-			m_cam, m_sub_mgr, ECS_WORLD_SELF_VAR m_selection);
+			m_camera, m_sub_mgr, ECS_WORLD_SELF_VAR m_selection);
 	}
 
 #ifndef GAME_OBJ_ECS
@@ -202,7 +202,7 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 	{
 		sm::vec2 offset = GetNodeOffset(selected);
 		if (sm::dis_pos_to_pos(offset, pos) < m_ctrl_node_radius) {
-			m_op_state = std::make_unique<OffsetNodeState>(m_cam, m_sub_mgr, ECS_WORLD_SELF_VAR selected);
+			m_op_state = std::make_unique<OffsetNodeState>(m_camera, m_sub_mgr, ECS_WORLD_SELF_VAR selected);
 			return;
 		}
 	}
@@ -219,7 +219,7 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 				NodeCtrlPoint::Node cn;
 				cn.pos = ctrl_nodes[i];
 				cn.type = NodeCtrlPoint::Type(i);
-				m_op_state = std::make_unique<ScaleNodeState>(m_cam, m_sub_mgr, ECS_WORLD_SELF_VAR selected, cn);
+				m_op_state = std::make_unique<ScaleNodeState>(m_camera, m_sub_mgr, ECS_WORLD_SELF_VAR selected, cn);
 				return;
 			}
 		}
@@ -242,7 +242,7 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 	//}
 
 	// translate
-	m_op_state = std::make_unique<TranslateNodeState>(m_cam, m_sub_mgr, ECS_WORLD_SELF_VAR m_selection, pos);
+	m_op_state = std::make_unique<TranslateNodeState>(m_camera, m_sub_mgr, ECS_WORLD_SELF_VAR m_selection, pos);
 
 	m_op_state->OnMousePress(x, y);
 }
@@ -255,9 +255,9 @@ void ArrangeNodeImpl::OnMouseLeftUp(int x, int y)
 		m_op_state = nullptr;
 	}
 
-	sm::vec2 pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
+	sm::vec2 pos = ee0::CameraHelper::TransPosScreenToProject(*m_camera, x, y);
 	if (!m_selection.IsEmpty()) {
-		m_op_state = std::make_unique<TranslateNodeState>(m_cam, m_sub_mgr, ECS_WORLD_SELF_VAR m_selection, pos);
+		m_op_state = std::make_unique<TranslateNodeState>(m_camera, m_sub_mgr, ECS_WORLD_SELF_VAR m_selection, pos);
 	}
 
 	if (m_cfg.is_auto_align_open &&
@@ -291,7 +291,7 @@ void ArrangeNodeImpl::OnMouseLeftUp(int x, int y)
 
 void ArrangeNodeImpl::OnMouseRightDown(int x, int y)
 {
-	sm::vec2 pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
+	sm::vec2 pos = ee0::CameraHelper::TransPosScreenToProject(*m_camera, x, y);
 	m_right_down_pos = pos;
 
 #ifndef GAME_OBJ_ECS
@@ -326,7 +326,7 @@ void ArrangeNodeImpl::OnMouseRightDown(int x, int y)
 				NodeCtrlPoint::Node cn;
 				cn.pos = ctrl_nodes[i];
 				cn.type = NodeCtrlPoint::Type(i);
-				m_op_state = std::make_unique<ShearNodeState>(m_cam, ECS_WORLD_SELF_VAR selected, cn);
+				m_op_state = std::make_unique<ShearNodeState>(m_camera, ECS_WORLD_SELF_VAR selected, cn);
 				return;
 			}
 		}
@@ -334,7 +334,7 @@ void ArrangeNodeImpl::OnMouseRightDown(int x, int y)
 
 	// rotate
 	if (m_cfg.is_rotate_open) {
-		m_op_state = std::make_unique<RotateNodeState>(m_cam, m_sub_mgr, ECS_WORLD_SELF_VAR m_selection, pos);
+		m_op_state = std::make_unique<RotateNodeState>(m_camera, m_sub_mgr, ECS_WORLD_SELF_VAR m_selection, pos);
 	}
 }
 
@@ -344,7 +344,7 @@ void ArrangeNodeImpl::OnMouseRightUp(int x, int y)
 		return;
 	}
 
-	sm::vec2 pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
+	sm::vec2 pos = ee0::CameraHelper::TransPosScreenToProject(*m_camera, x, y);
 	if (pos == m_right_down_pos)
 	{
 		wxMenu menu;

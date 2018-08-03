@@ -19,7 +19,8 @@ class CamControlOP;
 class NodeSelectOP : public ee0::NodeSelectOP
 {
 public:
-	NodeSelectOP(ECS_WORLD_PARAM ee0::WxStagePage& stage);
+	NodeSelectOP(const std::shared_ptr<pt0::Camera>& camera,
+		ECS_WORLD_PARAM ee0::WxStagePage& stage);
 	virtual ~NodeSelectOP() = default;
 
 	virtual bool OnKeyDown(int key_code) override;

@@ -20,11 +20,11 @@
 namespace ee2
 {
 
-OffsetNodeState::OffsetNodeState(pt0::Camera& cam, 
+OffsetNodeState::OffsetNodeState(const std::shared_ptr<pt0::Camera>& camera,
 	                             const ee0::SubjectMgrPtr& sub_mgr, 
 	                             ECS_WORLD_PARAM
 	                             const ee0::GameObj& obj)
-	: m_cam(cam)
+	: ee0::EditOpState(camera)
 	, m_sub_mgr(sub_mgr)
 	ECS_WORLD_SELF_ASSIGN
 	, m_obj(obj)
@@ -40,15 +40,15 @@ OffsetNodeState::OffsetNodeState(pt0::Camera& cam,
 bool OffsetNodeState::OnMouseRelease(int x, int y)
 {
 	float s = 1;
-	if (m_cam.TypeID() == pt0::GetCamTypeID<pt2::OrthoCamera>()) {
-		s = static_cast<pt2::OrthoCamera&>(m_cam).GetScale();
+	if (m_camera->TypeID() == pt0::GetCamTypeID<pt2::OrthoCamera>()) {
+		s = std::dynamic_pointer_cast<pt2::OrthoCamera>(m_camera)->GetScale();
 	}
 
 	float r = ArrangeNodeCfg::CTRL_NODE_RADIUS * s * 2;
 
 	sm::vec2 ctrl_nodes[8];
 	NodeCtrlPoint::GetNodeCtrlPoints(ECS_WORLD_SELF_VAR m_obj, ctrl_nodes);
-	sm::vec2 fixed = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
+	sm::vec2 fixed = ee0::CameraHelper::TransPosScreenToProject(*m_camera, x, y);
 #ifndef GAME_OBJ_ECS
 	auto& ctrans = m_obj->GetUniqueComp<n2::CompTransform>();
 	auto& pos = ctrans.GetTrans().GetPosition();
@@ -94,7 +94,7 @@ bool OffsetNodeState::OnMouseRelease(int x, int y)
 
 bool OffsetNodeState::OnMouseDrag(int x, int y)
 {
-	auto pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
+	auto pos = ee0::CameraHelper::TransPosScreenToProject(*m_camera, x, y);
 #ifndef GAME_OBJ_ECS
 	auto& ctrans = m_obj->GetUniqueComp<n2::CompTransform>();
 	sm::vec2 offset = sm::rotate_vector(

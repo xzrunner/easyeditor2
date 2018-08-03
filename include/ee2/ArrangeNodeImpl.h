@@ -18,13 +18,12 @@ namespace ee2
 class MultiSpritesImpl;
 class PropertySettingPanel;
 class ArrangeNodeState;
-class Camera;
 class SpriteSelection;
 
 class ArrangeNodeImpl
 {
 public:
-	ArrangeNodeImpl(ee0::WxStagePage& stage, pt0::Camera& cam, 
+	ArrangeNodeImpl(ee0::WxStagePage& stage, const std::shared_ptr<pt0::Camera>& camera,
 		ECS_WORLD_PARAM const ArrangeNodeCfg& cfg = ArrangeNodeCfg());
 	virtual ~ArrangeNodeImpl() = default;
 
@@ -43,6 +42,10 @@ public:
 
 	virtual void OnDraw(float cam_scale) const;
 	virtual void Clear();
+
+	void SetCamera(const std::shared_ptr<pt0::Camera>& camera) {
+		m_camera = camera;
+	}
 
 	// query edited spr, include its extra edit region
 	ee0::GameObj QueryEditedNode(const sm::vec2& pos) const;
@@ -67,7 +70,8 @@ private:
 
 private:
 	ee0::WxStagePage& m_stage;
-	pt0::Camera&      m_cam;
+
+	std::shared_ptr<pt0::Camera> m_camera;
 
 	ee0::SubjectMgrPtr m_sub_mgr;
 	ECS_WORLD_SELF_DEF

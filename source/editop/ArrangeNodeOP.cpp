@@ -12,29 +12,29 @@ namespace ee2
 {
 
 
-ArrangeNodeOP::ArrangeNodeOP(ee0::WxStagePage& stage, 
-	                         pt0::Camera& cam,
+ArrangeNodeOP::ArrangeNodeOP(const std::shared_ptr<pt0::Camera>& camera,
+	                         ee0::WxStagePage& stage, 
 	                         ECS_WORLD_PARAM
 	                         const ArrangeNodeCfg& cfg,
 	                         const std::shared_ptr<ee0::EditOP>& prev_op)
-	: m_cam(cam)
+	: ee0::EditOP(camera)
 	ECS_WORLD_SELF_ASSIGN
 {
-	m_impl = std::make_unique<ArrangeNodeImpl>(stage, cam, ECS_WORLD_VAR cfg);
+	m_impl = std::make_unique<ArrangeNodeImpl>(stage, camera, ECS_WORLD_VAR cfg);
 
 	if (prev_op) {
 		SetPrevEditOP(prev_op);
 	} else {
-		SetPrevEditOP(std::make_shared<NodeSelectOP>(ECS_WORLD_VAR stage));
+		SetPrevEditOP(std::make_shared<NodeSelectOP>(camera, ECS_WORLD_VAR stage));
 	}
 }
 
-ArrangeNodeOP::ArrangeNodeOP(ee0::WxStagePage& stage,
-	                         pt0::Camera& cam,
+ArrangeNodeOP::ArrangeNodeOP(const std::shared_ptr<pt0::Camera>& camera,
+	                         ee0::WxStagePage& stage,
 	                         ECS_WORLD_PARAM
 	                         std::unique_ptr<ArrangeNodeImpl>& impl,
 	                         const std::shared_ptr<ee0::EditOP>& prev_op)
-	: m_cam(cam)
+	: ee0::EditOP(camera)
 	ECS_WORLD_SELF_ASSIGN
 {
 	m_impl = std::move(impl);
@@ -42,7 +42,7 @@ ArrangeNodeOP::ArrangeNodeOP(ee0::WxStagePage& stage,
 	if (prev_op) {
 		SetPrevEditOP(prev_op);
 	} else {
-		SetPrevEditOP(std::make_shared<NodeSelectOP>(ECS_WORLD_VAR stage));
+		SetPrevEditOP(std::make_shared<NodeSelectOP>(camera, ECS_WORLD_VAR stage));
 	}
 }
 
@@ -145,8 +145,8 @@ bool ArrangeNodeOP::OnDraw() const
 	}
 
 	float cam_scale = 1;
-	if (m_cam.TypeID() == pt0::GetCamTypeID<pt2::OrthoCamera>()) {
-		cam_scale = static_cast<pt2::OrthoCamera&>(m_cam).GetScale();
+	if (m_camera->TypeID() == pt0::GetCamTypeID<pt2::OrthoCamera>()) {
+		cam_scale = std::dynamic_pointer_cast<pt2::OrthoCamera>(m_camera)->GetScale();
 	}
 
 	m_impl->OnDraw(cam_scale);
@@ -161,6 +161,13 @@ bool ArrangeNodeOP::Clear()
 	}
 	m_impl->Clear();
 	return false;
+}
+
+void ArrangeNodeOP::SetCamera(const std::shared_ptr<pt0::Camera>& camera)
+{
+	ee0::EditOP::SetCamera(camera);
+
+	m_impl->SetCamera(camera);
 }
 
 //bool ArrangeNodeOP::IsEmpty() const

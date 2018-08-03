@@ -12,14 +12,15 @@
 namespace ee2
 {
 
-CamControlOP::CamControlOP(pt0::Camera& cam, const ee0::SubjectMgrPtr& sub_mgr, uint32_t flag)
-	: m_cam(cam)
+CamControlOP::CamControlOP(const std::shared_ptr<pt0::Camera>& camera, 
+	                       const ee0::SubjectMgrPtr& sub_mgr, uint32_t flag)
+	: ee0::EditOP(camera)
 	, m_sub_mgr(sub_mgr)
 	, m_flag(flag)
 {
-	m_zoom_state      = std::make_shared<CamZoomState>(cam, sub_mgr);
-	m_left_pan_state  = std::make_shared<CamTranslateState>(cam, sub_mgr);
-	m_right_pan_state = std::make_shared<CamTranslateState>(cam, sub_mgr);
+	m_zoom_state      = std::make_shared<CamZoomState>(camera, sub_mgr);
+	m_left_pan_state  = std::make_shared<CamTranslateState>(camera, sub_mgr);
+	m_right_pan_state = std::make_shared<CamTranslateState>(camera, sub_mgr);
 	m_op_state = m_zoom_state;
 }
 
@@ -33,7 +34,7 @@ bool CamControlOP::OnKeyDown(int key_code)
 		}
 		break;
 	case WXK_ESCAPE:
-		m_cam.Reset();
+		m_camera->Reset();
 		m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 		break;
 	}
@@ -92,21 +93,6 @@ bool CamControlOP::OnMouseMove(int x, int y)
 bool CamControlOP::OnMouseWheelRotation(int x, int y, int direction)
 {
 	return m_op_state->OnMouseWheelRotation(x, y, direction);
-}
-
-void CamControlOP::ChangeEditOpState(const ee0::EditOpStatePtr& state)
-{
-	if (m_op_state == state) {
-		return;
-	}
-	
-	if (m_op_state) {
-		m_op_state->UnBind();
-	}
-	m_op_state = state;
-	if (m_op_state) {
-		m_op_state->Bind();
-	}
 }
 
 }

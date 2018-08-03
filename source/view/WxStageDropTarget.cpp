@@ -50,9 +50,9 @@ void WxStageDropTarget::OnDropText(wxCoord x, wxCoord y, const wxString& text)
 		return;
 	}
 
-	auto& cam = std::dynamic_pointer_cast<WxStageCanvas>(m_stage->GetImpl().GetCanvas())->GetCamera();
-	GD_ASSERT(cam, "null cam");
-	sm::vec2 pos = ee0::CameraHelper::TransPosScreenToProject(*cam, x, y);
+	auto& camera = std::dynamic_pointer_cast<WxStageCanvas>(m_stage->GetImpl().GetCanvas())->GetCamera();
+	GD_ASSERT(camera, "null cam");
+	sm::vec2 pos = ee0::CameraHelper::TransPosScreenToProject(*camera, x, y);
 
 	for (int i = 1, n = keys.size(); i < n; ++i)
 	{

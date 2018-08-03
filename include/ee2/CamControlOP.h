@@ -19,8 +19,8 @@ public:
 	static const uint32_t DEFAULT_FLAG     = MOUSE_MOVE_FOCUS | LEFT_TAP;
 
 public:
-	CamControlOP(pt0::Camera& cam, const ee0::SubjectMgrPtr& sub_mgr,
-		uint32_t flag = DEFAULT_FLAG);
+	CamControlOP(const std::shared_ptr<pt0::Camera>& camera, 
+		const ee0::SubjectMgrPtr& sub_mgr, uint32_t flag = DEFAULT_FLAG);
 
 	virtual bool OnKeyDown(int key_code) override;
 	virtual bool OnKeyUp(int key_code) override;
@@ -32,17 +32,11 @@ public:
 	virtual bool OnMouseMove(int x, int y) override;
 	virtual bool OnMouseWheelRotation(int x, int y, int direction) override;
 
-private:
-	void ChangeEditOpState(const ee0::EditOpStatePtr& state);
-
 protected:
-	pt0::Camera&       m_cam;
 	ee0::SubjectMgrPtr m_sub_mgr;
 
 private:
 	uint32_t m_flag;
-
-	ee0::EditOpStatePtr m_op_state = nullptr;
 
 	ee0::EditOpStatePtr m_zoom_state = nullptr;
 	ee0::EditOpStatePtr m_left_pan_state = nullptr;

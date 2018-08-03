@@ -6,7 +6,6 @@
 
 #include "ee2/NodeCtrlPoint.h"
 
-namespace pt0 { class Camera; }
 ECS_WORLD_DECL
 
 namespace ee2
@@ -15,7 +14,8 @@ namespace ee2
 class ScaleNodeState : public ee0::EditOpState
 {
 public:
-	ScaleNodeState(pt0::Camera& cam, const ee0::SubjectMgrPtr& sub_mgr, ECS_WORLD_PARAM
+	ScaleNodeState(const std::shared_ptr<pt0::Camera>& camera, 
+		const ee0::SubjectMgrPtr& sub_mgr, ECS_WORLD_PARAM
 		const ee0::GameObj& obj, const NodeCtrlPoint::Node& ctrl_point);
 
 	virtual bool OnMouseRelease(int x, int y) override;
@@ -27,8 +27,6 @@ private:
 	void SetScaleTimes(const sm::vec2& st);
 
 private:
-	pt0::Camera& m_cam;
-
 	ee0::SubjectMgrPtr m_sub_mgr;
 	ECS_WORLD_SELF_DEF
 

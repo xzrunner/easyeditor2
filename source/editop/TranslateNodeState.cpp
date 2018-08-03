@@ -16,12 +16,12 @@
 namespace ee2
 {
 
-TranslateNodeState::TranslateNodeState(pt0::Camera& cam, 
+TranslateNodeState::TranslateNodeState(const std::shared_ptr<pt0::Camera>& camera,
 	                                   const ee0::SubjectMgrPtr& sub_mgr,
 	                                   ECS_WORLD_PARAM
 		                               const ee0::SelectionSet<ee0::GameObjWithPos>& selection,
 		                               const sm::vec2& first_pos)
-	: m_cam(cam)
+	: ee0::EditOpState(camera)
 	, m_sub_mgr(sub_mgr)
 	ECS_WORLD_SELF_ASSIGN
 	, m_selection(selection)
@@ -32,7 +32,7 @@ TranslateNodeState::TranslateNodeState(pt0::Camera& cam,
 
 bool TranslateNodeState::OnMousePress(int x, int y)
 {
-	auto pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
+	auto pos = ee0::CameraHelper::TransPosScreenToProject(*m_camera, x, y);
 	m_first_pos = m_last_pos = pos;
 	return false;
 }
@@ -46,7 +46,7 @@ bool TranslateNodeState::OnMouseRelease(int x, int y)
 
 	m_dirty = false;
 
-	auto pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
+	auto pos = ee0::CameraHelper::TransPosScreenToProject(*m_camera, x, y);
 	if (pos == m_first_pos) {
 		return false;
 	}
@@ -69,7 +69,7 @@ bool TranslateNodeState::OnMouseDrag(int x, int y)
 
 	m_dirty = true;
 
-	auto pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
+	auto pos = ee0::CameraHelper::TransPosScreenToProject(*m_camera, x, y);
 	auto offset = pos - m_last_pos;
 	Translate(offset);
 

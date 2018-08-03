@@ -7,7 +7,6 @@
 #include <memory>
 
 namespace ee0 { class WxStagePage; }
-namespace pt0 { class Camera; }
 ECS_WORLD_DECL
 
 namespace ee2
@@ -22,9 +21,6 @@ public:
 
 	virtual void OnNotify(uint32_t msg, const ee0::VariantSet& variants) override;
 
-	std::shared_ptr<pt0::Camera>& GetCamera() { return m_cam; }
-	const std::shared_ptr<pt0::Camera>& GetCamera() const { return m_cam; }
-
 protected:
 	virtual void OnSize(int w, int h) override;
 	virtual void OnDrawSprites() const override;
@@ -36,9 +32,6 @@ protected:
 	ee0::WxStagePage* m_stage;
 
 	ECS_WORLD_SELF_DEF
-
-private:
-	std::shared_ptr<pt0::Camera> m_cam = nullptr;
 
 }; // WxStageCanvas
 

@@ -9,7 +9,6 @@
 
 #include <vector>
 
-namespace pt0 { class Camera; }
 ECS_WORLD_DECL
 
 namespace ee2
@@ -18,14 +17,14 @@ namespace ee2
 class CopyPasteNodeState : public ee0::EditOpState
 {
 public:
-	CopyPasteNodeState(pt0::Camera& cam, const ee0::SubjectMgrPtr& sub_mgr,
-		ECS_WORLD_PARAM ee0::SelectionSet<ee0::GameObjWithPos>& selection);
+	CopyPasteNodeState(const std::shared_ptr<pt0::Camera>& camera, 
+		const ee0::SubjectMgrPtr& sub_mgr, ECS_WORLD_PARAM 
+		ee0::SelectionSet<ee0::GameObjWithPos>& selection);
 
 	virtual bool OnMousePress(int x, int y) override;
 	virtual bool OnMouseDrag(int x, int y) override;
 
 private:
-	pt0::Camera&       m_cam;
 	ee0::SubjectMgrPtr m_sub_mgr;
 	ECS_WORLD_SELF_DEF
 

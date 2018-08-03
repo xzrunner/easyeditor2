@@ -17,12 +17,12 @@
 namespace ee2
 {
 
-RotateNodeState::RotateNodeState(pt0::Camera& cam, 
+RotateNodeState::RotateNodeState(const std::shared_ptr<pt0::Camera>& camera,
 	                             const ee0::SubjectMgrPtr& sub_mgr,
 	                             ECS_WORLD_PARAM
 	                             ee0::SelectionSet<ee0::GameObjWithPos>& selection,
 	                             const sm::vec2& first_pos)
-	: m_cam(cam)
+	: ee0::EditOpState(camera)
 	, m_sub_mgr(sub_mgr)
 	ECS_WORLD_SELF_ASSIGN
 	, m_selection(selection)
@@ -33,7 +33,7 @@ RotateNodeState::RotateNodeState(pt0::Camera& cam,
 
 bool RotateNodeState::OnMouseRelease(int x, int y)
 {
-	auto pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
+	auto pos = ee0::CameraHelper::TransPosScreenToProject(*m_camera, x, y);
 
 	if (pos == m_first_pos || m_selection.IsEmpty()) {
 		return false;
@@ -70,7 +70,7 @@ bool RotateNodeState::OnMouseDrag(int x, int y)
 		return false;
 	}
 
-	auto pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
+	auto pos = ee0::CameraHelper::TransPosScreenToProject(*m_camera, x, y);
 	m_selection.Traverse([&](const ee0::GameObjWithPos& opw)->bool
 	{
 #ifndef GAME_OBJ_ECS

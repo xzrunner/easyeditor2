@@ -16,11 +16,11 @@
 namespace ee2
 {
 
-ShearNodeState::ShearNodeState(pt0::Camera& cam, 
+ShearNodeState::ShearNodeState(const std::shared_ptr<pt0::Camera>& camera,
 	                           ECS_WORLD_PARAM
 	                           const ee0::GameObj& obj,
 	                           const NodeCtrlPoint::Node& ctrl_point)
-	: m_cam(cam)
+	: ee0::EditOpState(camera)
 	ECS_WORLD_SELF_ASSIGN
 	, m_obj(obj)
 	, m_ctrl_point(ctrl_point)
@@ -40,7 +40,7 @@ bool ShearNodeState::OnMouseRelease(int x, int y)
 
 bool ShearNodeState::OnMouseDrag(int x, int y)
 {
-	auto pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
+	auto pos = ee0::CameraHelper::TransPosScreenToProject(*m_camera, x, y);
 	Shear2(pos);
 	return true;
 }

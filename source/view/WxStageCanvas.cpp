@@ -33,12 +33,10 @@ namespace ee2
 
 WxStageCanvas::WxStageCanvas(ee0::WxStagePage* stage, ECS_WORLD_PARAM
                              const ee0::RenderContext* rc, const ee0::WindowContext* wc)
-	: ee0::WxStageCanvas(stage, stage->GetImpl(), rc, wc, HAS_2D)
+	: ee0::WxStageCanvas(stage, stage->GetImpl(), std::make_shared<pt2::OrthoCamera>(), rc, wc, HAS_2D)
 	, m_stage(stage)
 	ECS_WORLD_SELF_ASSIGN
 {
-	m_cam = std::make_shared<pt2::OrthoCamera>();
-
 	for (auto& msg : MESSAGES) {
 		stage->GetSubjectMgr()->RegisterObserver(msg, this);
 	}

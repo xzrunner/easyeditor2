@@ -12,16 +12,14 @@ ECS_WORLD_DECL
 namespace ee2
 {
 
-class ArrangeNodeImpl;
-
 class ArrangeNodeOP : public ee0::EditOP
 {
 public:
-	ArrangeNodeOP(ee0::WxStagePage& stage, pt0::Camera& cam,
-		ECS_WORLD_PARAM const ArrangeNodeCfg& cfg = ArrangeNodeCfg(),
+	ArrangeNodeOP(const std::shared_ptr<pt0::Camera>& camera,
+		ee0::WxStagePage& stage, ECS_WORLD_PARAM const ArrangeNodeCfg& cfg = ArrangeNodeCfg(),
 		const std::shared_ptr<ee0::EditOP>& prev_op = nullptr);
-	ArrangeNodeOP(ee0::WxStagePage& stage, pt0::Camera& cam,
-		ECS_WORLD_PARAM std::unique_ptr<ArrangeNodeImpl>& impl,
+	ArrangeNodeOP(const std::shared_ptr<pt0::Camera>& camera,
+		ee0::WxStagePage& stage, ECS_WORLD_PARAM std::unique_ptr<ArrangeNodeImpl>& impl,
 		const std::shared_ptr<ee0::EditOP>& prev_op = nullptr
 	);
 
@@ -41,13 +39,14 @@ public:
 	virtual bool OnDraw() const override;
 	virtual bool Clear() override;
 
+	virtual void SetCamera(const std::shared_ptr<pt0::Camera>& camera) override;
+
 //	virtual bool IsEmpty() const override;
 
 private:
 	ee0::GameObj SelectByPos(const sm::vec2& pos) const;
 
 private:
-	pt0::Camera& m_cam;
 	ECS_WORLD_SELF_DEF
 
 	std::unique_ptr<ArrangeNodeImpl> m_impl = nullptr;

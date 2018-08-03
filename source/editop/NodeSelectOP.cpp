@@ -26,17 +26,16 @@
 namespace ee2
 {
 
-NodeSelectOP::NodeSelectOP(ECS_WORLD_PARAM ee0::WxStagePage& stage)
-	: ee0::NodeSelectOP(stage)
+NodeSelectOP::NodeSelectOP(const std::shared_ptr<pt0::Camera>& camera,
+	                       ECS_WORLD_PARAM 
+	                       ee0::WxStagePage& stage)
+	: ee0::NodeSelectOP(camera, stage)
 	ECS_WORLD_SELF_ASSIGN
 	, m_draw_state_disable(false)
 {
-	auto cam = std::dynamic_pointer_cast<WxStageCanvas>(m_stage.GetImpl().GetCanvas())->GetCamera();
-	GD_ASSERT(cam, "null cam");
+	SetPrevEditOP(std::make_shared<CamControlOP>(camera, stage.GetSubjectMgr()));
 
-	SetPrevEditOP(std::make_shared<CamControlOP>(*cam, stage.GetSubjectMgr()));
-
-	m_draw_state = std::make_unique<DrawSelectRectState>(*cam, stage.GetSubjectMgr());
+	m_draw_state = std::make_unique<DrawSelectRectState>(camera, stage.GetSubjectMgr());
 }
 
 bool NodeSelectOP::OnKeyDown(int key_code)
@@ -144,9 +143,7 @@ bool NodeSelectOP::OnDraw() const
 
 ee0::GameObj NodeSelectOP::QueryByPos(int screen_x, int screen_y) const
 {
-	auto cam = std::dynamic_pointer_cast<WxStageCanvas>(m_stage.GetImpl().GetCanvas())->GetCamera();
-	GD_ASSERT(cam, "null cam");
-	auto pos = ee0::CameraHelper::TransPosScreenToProject(*cam, screen_x, screen_y);
+	auto pos = ee0::CameraHelper::TransPosScreenToProject(*m_camera, screen_x, screen_y);
 
 	ee0::VariantSet vars;
 	ee0::Variant var;
@@ -180,10 +177,8 @@ ee0::GameObj NodeSelectOP::QueryByPos(int screen_x, int screen_y) const
 void NodeSelectOP::QueryByRect(const sm::ivec2& p0, const sm::ivec2& p1, bool contain, 
 	                           std::vector<ee0::GameObj>& result) const
 {
-	auto cam = std::dynamic_pointer_cast<WxStageCanvas>(m_stage.GetImpl().GetCanvas())->GetCamera();
-	GD_ASSERT(cam, "null cam");
-	auto pos0 = ee0::CameraHelper::TransPosScreenToProject(*cam, p0.x, p0.y);
-	auto pos1 = ee0::CameraHelper::TransPosScreenToProject(*cam, p1.x, p1.y);
+	auto pos0 = ee0::CameraHelper::TransPosScreenToProject(*m_camera, p0.x, p0.y);
+	auto pos1 = ee0::CameraHelper::TransPosScreenToProject(*m_camera, p1.x, p1.y);
 	sm::rect rect(pos0, pos1);
 
 	ee0::VariantSet vars;

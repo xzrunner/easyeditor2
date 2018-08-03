@@ -13,11 +13,11 @@
 namespace ee2
 {
 
-CopyPasteNodeState::CopyPasteNodeState(pt0::Camera& cam, 
+CopyPasteNodeState::CopyPasteNodeState(const std::shared_ptr<pt0::Camera>& camera,
 	                                   const ee0::SubjectMgrPtr& sub_mgr,
 	                                   ECS_WORLD_PARAM
 	                                   ee0::SelectionSet<ee0::GameObjWithPos>& selection)
-	: m_cam(cam)
+	: ee0::EditOpState(camera)
 	, m_sub_mgr(sub_mgr)
 	ECS_WORLD_SELF_ASSIGN
 {
@@ -47,14 +47,14 @@ CopyPasteNodeState::CopyPasteNodeState(pt0::Camera& cam,
 
 bool CopyPasteNodeState::OnMousePress(int x, int y)
 {
-	m_last_pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
+	m_last_pos = ee0::CameraHelper::TransPosScreenToProject(*m_camera, x, y);
 
 	return false;
 }
 
 bool CopyPasteNodeState::OnMouseDrag(int x, int y)
 {
-	auto pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
+	auto pos = ee0::CameraHelper::TransPosScreenToProject(*m_camera, x, y);
 	sm::vec2 offset = pos - m_last_pos;
 #ifndef GAME_OBJ_ECS
 	for (auto& obj : m_objs)

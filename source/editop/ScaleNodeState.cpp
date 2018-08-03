@@ -18,12 +18,12 @@
 namespace ee2
 {
 
-ScaleNodeState::ScaleNodeState(pt0::Camera& cam, 
+ScaleNodeState::ScaleNodeState(const std::shared_ptr<pt0::Camera>& camera,
 	                           const ee0::SubjectMgrPtr& sub_mgr, 
 	                           ECS_WORLD_PARAM
 	                           const ee0::GameObj& obj,
 	                           const NodeCtrlPoint::Node& ctrl_point)
-	: m_cam(cam)
+	: ee0::EditOpState(camera)
 	, m_sub_mgr(sub_mgr)
 	ECS_WORLD_SELF_ASSIGN
 	, m_obj(obj)
@@ -75,7 +75,7 @@ bool ScaleNodeState::OnMouseRelease(int x, int y)
 
 bool ScaleNodeState::OnMouseDrag(int x, int y)
 {
-	auto pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
+	auto pos = ee0::CameraHelper::TransPosScreenToProject(*m_camera, x, y);
 	Scale(pos);
 	return true;
 }

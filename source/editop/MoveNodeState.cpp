@@ -14,9 +14,9 @@
 namespace ee2
 {
 
-MoveNodeState::MoveNodeState(pt0::Camera& cam, ECS_WORLD_PARAM
+MoveNodeState::MoveNodeState(const std::shared_ptr<pt0::Camera>& camera, ECS_WORLD_PARAM
 	                         ee0::SelectionSet<ee0::GameObjWithPos>& selection)
-	: m_cam(cam)
+	: ee0::EditOpState(camera)
 	ECS_WORLD_SELF_ASSIGN
 {
 	m_center.Set(0, 0);
@@ -42,7 +42,7 @@ bool MoveNodeState::OnMouseMove(int x, int y)
 		return false;
 	}
 
-	auto pos = ee0::CameraHelper::TransPosScreenToProject(m_cam, x, y);
+	auto pos = ee0::CameraHelper::TransPosScreenToProject(*m_camera, x, y);
 	auto offset = pos - m_center;
 #ifndef GAME_OBJ_ECS
 	for (auto& obj : m_objs) 
