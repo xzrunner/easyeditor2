@@ -107,7 +107,7 @@ void WxStageCanvas::DrawForeground() const
 			rp.SetPatch(patch);
 		}
 
-		n2::RenderSystem::Draw(obj, rp);
+		n2::RenderSystem::Instance()->Draw(obj, rp);
 #else
 		e2::RenderParams rp;
 		e2::SysRender::Draw(m_world, obj, rp);
