@@ -368,20 +368,24 @@ void WxCompTextPanel::SpinEventHandler(wxSpinEvent& event)
 
 void WxCompTextPanel::RefreshColorBtn(const pt2::Textbox& tb)
 {
-	if (tb.font_color.items.size() == 1) {
-		m_font_color->SetLabelText("");
-		m_font_color->SetBackgroundColour(ToWxColor(tb.font_color.items[0].col));
-	} else {
-		m_font_color->SetLabelText("gradient");
-		m_font_color->SetBackgroundColour(*wxWHITE);
-	}
-	if (tb.edge_color.items.size() == 1) {
-		m_edge_color->SetLabelText("");
-		m_edge_color->SetBackgroundColour(ToWxColor(tb.edge_color.items[0].col));
-	} else {
-		m_edge_color->SetLabelText("gradient");
-		m_edge_color->SetBackgroundColour(*wxWHITE);
-	}
+	//// FIXME
+	//// use SetBackgroundColour here will make stage window lose response
+	//// than have to resize the top frame
+	//// 
+	//if (tb.font_color.items.size() == 1) {
+	//	m_font_color->SetLabelText("");
+	//	m_font_color->SetBackgroundColour(ToWxColor(tb.font_color.items[0].col));
+	//} else {
+	//	m_font_color->SetLabelText("gradient");
+	//	m_font_color->SetBackgroundColour(*wxWHITE);
+	//}
+	//if (tb.edge_color.items.size() == 1) {
+	//	m_edge_color->SetLabelText("");
+	//	m_edge_color->SetBackgroundColour(ToWxColor(tb.edge_color.items[0].col));
+	//} else {
+	//	m_edge_color->SetLabelText("gradient");
+	//	m_edge_color->SetBackgroundColour(*wxWHITE);
+	//}
 }
 
 void WxCompTextPanel::UpdateBoundingBox(const pt2::Textbox& tb)
