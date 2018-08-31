@@ -5,7 +5,7 @@
 #include <node0/SceneNode.h>
 #include <node0/CompIdentity.h>
 #include <node2/CompTransform.h>
-#include <sx/StringHelper.h>
+#include <cpputil/StringHelper.h>
 
 namespace ee2
 {
@@ -54,13 +54,13 @@ std::string InsertNodeAO::ToScript() const
 	{
 		auto& cid = obj->GetUniqueComp<n0::CompIdentity>();
 		auto& filepath = cid.GetFilepath();
-		str += sx::StringHelper::Format(
+		str += cpputil::StringHelper::Format(
 			"moon.scene.new_node(\"%s\")\n", filepath.c_str()
 		);
 
 		auto& ctrans = obj->GetUniqueComp<n2::CompTransform>();
 		auto& pos = ctrans.GetTrans().GetPosition();
-		str += sx::StringHelper::Format(
+		str += cpputil::StringHelper::Format(
 			"moon.scene.get_node(%d):set_pos(%f, %f)\n", cid.GetID(), pos.x, pos.y
 		);
 	}

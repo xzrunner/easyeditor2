@@ -26,7 +26,7 @@
 #include <entity2/SysTransform.h>
 #endif // GAME_OBJ_ECS
 #include <painting2/OrthoCamera.h>
-#include <sx/StringHelper.h>
+#include <cpputil/StringHelper.h>
 
 namespace ee2
 {
@@ -44,7 +44,7 @@ WxStageDropTarget::WxStageDropTarget(ECS_WORLD_PARAM
 void WxStageDropTarget::OnDropText(wxCoord x, wxCoord y, const wxString& text)
 {
 	std::vector<std::string> keys;
-	sx::StringHelper::Split(text.ToStdString().c_str(), ",", keys);
+	cpputil::StringHelper::Split(text.ToStdString().c_str(), ",", keys);
 
 	if (keys.size() <= 1) {
 		return;

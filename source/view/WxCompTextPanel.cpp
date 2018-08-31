@@ -14,7 +14,7 @@
 #include <entity2/CompText.h>
 #include <entity2/CompBoundingBox.h>
 #endif // GAME_OBJ_ECS
-#include <sx/StringHelper.h>
+#include <cpputil/StringHelper.h>
 
 #include <wx/sizer.h>
 #include <wx/stattext.h>
@@ -28,9 +28,9 @@
 namespace
 {
 
-const wxString HORI_ALIGN_LABELS[] = { 
+const wxString HORI_ALIGN_LABELS[] = {
 	wxT("左"), wxT("右"), wxT("中"), wxT("自动") };
-const wxString VERT_ALIGN_LABELS[] = { 
+const wxString VERT_ALIGN_LABELS[] = {
 	wxT("上"), wxT("下"), wxT("中"), wxT("自动") };
 
 const wxString OVER_LABEL_LABELS[] = {
@@ -41,9 +41,9 @@ const wxString OVER_LABEL_LABELS[] = {
 namespace ee2
 {
 
-WxCompTextPanel::WxCompTextPanel(wxWindow* parent, 
+WxCompTextPanel::WxCompTextPanel(wxWindow* parent,
 	                             ECS_WORLD_PARAM
-	                             const ee0::GameObj& obj, 
+	                             const ee0::GameObj& obj,
 	                             const ee0::SubjectMgrPtr& sub_mgr)
 	: ee0::WxCompPanel(parent, "Text")
 	ECS_WORLD_SELF_ASSIGN
@@ -155,7 +155,7 @@ void WxCompTextPanel::InitLayout()
 			wxArrayString choices;
 			auto& fonts = ee0::ConfigFile::Instance()->GetFonts();
 			for (auto& font : fonts) {
-				auto name = sx::StringHelper::UTF8ToGBK(font.first.c_str());
+				auto name = cpputil::StringHelper::UTF8ToGBK(font.first.c_str());
 				choices.push_back(font.first);
 			}
 			sizer->Add(new wxStaticText(win, wxID_ANY, wxT("  Type ")));
@@ -309,7 +309,7 @@ void WxCompTextPanel::CommandEventHandler(wxCommandEvent& event)
 		tb.font_size = m_font_size->GetValue();
 	} else if (id == m_font_color->GetId()) {
 		ee0::WxColorGradientDlg dlg(this, tb.font_color);
-		if (dlg.ShowModal() == wxID_OK) 
+		if (dlg.ShowModal() == wxID_OK)
 		{
 			tb.font_color = dlg.GetColor();
 			RefreshColorBtn(tb);
@@ -320,7 +320,7 @@ void WxCompTextPanel::CommandEventHandler(wxCommandEvent& event)
 		tb.edge_size = std::stof(m_edge_size->GetValue().ToStdString());
 	}  else if (id == m_edge_color->GetId()) {
 		ee0::WxColorGradientDlg dlg(this, tb.edge_color);
-		if (dlg.ShowModal() == wxID_OK) 
+		if (dlg.ShowModal() == wxID_OK)
 		{
 			tb.edge_color = dlg.GetColor();
 			RefreshColorBtn(tb);
@@ -371,7 +371,7 @@ void WxCompTextPanel::RefreshColorBtn(const pt2::Textbox& tb)
 	//// FIXME
 	//// use SetBackgroundColour here will make stage window lose response
 	//// than have to resize the top frame
-	//// 
+	////
 	//if (tb.font_color.items.size() == 1) {
 	//	m_font_color->SetLabelText("");
 	//	m_font_color->SetBackgroundColour(ToWxColor(tb.font_color.items[0].col));
