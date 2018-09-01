@@ -11,7 +11,6 @@
 #endif // GAME_OBJ_ECS
 #include <facade/ResPool.h>
 #include <facade/Image.h>
-#include <facade/Texture.h>
 
 #include <wx/sizer.h>
 #include <wx/textctrl.h>
