@@ -53,7 +53,7 @@ void NodeGroupHelper::BuildGroup(ECS_WORLD_PARAM ee0::SubjectMgr& sub_mgr,
 
 	// aabb
 #ifndef GAME_OBJ_ECS
-	auto aabb = n2::AABBSystem::GetBounding(ccomplex);
+	auto aabb = n2::AABBSystem::Instance()->GetBounding(*obj);
 	auto center = aabb.Center();
 	auto& children = ccomplex.GetAllChildren();
 	for (auto& child : children)
