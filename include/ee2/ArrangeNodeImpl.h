@@ -59,10 +59,10 @@ protected:
 	virtual void SetRightPopupMenu(wxMenu& menu, int x, int y);
 
 private:
-	void OnDeleteKeyDown();
+	bool OnDeleteKeyDown();
 
-	void UpOneLayer();
-	void DownOneLayer();
+	bool UpOneLayer();
+	bool DownOneLayer();
 
 	sm::vec2 GetNodeOffset(const ee0::GameObj& obj) const;
 

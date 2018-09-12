@@ -43,9 +43,9 @@
 namespace ee2
 {
 
-ArrangeNodeImpl::ArrangeNodeImpl(ee0::WxStagePage& stage, 
-	                             const std::shared_ptr<pt0::Camera>& camera, 
-		                         ECS_WORLD_PARAM 
+ArrangeNodeImpl::ArrangeNodeImpl(ee0::WxStagePage& stage,
+	                             const std::shared_ptr<pt0::Camera>& camera,
+		                         ECS_WORLD_PARAM
 	                             const ArrangeNodeCfg& cfg)
 	: m_stage(stage)
 	, m_camera(camera)
@@ -72,24 +72,19 @@ bool ArrangeNodeImpl::OnKeyDown(int keycode)
 	switch (keycode)
 	{
 	case WXK_DELETE:
-		ret = true;
-		OnDeleteKeyDown();
+		ret = OnDeleteKeyDown();
 		break;
 	case WXK_PAGEUP:
-		ret = true;
-		UpOneLayer();
+		ret = UpOneLayer();
 		break;
 	case WXK_PAGEDOWN:
-		ret = true;
-		DownOneLayer();
+		ret = DownOneLayer();
 		break;
 	case '[':
-		ret = true;
-		DownOneLayer();
+		ret = DownOneLayer();
 		break;
 	case ']':
-		ret = true;
-		UpOneLayer();
+		ret = UpOneLayer();
 		break;
 	case 'm' : case 'M':
 		ret = true;
@@ -160,7 +155,7 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 
 	m_align.SetInvisible();
 
-	if (m_selection.IsEmpty()) 
+	if (m_selection.IsEmpty())
 	{
 		if (m_op_state) {
 			m_op_state->OnMousePress(x, y);
@@ -249,7 +244,7 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 
 void ArrangeNodeImpl::OnMouseLeftUp(int x, int y)
 {
-	if (m_op_state) 
+	if (m_op_state)
 	{
 		m_op_state->OnMouseRelease(x, y);
 		m_op_state = nullptr;
@@ -435,15 +430,15 @@ void ArrangeNodeImpl::OnDraw(float cam_scale) const
 		float w = sz.Width() * fabs(sx);
 		float h = sz.Height() * fabs(sy);
 		float max_e = std::max(w, h);
-		if (max_e / cam_scale < 100) 
+		if (max_e / cam_scale < 100)
 		{
 			m_ctrl_node_radius = 0;
-		} 
-		else if (m_ctrl_node_radius > max_e * 0.1f) 
+		}
+		else if (m_ctrl_node_radius > max_e * 0.1f)
 		{
 			m_ctrl_node_radius = 0;
-		} 
-		else 
+		}
+		else
 		{
 			if (m_cfg.is_deform_open)
 			{
@@ -625,10 +620,10 @@ void ArrangeNodeImpl::SetRightPopupMenu(wxMenu& menu, int x, int y)
 	m_stage.GetImpl().GetPopupMenu().SetRightPopupMenu(menu, x, y);
 }
 
-void ArrangeNodeImpl::OnDeleteKeyDown()
+bool ArrangeNodeImpl::OnDeleteKeyDown()
 {
 	if (m_selection.IsEmpty()) {
-		return;
+		return false;
 	}
 
 	std::vector<ee0::GameObj> objs;
@@ -651,22 +646,36 @@ void ArrangeNodeImpl::OnDeleteKeyDown()
 	ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
 
 	m_sub_mgr->NotifyObservers(ee0::MSG_NODE_SELECTION_CLEAR);
+
+	return true;
 }
 
-void ArrangeNodeImpl::UpOneLayer()
+bool ArrangeNodeImpl::UpOneLayer()
 {
+	if (m_selection.IsEmpty()) {
+		return false;
+	}
+
 	auto ao = std::make_shared<UpLayerNodeAO>(m_sub_mgr, m_selection);
 	ao->Redo();
 	ee0::MsgHelper::AddAtomicOP(*m_sub_mgr, ao);
 	ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
+
+	return true;
 }
 
-void ArrangeNodeImpl::DownOneLayer()
+bool ArrangeNodeImpl::DownOneLayer()
 {
+	if (m_selection.IsEmpty()) {
+		return false;
+	}
+
 	auto ao = std::make_shared<DownLayerNodeAO>(m_sub_mgr, m_selection);
 	ao->Redo();
 	ee0::MsgHelper::AddAtomicOP(*m_sub_mgr, ao);
 	ee0::MsgHelper::SetEditorDirty(*m_sub_mgr, true);
+
+	return true;
 }
 
 sm::vec2 ArrangeNodeImpl::GetNodeOffset(const ee0::GameObj& obj) const
