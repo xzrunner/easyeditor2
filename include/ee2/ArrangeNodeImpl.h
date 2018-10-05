@@ -55,6 +55,8 @@ public:
 
 	bool IsSelectionEmpty() const;
 
+	auto& GetCfgRef() { return m_cfg; }
+
 protected:
 	virtual void OnDirectionKeyDown(int type);
 	virtual void OnSpaceKeyDown();
@@ -81,7 +83,7 @@ private:
 
 	ee0::SelectionSet<ee0::GameObjWithPos>& m_selection;
 
-	const ArrangeNodeCfg m_cfg;
+	ArrangeNodeCfg m_cfg;
 
 	AutoAlign m_align;
 

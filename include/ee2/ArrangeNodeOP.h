@@ -46,11 +46,12 @@ public:
 private:
 	ee0::GameObj SelectByPos(const sm::vec2& pos) const;
 
+protected:
+	std::unique_ptr<ArrangeNodeImpl> m_impl = nullptr;
+
 private:
 	ECS_WORLD_SELF_DEF
 
-	std::unique_ptr<ArrangeNodeImpl> m_impl = nullptr;
-	
 }; // ArrangeNodeOP
 
 }
