@@ -50,6 +50,9 @@ public:
 	// query edited spr, include its extra edit region
 	ee0::GameObj QueryEditedNode(const sm::vec2& pos) const;
 
+	void TraversePosIn(const sm::vec2& pos,
+		std::function<bool(const ee0::GameObj&)> func) const;
+
 	bool IsSelectionEmpty() const;
 
 protected:

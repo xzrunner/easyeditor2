@@ -539,6 +539,19 @@ ee0::GameObj ArrangeNodeImpl::QueryEditedNode(const sm::vec2& pos) const
 	return ret;
 }
 
+void ArrangeNodeImpl::TraversePosIn(const sm::vec2& pos,
+	                                std::function<bool(const ee0::GameObj&)> func) const
+{
+	m_stage.Traverse([&](const ee0::GameObj& obj)->bool
+	{
+		auto& cbb = obj->GetUniqueComp<n2::CompBoundingBox>();
+		if (cbb.GetBounding(*obj).IsContain(pos)) {
+			func(obj);
+		}
+		return true;
+	});
+}
+
 bool ArrangeNodeImpl::IsSelectionEmpty() const
 {
 	return m_selection.IsEmpty();
