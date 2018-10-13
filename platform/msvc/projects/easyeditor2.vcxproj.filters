@@ -213,6 +213,9 @@
     <ClInclude Include="..\..\..\include\ee2\WxCompScriptPanel.h">
       <Filter>view\detail\script</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\ee2\WxCompShapePanel.h">
+      <Filter>view\detail\asset</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\editop\CamControlOP.cpp">
@@ -349,6 +352,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\view\WxCompScriptPanel.cpp">
       <Filter>view\detail\script</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\view\WxCompShapePanel.cpp">
+      <Filter>view\detail\asset</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
