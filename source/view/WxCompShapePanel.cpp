@@ -28,8 +28,8 @@ void WxCompShapePanel::RefreshNodeComp()
 	auto& shape = m_cshape.GetShape();
 	assert(shape);
 
-	auto& type = shape->GetClassInfo().GetClassName();
-	m_type->SetValue(type);
+	auto type_name = shape->get_type().get_name();
+	m_type->SetValue(type_name.to_string());
 }
 
 void WxCompShapePanel::InitLayout()
@@ -43,8 +43,8 @@ void WxCompShapePanel::InitLayout()
 
 	// type
 	{
-		auto& type = shape->GetClassInfo().GetClassName();
-		m_type = new wxTextCtrl(win, wxID_ANY, type,
+		auto type_name = shape->get_type().get_name();
+		m_type = new wxTextCtrl(win, wxID_ANY, type_name.to_string(),
 			wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
 		pane_sizer->Add(m_type);
 	}
