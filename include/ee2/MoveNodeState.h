@@ -19,7 +19,7 @@ class SpriteSelection;
 class MoveNodeState : public ee0::EditOpState
 {
 public:
-	MoveNodeState(const std::shared_ptr<pt0::Camera>& camera, 
+	MoveNodeState(const std::shared_ptr<pt0::Camera>& camera,
 		ECS_WORLD_PARAM ee0::SelectionSet<ee0::GameObjWithPos>& selection);
 
 	virtual bool OnMouseMove(int x, int y) override;

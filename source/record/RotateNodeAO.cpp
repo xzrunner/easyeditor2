@@ -16,8 +16,8 @@ namespace ee2
 
 RotateNodeAO::RotateNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
 	                       ECS_WORLD_PARAM
-	                       const std::vector<ee0::GameObj>& objs, 
-	                       const sm::vec2& start, 
+	                       const std::vector<ee0::GameObj>& objs,
+	                       const sm::vec2& start,
 	                       const sm::vec2& end)
 	: m_sub_mgr(sub_mgr)
 	ECS_WORLD_SELF_ASSIGN
@@ -31,7 +31,7 @@ RotateNodeAO::RotateNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
 
 RotateNodeAO::RotateNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
 	                       ECS_WORLD_PARAM
-	                       const std::vector<ee0::GameObj>& objs, 
+	                       const std::vector<ee0::GameObj>& objs,
 	                       float angle)
 	: m_sub_mgr(sub_mgr)
 	ECS_WORLD_SELF_ASSIGN
@@ -43,9 +43,9 @@ RotateNodeAO::RotateNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
 
 void RotateNodeAO::Undo()
 {
-	if (m_inited) 
+	if (m_inited)
 	{
-		for (auto& obj : m_objs) 
+		for (auto& obj : m_objs)
 		{
 #ifndef GAME_OBJ_ECS
 			auto& ctrans = obj->GetUniqueComp<n2::CompTransform>();
@@ -57,10 +57,10 @@ void RotateNodeAO::Undo()
 			e2::SysTransform::Rotate(m_world, obj, -angle);
 #endif // GAME_OBJ_ECS
 		}
-	} 
-	else if (m_angle != 0) 
+	}
+	else if (m_angle != 0)
 	{
-		for (auto& obj : m_objs) 
+		for (auto& obj : m_objs)
 		{
 #ifndef GAME_OBJ_ECS
 			auto& ctrans = obj->GetUniqueComp<n2::CompTransform>();

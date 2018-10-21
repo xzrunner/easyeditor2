@@ -15,8 +15,8 @@ namespace ee2
 class TranslateNodeState : public ee0::EditOpState
 {
 public:
-	TranslateNodeState(const std::shared_ptr<pt0::Camera>& camera, 
-		const ee0::SubjectMgrPtr& sub_mgr, ECS_WORLD_PARAM 
+	TranslateNodeState(const std::shared_ptr<pt0::Camera>& camera,
+		const ee0::SubjectMgrPtr& sub_mgr, ECS_WORLD_PARAM
 		const ee0::SelectionSet<ee0::GameObjWithPos>& selection, const sm::vec2& first_pos);
 
 	virtual bool OnMousePress(int x, int y) override;
@@ -37,7 +37,7 @@ private:
 	sm::vec2 m_first_pos, m_last_pos;
 
 	bool m_dirty;
-	
+
 }; // TranslateState
 
 }

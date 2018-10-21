@@ -16,7 +16,7 @@ namespace ee2
 ShearNodeAO::ShearNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
 	                     ECS_WORLD_PARAM
 	                     const ee0::GameObj& obj,
-	                     const sm::vec2& new_shear, 
+	                     const sm::vec2& new_shear,
 	                     const sm::vec2& old_shear)
     : m_sub_mgr(sub_mgr)
 	ECS_WORLD_SELF_ASSIGN

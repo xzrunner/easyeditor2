@@ -14,7 +14,7 @@ namespace ee2
 class ScaleNodeState : public ee0::EditOpState
 {
 public:
-	ScaleNodeState(const std::shared_ptr<pt0::Camera>& camera, 
+	ScaleNodeState(const std::shared_ptr<pt0::Camera>& camera,
 		const ee0::SubjectMgrPtr& sub_mgr, ECS_WORLD_PARAM
 		const ee0::GameObj& obj, const NodeCtrlPoint::Node& ctrl_point);
 

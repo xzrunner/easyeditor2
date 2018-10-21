@@ -12,7 +12,7 @@
 namespace ee2
 {
 
-CamTranslateState::CamTranslateState(const std::shared_ptr<pt0::Camera>& camera, 
+CamTranslateState::CamTranslateState(const std::shared_ptr<pt0::Camera>& camera,
 	                                 const ee0::SubjectMgrPtr& sub_mgr)
 	: ee0::EditOpState(camera)
 	, m_sub_mgr(sub_mgr)

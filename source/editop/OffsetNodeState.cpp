@@ -21,7 +21,7 @@ namespace ee2
 {
 
 OffsetNodeState::OffsetNodeState(const std::shared_ptr<pt0::Camera>& camera,
-	                             const ee0::SubjectMgrPtr& sub_mgr, 
+	                             const ee0::SubjectMgrPtr& sub_mgr,
 	                             ECS_WORLD_PARAM
 	                             const ee0::GameObj& obj)
 	: ee0::EditOpState(camera)
@@ -58,8 +58,8 @@ bool OffsetNodeState::OnMouseRelease(int x, int y)
 	if (sm::dis_pos_to_pos(fixed, pos) < r)
 	{
 		fixed = pos;
-	} 
-	else 
+	}
+	else
 	{
 		for (int i = 0; i < 8; ++i) {
 			if (sm::dis_pos_to_pos(fixed, ctrl_nodes[i]) < r) {
@@ -98,7 +98,7 @@ bool OffsetNodeState::OnMouseDrag(int x, int y)
 #ifndef GAME_OBJ_ECS
 	auto& ctrans = m_obj->GetUniqueComp<n2::CompTransform>();
 	sm::vec2 offset = sm::rotate_vector(
-		pos - ctrans.GetTrans().GetCenter(), 
+		pos - ctrans.GetTrans().GetCenter(),
 		-ctrans.GetTrans().GetAngle()
 	);
 	ctrans.SetOffset(*m_obj, offset);
@@ -108,7 +108,7 @@ bool OffsetNodeState::OnMouseDrag(int x, int y)
 	auto offset = sm::rotate_vector(pos - center, -angle);
 	e2::SysTransform::SetOffset(m_world, m_obj, offset);
 #endif // GAME_OBJ_ECS
-	
+
 	return true;
 }
 

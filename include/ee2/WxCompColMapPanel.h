@@ -19,7 +19,7 @@ class WxCompColMapPanel : public ee0::WxCompPanel
 {
 public:
 	WxCompColMapPanel(
-		wxWindow* parent, 
+		wxWindow* parent,
 #ifndef GAME_OBJ_ECS
 		n2::CompColorMap& col,
 #else

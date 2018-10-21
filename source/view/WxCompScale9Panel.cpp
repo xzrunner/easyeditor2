@@ -71,7 +71,7 @@ void WxCompScale9Panel::InitLayout()
 
 		pane_sizer->Add(sizer);
 	}
-	
+
 	win->SetSizer(pane_sizer);
 	pane_sizer->SetSizeHints(win);
 }
@@ -86,11 +86,11 @@ void WxCompScale9Panel::UpdateSpinValue(wxSpinEvent& event)
 
 
 	int id = event.GetId();
-	if (id == m_width->GetId()) 
+	if (id == m_width->GetId())
 	{
 		cscale9.SetWidth(ECS_WORLD_SELF_VAR m_width->GetValue());
-	} 
-	else if (id == m_height->GetId()) 
+	}
+	else if (id == m_height->GetId())
 	{
 		cscale9.SetHeight(ECS_WORLD_SELF_VAR m_height->GetValue());
 	}

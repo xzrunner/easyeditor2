@@ -16,11 +16,11 @@
 namespace ee2
 {
 
-WxCompScissorPanel::WxCompScissorPanel(wxWindow* parent, 
+WxCompScissorPanel::WxCompScissorPanel(wxWindow* parent,
 #ifndef GAME_OBJ_ECS
-	                                   n2::CompScissor& cscissor, 
+	                                   n2::CompScissor& cscissor,
 #else
-		                               e2::CompScissor& cscissor, 
+		                               e2::CompScissor& cscissor,
 #endif // GAME_OBJ_ECS
 	                                   const ee0::SubjectMgrPtr& sub_mgr)
 	: ee0::WxCompPanel(parent, "Scissor")

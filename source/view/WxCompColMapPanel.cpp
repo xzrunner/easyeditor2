@@ -7,9 +7,9 @@
 namespace ee2
 {
 
-WxCompColMapPanel::WxCompColMapPanel(wxWindow* parent, 
+WxCompColMapPanel::WxCompColMapPanel(wxWindow* parent,
 #ifndef GAME_OBJ_ECS
-	                                 n2::CompColorMap& col, 
+	                                 n2::CompColorMap& col,
 #else
 	                                 e2::CompColorMap& col,
 #endif // GAME_OBJ_ECS

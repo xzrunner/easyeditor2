@@ -8,7 +8,7 @@
 namespace ee2
 {
 
-void NodeReorderHelper::UpOneLayer(ee0::SubjectMgr& sub_mgr, 
+void NodeReorderHelper::UpOneLayer(ee0::SubjectMgr& sub_mgr,
 	                               const ee0::SelectionSet<ee0::GameObjWithPos>& selection)
 {
 	if (selection.IsEmpty()) {
@@ -22,7 +22,7 @@ void NodeReorderHelper::UpOneLayer(ee0::SubjectMgr& sub_mgr,
 		objs.push_back(opw);
 		return true;
 	});
-	
+
 	for (auto& itr = objs.rbegin(); itr != objs.rend(); ++itr)
 	{
 		ee0::VariantSet vars;
@@ -50,7 +50,7 @@ void NodeReorderHelper::UpOneLayer(ee0::SubjectMgr& sub_mgr,
 	sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
 
-void NodeReorderHelper::DownOneLayer(ee0::SubjectMgr& sub_mgr, 
+void NodeReorderHelper::DownOneLayer(ee0::SubjectMgr& sub_mgr,
 	                                 const ee0::SelectionSet<ee0::GameObjWithPos>& selection)
 {
 	if (selection.IsEmpty()) {

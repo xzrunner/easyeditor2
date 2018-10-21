@@ -17,8 +17,8 @@ namespace ee2
 class CopyPasteNodeState : public ee0::EditOpState
 {
 public:
-	CopyPasteNodeState(const std::shared_ptr<pt0::Camera>& camera, 
-		const ee0::SubjectMgrPtr& sub_mgr, ECS_WORLD_PARAM 
+	CopyPasteNodeState(const std::shared_ptr<pt0::Camera>& camera,
+		const ee0::SubjectMgrPtr& sub_mgr, ECS_WORLD_PARAM
 		ee0::SelectionSet<ee0::GameObjWithPos>& selection);
 
 	virtual bool OnMousePress(int x, int y) override;
@@ -31,7 +31,7 @@ private:
 	sm::vec2 m_last_pos;
 
 	std::vector<ee0::GameObjWithPos> m_objs;
-	
+
 }; // CopyPasteNodeState
 
 }

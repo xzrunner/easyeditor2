@@ -14,7 +14,7 @@ namespace ee2
 class WxCompScriptPanel : public ee0::WxCompPanel
 {
 public:
-	WxCompScriptPanel(wxWindow* parent, const ee0::SubjectMgrPtr& sub_mgr, 
+	WxCompScriptPanel(wxWindow* parent, const ee0::SubjectMgrPtr& sub_mgr,
 		ECS_WORLD_PARAM const ee0::GameObj& obj);
 
 	virtual void RefreshNodeComp() override;

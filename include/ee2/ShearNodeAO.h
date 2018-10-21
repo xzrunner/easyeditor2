@@ -30,6 +30,6 @@ private:
 
 	sm::vec2 m_old_shear, m_new_shear;
 
-}; // ShearNodeAO 
+}; // ShearNodeAO
 
 }

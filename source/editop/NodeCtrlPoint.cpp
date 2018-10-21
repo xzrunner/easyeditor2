@@ -26,7 +26,7 @@ void NodeCtrlPoint::GetNodeCtrlPoints(ECS_WORLD_PARAM const ee0::GameObj& obj, s
 #else
 	auto& cbb = world.GetComponent<e2::CompBoundingBox>(obj);
 	auto& r = cbb.rect;
-	
+
 	auto& mt = world.GetComponent<e2::CompLocalMat>(obj).mat;
 #endif // GAME_OBJ_ECS
 

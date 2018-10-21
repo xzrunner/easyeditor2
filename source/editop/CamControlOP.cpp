@@ -12,7 +12,7 @@
 namespace ee2
 {
 
-CamControlOP::CamControlOP(const std::shared_ptr<pt0::Camera>& camera, 
+CamControlOP::CamControlOP(const std::shared_ptr<pt0::Camera>& camera,
 	                       const ee0::SubjectMgrPtr& sub_mgr, uint32_t flag)
 	: ee0::EditOP(camera)
 	, m_sub_mgr(sub_mgr)
@@ -57,7 +57,7 @@ bool CamControlOP::OnMouseLeftDown(int x, int y)
 
 bool CamControlOP::OnMouseLeftUp(int x, int y)
 {
-	return m_op_state->OnMouseRelease(x, y);	
+	return m_op_state->OnMouseRelease(x, y);
 }
 
 bool CamControlOP::OnMouseRightDown(int x, int y)

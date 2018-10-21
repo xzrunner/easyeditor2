@@ -34,7 +34,7 @@ TranslateNodeAO::TranslateNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
 
 TranslateNodeAO::TranslateNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
 	                             ECS_WORLD_PARAM
-	                             const ee0::GameObj& obj, 
+	                             const ee0::GameObj& obj,
 	                             const sm::vec2& offset)
 	: m_sub_mgr(sub_mgr)
 	ECS_WORLD_SELF_ASSIGN
@@ -56,7 +56,7 @@ TranslateNodeAO::TranslateNodeAO(const ee0::SubjectMgrPtr& sub_mgr,
 
 void TranslateNodeAO::Undo()
 {
-	for (auto& obj : m_objs) 
+	for (auto& obj : m_objs)
 	{
 #ifndef GAME_OBJ_ECS
 		auto& ctrans = obj->GetUniqueComp<n2::CompTransform>();

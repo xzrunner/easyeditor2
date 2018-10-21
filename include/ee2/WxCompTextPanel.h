@@ -48,7 +48,7 @@ private:
 	wxChoice*   m_font_type;
 	wxSpinCtrl* m_font_size;
 	wxButton*   m_font_color;
-	
+
 	wxCheckBox* m_has_edge;
 	wxTextCtrl* m_edge_size;
 	wxButton*   m_edge_color;

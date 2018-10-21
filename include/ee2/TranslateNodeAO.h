@@ -37,6 +37,6 @@ private:
 
 	sm::vec2 m_offset;
 
-}; // TranslateNodeAO 
+}; // TranslateNodeAO
 
 }

@@ -32,13 +32,13 @@ public:
  		RIGHT,
  		DOWN
  	};
- 
+
  	struct Node
  	{
  		sm::vec2 pos;
  		Type type;
 		bool valid;
- 
+
  		void SetInvalid() {
  			valid = false;
  		}

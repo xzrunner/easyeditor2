@@ -23,7 +23,7 @@
 namespace ee2
 {
 
-WxCompTransformPanel::WxCompTransformPanel(wxWindow* parent, 
+WxCompTransformPanel::WxCompTransformPanel(wxWindow* parent,
 	                                       const ee0::SubjectMgrPtr& sub_mgr,
 	                                       ECS_WORLD_PARAM
 	                                       const ee0::GameObjWithPos& opw)
@@ -52,7 +52,7 @@ void WxCompTransformPanel::RefreshNodeComp()
 	m_shear_x->SetValue(std::to_string(trans.GetShear().x));
 	m_shear_y->SetValue(std::to_string(trans.GetShear().y));
 #else
-	
+
 #endif // GAME_OBJ_ECS
 }
 
@@ -80,15 +80,15 @@ void WxCompTransformPanel::InitLayout()
 		auto pos = e2::SysTransform::GetPosition(m_world, m_nwp);
 #endif // GAME_OBJ_ECS
 		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("X ")));
-		sizer->Add(m_pos_x = new wxTextCtrl(win, wxID_ANY, std::to_string(pos.x), 
+		sizer->Add(m_pos_x = new wxTextCtrl(win, wxID_ANY, std::to_string(pos.x),
 			wxDefaultPosition, INPUT_SIZE, wxTE_PROCESS_ENTER));
 		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("  Y ")));
-		sizer->Add(m_pos_y = new wxTextCtrl(win, wxID_ANY, std::to_string(pos.y), 
+		sizer->Add(m_pos_y = new wxTextCtrl(win, wxID_ANY, std::to_string(pos.y),
 			wxDefaultPosition, INPUT_SIZE, wxTE_PROCESS_ENTER));
 
-		Connect(m_pos_x->GetId(), wxEVT_COMMAND_TEXT_ENTER, 
+		Connect(m_pos_x->GetId(), wxEVT_COMMAND_TEXT_ENTER,
 			wxCommandEventHandler(WxCompTransformPanel::EnterTextValue));
-		Connect(m_pos_y->GetId(), wxEVT_COMMAND_TEXT_ENTER, 
+		Connect(m_pos_y->GetId(), wxEVT_COMMAND_TEXT_ENTER,
 			wxCommandEventHandler(WxCompTransformPanel::EnterTextValue));
 
 		pane_sizer->Add(sizer);
@@ -105,10 +105,10 @@ void WxCompTransformPanel::InitLayout()
 		float angle = e2::SysTransform::GetAngle(m_world, m_nwp) * SM_RAD_TO_DEG;
 #endif // GAME_OBJ_ECS
 		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("X ")));
-		sizer->Add(m_angle = new wxTextCtrl(win, wxID_ANY, std::to_string(angle), 
+		sizer->Add(m_angle = new wxTextCtrl(win, wxID_ANY, std::to_string(angle),
 			wxDefaultPosition, INPUT_SIZE, wxTE_PROCESS_ENTER));
 
-		Connect(m_angle->GetId(), wxEVT_COMMAND_TEXT_ENTER, 
+		Connect(m_angle->GetId(), wxEVT_COMMAND_TEXT_ENTER,
 			wxCommandEventHandler(WxCompTransformPanel::EnterTextValue));
 
 		pane_sizer->Add(sizer);
@@ -125,15 +125,15 @@ void WxCompTransformPanel::InitLayout()
 		auto scale = e2::SysTransform::GetScale(m_world, m_nwp);
 #endif // GAME_OBJ_ECS
 		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("X ")));
-		sizer->Add(m_scale_x = new wxTextCtrl(win, wxID_ANY, std::to_string(scale.x), 
+		sizer->Add(m_scale_x = new wxTextCtrl(win, wxID_ANY, std::to_string(scale.x),
 			wxDefaultPosition, INPUT_SIZE, wxTE_PROCESS_ENTER));
 		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("  Y ")));
-		sizer->Add(m_scale_y = new wxTextCtrl(win, wxID_ANY, std::to_string(scale.y), 
+		sizer->Add(m_scale_y = new wxTextCtrl(win, wxID_ANY, std::to_string(scale.y),
 			wxDefaultPosition, INPUT_SIZE, wxTE_PROCESS_ENTER));
 
-		Connect(m_scale_x->GetId(), wxEVT_COMMAND_TEXT_ENTER, 
+		Connect(m_scale_x->GetId(), wxEVT_COMMAND_TEXT_ENTER,
 			wxCommandEventHandler(WxCompTransformPanel::EnterTextValue));
-		Connect(m_scale_y->GetId(), wxEVT_COMMAND_TEXT_ENTER, 
+		Connect(m_scale_y->GetId(), wxEVT_COMMAND_TEXT_ENTER,
 			wxCommandEventHandler(WxCompTransformPanel::EnterTextValue));
 
 		pane_sizer->Add(sizer);
@@ -150,15 +150,15 @@ void WxCompTransformPanel::InitLayout()
 		auto shear = e2::SysTransform::GetShear(m_world, m_nwp);
 #endif // GAME_OBJ_ECS
 		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("X ")));
-		sizer->Add(m_shear_x = new wxTextCtrl(win, wxID_ANY, std::to_string(shear.x), 
+		sizer->Add(m_shear_x = new wxTextCtrl(win, wxID_ANY, std::to_string(shear.x),
 			wxDefaultPosition, INPUT_SIZE, wxTE_PROCESS_ENTER));
 		sizer->Add(new wxStaticText(win, wxID_ANY, wxT("  Y ")));
 		sizer->Add(m_shear_y = new wxTextCtrl(win, wxID_ANY, std::to_string(shear.y),
 			wxDefaultPosition, INPUT_SIZE, wxTE_PROCESS_ENTER));
 
-		Connect(m_shear_x->GetId(), wxEVT_COMMAND_TEXT_ENTER, 
+		Connect(m_shear_x->GetId(), wxEVT_COMMAND_TEXT_ENTER,
 			wxCommandEventHandler(WxCompTransformPanel::EnterTextValue));
-		Connect(m_shear_y->GetId(), wxEVT_COMMAND_TEXT_ENTER, 
+		Connect(m_shear_y->GetId(), wxEVT_COMMAND_TEXT_ENTER,
 			wxCommandEventHandler(WxCompTransformPanel::EnterTextValue));
 
 		pane_sizer->Add(sizer);
@@ -194,7 +194,7 @@ void WxCompTransformPanel::UpdateSharedValue(wxCommandEvent& event)
 #endif // GAME_OBJ_ECS
 
 	// pos
-	if (event.GetId() == m_pos_x->GetId()) 
+	if (event.GetId() == m_pos_x->GetId())
 	{
 		double x;
 		m_pos_x->GetValue().ToDouble(&x);
@@ -206,7 +206,7 @@ void WxCompTransformPanel::UpdateSharedValue(wxCommandEvent& event)
 		e2::SysTransform::SetPosition(m_world, m_nwp, sm::vec2(x, pos.y));
 #endif // GAME_OBJ_ECS
 	}
-	else if (event.GetId() == m_pos_y->GetId()) 
+	else if (event.GetId() == m_pos_y->GetId())
 	{
 		double y;
 		m_pos_y->GetValue().ToDouble(&y);
@@ -296,7 +296,7 @@ void WxCompTransformPanel::UpdateSharedPatchValue(wxCommandEvent& event)
 					m_nwp.GetRoot()->GetUniqueComp<n2::CompSharedPatch>() :
 					m_nwp.GetRoot()->AddUniqueComp<n2::CompSharedPatch>();
 	// pos
-	if (event.GetId() == m_pos_x->GetId()) 
+	if (event.GetId() == m_pos_x->GetId())
 	{
 		double x;
 		m_pos_x->GetValue().ToDouble(&x);
@@ -307,7 +307,7 @@ void WxCompTransformPanel::UpdateSharedPatchValue(wxCommandEvent& event)
 		std::unique_ptr<n2::EditOp> op = std::make_unique<n2::SetPositionOp>(new_pos);
 		cpatch.AddEditOp(m_nwp.GetNodeID(), op);
 	}
-	else if (event.GetId() == m_pos_y->GetId()) 
+	else if (event.GetId() == m_pos_y->GetId())
 	{
 		double y;
 		m_pos_y->GetValue().ToDouble(&y);

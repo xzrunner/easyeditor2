@@ -19,7 +19,7 @@ namespace ee2
 {
 
 ScaleNodeState::ScaleNodeState(const std::shared_ptr<pt0::Camera>& camera,
-	                           const ee0::SubjectMgrPtr& sub_mgr, 
+	                           const ee0::SubjectMgrPtr& sub_mgr,
 	                           ECS_WORLD_PARAM
 	                           const ee0::GameObj& obj,
 	                           const NodeCtrlPoint::Node& ctrl_point)
@@ -90,7 +90,7 @@ void ScaleNodeState::Scale(const sm::vec2& curr)
 
 	sm::vec2 ctrls[8];
 	NodeCtrlPoint::GetNodeCtrlPoints(ECS_WORLD_SELF_VAR m_obj, ctrls);
-	
+
 	sm::vec2 ori = ctrls[m_ctrl_point.type];
 #ifndef GAME_OBJ_ECS
 	auto& ctrans = m_obj->GetUniqueComp<n2::CompTransform>();

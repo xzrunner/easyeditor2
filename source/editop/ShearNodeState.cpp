@@ -71,7 +71,7 @@ void ShearNodeState::Shear(const sm::vec2& curr)
 	//
 	// x' = e0 * x + e4 * y + e12
 	// y' = e1 * x + e5 * y + e13
-	// 
+	//
 	// e0 = c * sx - ky * s * sy
 	// e4 = kx * c * sx - s * sy
 	// e12 = px
@@ -80,7 +80,7 @@ void ShearNodeState::Shear(const sm::vec2& curr)
 	// pos.y = (s * sx + ky * c * sy) * x + (kx * s * sx + c * sy) * y + py
 	// pos.x = c*sx*x - ky*s*sy*x + kx*c*sx*y - s*sy*y + px
 	// pos.y = s*sx*x + ky*c*sy*x + kx*s*sx*y + c*sy*y + py
-	// 
+	//
 	// kx = (pos.x - c*sx*x + ky*s*sy*x + s*sy*y - px) / (c*sx*y)
 	// kx = (pos.y - s*sx*x - ky*c*sy*x - c*sy*y - py) / (s*sx*y)
 	// ky = (pos.x - c*sx*x - kx*c*sx*y + s*sy*y - px) / (-s*sy*x)
@@ -125,7 +125,7 @@ void ShearNodeState::Shear(const sm::vec2& curr)
 	float hw = sz.x * 0.5f, hh = sz.y * 0.5f;
 	if (m_ctrl_point.type == NodeCtrlPoint::UP)
 	{
-		x = 0; y = hh - offset.y;		
+		x = 0; y = hh - offset.y;
 		if (c != 0)
 			kx = (pos.x - c*sx*x + ky*s*sy*x + s*sy*y - px) / (c*sx*y);
 		else
@@ -195,7 +195,7 @@ void ShearNodeState::Shear2(const sm::vec2& curr)
 	NodeCtrlPoint::GetNodeCtrlPoints(m_world, m_obj, ctrls);
 #endif // GAME_OBJ_ECS
 	sm::vec2 sz = region.Size();
-	float hw = sz.x * 0.5f, 
+	float hw = sz.x * 0.5f,
 		  hh = sz.y * 0.5f;
 
 	sm::vec2 center = (ctrls[NodeCtrlPoint::LEFT] + ctrls[NodeCtrlPoint::RIGHT]) * 0.5f;

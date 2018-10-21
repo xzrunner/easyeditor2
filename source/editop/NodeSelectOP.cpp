@@ -27,7 +27,7 @@ namespace ee2
 {
 
 NodeSelectOP::NodeSelectOP(const std::shared_ptr<pt0::Camera>& camera,
-	                       ECS_WORLD_PARAM 
+	                       ECS_WORLD_PARAM
 	                       ee0::WxStagePage& stage)
 	: ee0::NodeSelectOP(camera, stage)
 	ECS_WORLD_SELF_ASSIGN
@@ -174,7 +174,7 @@ ee0::GameObj NodeSelectOP::QueryByPos(int screen_x, int screen_y) const
 	return ret;
 }
 
-void NodeSelectOP::QueryByRect(const sm::ivec2& p0, const sm::ivec2& p1, bool contain, 
+void NodeSelectOP::QueryByRect(const sm::ivec2& p0, const sm::ivec2& p1, bool contain,
 	                           std::vector<ee0::GameObj>& result) const
 {
 	auto pos0 = ee0::CameraHelper::TransPosScreenToProject(*m_camera, p0.x, p0.y);
@@ -215,7 +215,7 @@ ee0::GameObj NodeSelectOP::QueryByPos(const ee0::GameObj& obj, const sm::vec2& p
 
 		auto& ccomplex = obj->GetSharedComp<n0::CompComplex>();
 		auto& children = ccomplex.GetAllChildren();
-		for (auto& child : children) 
+		for (auto& child : children)
 		{
 			auto ret = QueryByPos(child, child_pos);
 			if (ret) {
@@ -228,7 +228,7 @@ ee0::GameObj NodeSelectOP::QueryByPos(const ee0::GameObj& obj, const sm::vec2& p
 	return GAME_OBJ_NULL;
 }
 
-void NodeSelectOP::QueryByRect(const ee0::GameObj& obj, const sm::rect& rect, 
+void NodeSelectOP::QueryByRect(const ee0::GameObj& obj, const sm::rect& rect,
 	                           bool contain, std::vector<ee0::GameObj>& result) const
 {
 #ifndef GAME_OBJ_ECS

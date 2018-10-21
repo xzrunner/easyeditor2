@@ -14,7 +14,7 @@ namespace ee2
 class WxCompTransformPanel : public ee0::WxCompPanel
 {
 public:
-	WxCompTransformPanel(wxWindow* parent, const ee0::SubjectMgrPtr& sub_mgr, 
+	WxCompTransformPanel(wxWindow* parent, const ee0::SubjectMgrPtr& sub_mgr,
 		ECS_WORLD_PARAM const ee0::GameObjWithPos& opw);
 
 	virtual void RefreshNodeComp() override;

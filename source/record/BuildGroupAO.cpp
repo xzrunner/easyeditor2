@@ -18,7 +18,7 @@ void BuildGroupAO::Undo()
 	std::vector<ee0::GameObjWithPos> objs;
 	CopyFromSelection(objs);
 
-	for (auto& obj : objs) 
+	for (auto& obj : objs)
 	{
 		NodeGroupHelper::BreakUp(ECS_WORLD_SELF_VAR *m_sub_mgr, obj);
 	}

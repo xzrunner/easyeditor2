@@ -9,7 +9,7 @@ namespace ee2
 class CamZoomState : public ee0::EditOpState
 {
 public:
-	CamZoomState(const std::shared_ptr<pt0::Camera>& camera, 
+	CamZoomState(const std::shared_ptr<pt0::Camera>& camera,
 		const ee0::SubjectMgrPtr& sub_mgr);
 
 	virtual bool OnMouseWheelRotation(int x, int y, int direction) override;

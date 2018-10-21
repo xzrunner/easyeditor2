@@ -14,8 +14,8 @@ namespace ee2
 class OffsetNodeState : public ee0::EditOpState
 {
 public:
-	OffsetNodeState(const std::shared_ptr<pt0::Camera>& camera, 
-		const ee0::SubjectMgrPtr& sub_mgr, ECS_WORLD_PARAM 
+	OffsetNodeState(const std::shared_ptr<pt0::Camera>& camera,
+		const ee0::SubjectMgrPtr& sub_mgr, ECS_WORLD_PARAM
 		const ee0::GameObj& obj);
 
 	virtual bool OnMouseRelease(int x, int y) override;

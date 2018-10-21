@@ -15,7 +15,7 @@ namespace ee2
 class RotateNodeState : public ee0::EditOpState
 {
 public:
-	RotateNodeState(const std::shared_ptr<pt0::Camera>& camera, 
+	RotateNodeState(const std::shared_ptr<pt0::Camera>& camera,
 		const ee0::SubjectMgrPtr& sub_mgr, ECS_WORLD_PARAM
 		ee0::SelectionSet<ee0::GameObjWithPos>& selection, const sm::vec2& first_pos);
 

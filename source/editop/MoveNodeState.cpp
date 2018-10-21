@@ -45,7 +45,7 @@ bool MoveNodeState::OnMouseMove(int x, int y)
 	auto pos = ee0::CameraHelper::TransPosScreenToProject(*m_camera, x, y);
 	auto offset = pos - m_center;
 #ifndef GAME_OBJ_ECS
-	for (auto& obj : m_objs) 
+	for (auto& obj : m_objs)
 	{
 		auto& ctrans = obj->GetUniqueComp<n2::CompTransform>();
 		ctrans.SetPosition(*obj, ctrans.GetTrans().GetPosition() + offset);

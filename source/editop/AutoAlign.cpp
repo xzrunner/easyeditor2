@@ -44,7 +44,7 @@ void AutoAlign::Align(ECS_WORLD_PARAM const std::vector<ee0::GameObj>& objs)
 #endif // GAME_OBJ_ECS
 	float dis_hor = DIS, dis_ver = DIS;
 	// hor
-	m_objs.Traverse([&](const ee0::GameObj& obj)->bool 
+	m_objs.Traverse([&](const ee0::GameObj& obj)->bool
 	{
 		auto& dst = objs[0];
 		auto& src = obj;
@@ -206,7 +206,7 @@ void AutoAlign::Align(ECS_WORLD_PARAM const ee0::GameObj& src, const ee0::GameOb
 		dst_rect.Translate(sm::vec2(0, dy));
 		m_hor[0].Set(src_cx - LEN, src_down);
 		m_hor[1].Set(src_cx + LEN, src_down);
-	}		
+	}
 	// down
 	if (float dis = fabs(dst_rect.ymin - src_up) < nearest)
 	{
@@ -233,7 +233,7 @@ void AutoAlign::Align(ECS_WORLD_PARAM const ee0::GameObj& src, const ee0::GameOb
 		dst_rect.Translate(sm::vec2(0, dy));
 		m_hor[0].Set(src_cx - LEN, src_down);
 		m_hor[1].Set(src_cx + LEN, src_down);
-	}	
+	}
 	// left
 	nearest = DIS;
 	if (float dis = fabs(dst_rect.xmin - src_left) < nearest)
@@ -305,10 +305,10 @@ void AutoAlign::Draw() const
 	}
 }
 
-void AutoAlign::SetInvisible() 
-{ 
-	m_hor[0] = m_hor[1]; 
-	m_ver[0] = m_ver[1]; 
+void AutoAlign::SetInvisible()
+{
+	m_hor[0] = m_hor[1];
+	m_ver[0] = m_ver[1];
 }
 
 }

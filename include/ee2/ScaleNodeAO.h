@@ -30,6 +30,6 @@ private:
 
 	sm::vec2 m_old_scale, m_new_scale;
 
-}; // ScaleNodeAO 
+}; // ScaleNodeAO
 
 }

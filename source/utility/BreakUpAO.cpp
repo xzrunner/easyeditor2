@@ -4,7 +4,7 @@
 namespace ee2
 {
 
-BreakUpAO::BreakUpAO(const ee0::SubjectMgrPtr& sub_mgr, 
+BreakUpAO::BreakUpAO(const ee0::SubjectMgrPtr& sub_mgr,
 	                 ECS_WORLD_PARAM
 	                 const ee0::SelectionSet<ee0::GameObjWithPos>& selection)
 	: m_sub_mgr(sub_mgr)

@@ -19,7 +19,7 @@ class WxCompScissorPanel : public ee0::WxCompPanel
 {
 public:
 	WxCompScissorPanel(
-		wxWindow* parent, 
+		wxWindow* parent,
 #ifndef GAME_OBJ_ECS
 		n2::CompScissor& cscissor,
 #else
@@ -27,7 +27,7 @@ public:
 #endif // GAME_OBJ_ECS
 		const ee0::SubjectMgrPtr& sub_mgr
 	);
-	
+
 	virtual void RefreshNodeComp() override;
 
 private:

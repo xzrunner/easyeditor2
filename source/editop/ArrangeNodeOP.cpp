@@ -13,7 +13,7 @@ namespace ee2
 
 
 ArrangeNodeOP::ArrangeNodeOP(const std::shared_ptr<pt0::Camera>& camera,
-	                         ee0::WxStagePage& stage, 
+	                         ee0::WxStagePage& stage,
 	                         ECS_WORLD_PARAM
 	                         const ArrangeNodeCfg& cfg,
 	                         const std::shared_ptr<ee0::EditOP>& prev_op)

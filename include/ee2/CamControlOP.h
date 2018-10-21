@@ -19,7 +19,7 @@ public:
 	static const uint32_t DEFAULT_FLAG     = MOUSE_MOVE_FOCUS | LEFT_TAP;
 
 public:
-	CamControlOP(const std::shared_ptr<pt0::Camera>& camera, 
+	CamControlOP(const std::shared_ptr<pt0::Camera>& camera,
 		const ee0::SubjectMgrPtr& sub_mgr, uint32_t flag = DEFAULT_FLAG);
 
 	virtual bool OnKeyDown(int key_code) override;

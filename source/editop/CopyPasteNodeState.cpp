@@ -33,11 +33,11 @@ CopyPasteNodeState::CopyPasteNodeState(const std::shared_ptr<pt0::Camera>& camer
 	});
 
 	selection.Clear();
-	for (auto& obj : m_objs) 
+	for (auto& obj : m_objs)
 	{
 		selection.Add(obj);
 #ifndef GAME_OBJ_ECS
-		ee0::MsgHelper::InsertNode(*m_sub_mgr, 
+		ee0::MsgHelper::InsertNode(*m_sub_mgr,
 			std::const_pointer_cast<n0::SceneNode>(obj.GetNode()));
 #else
 		ee0::MsgHelper::InsertNode(*m_sub_mgr, obj);
