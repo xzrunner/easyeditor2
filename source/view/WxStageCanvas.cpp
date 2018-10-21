@@ -7,10 +7,10 @@
 
 #include <unirender/RenderContext.h>
 #include <painting2/OrthoCamera.h>
-#include <painting2/PrimitiveDraw.h>
 #include <painting2/Blackboard.h>
 #include <painting2/RenderContext.h>
 #include <painting2/WindowContext.h>
+#include <painting2/RenderSystem.h>
 #ifndef GAME_OBJ_ECS
 #include <node0/SceneNode.h>
 #include <node2/RenderSystem.h>
@@ -19,6 +19,7 @@
 #include <entity2/SysRender.h>
 #endif // GAME_OBJ_ECS
 #include <facade/RenderContext.h>
+#include <tessellation/Painter.h>
 
 namespace
 {
@@ -92,9 +93,12 @@ void WxStageCanvas::OnDrawSprites() const
 
 void WxStageCanvas::DrawBackground() const
 {
-	const float EDGE = 100;
-	pt2::PrimitiveDraw::SetColor(ee0::LIGHT_GREY);
-	pt2::PrimitiveDraw::Cross(nullptr, sm::vec2(0, 0), EDGE, EDGE);
+	// draw cross
+	const float HALF_EDGE = 50;
+	tess::Painter pt;
+	pt.AddLine(sm::vec2(-HALF_EDGE, 0), sm::vec2(HALF_EDGE, 0), ee0::LIGHT_GREY.ToABGR());
+	pt.AddLine(sm::vec2(0, -HALF_EDGE), sm::vec2(0, HALF_EDGE), ee0::LIGHT_GREY.ToABGR());
+	pt2::RenderSystem::DrawPainter(pt, sm::mat4());
 }
 
 void WxStageCanvas::DrawForeground() const
