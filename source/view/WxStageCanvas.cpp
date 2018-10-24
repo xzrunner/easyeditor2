@@ -76,10 +76,10 @@ void WxStageCanvas::OnSize(int w, int h)
 void WxStageCanvas::OnDrawSprites() const
 {
 	auto& ur_rc = GetRenderContext().facade_rc->GetUrRc();
-	//ur_rc.SetClearFlag(ur::MASKC);
-	//ur_rc.Clear(0x88888888);
-	//ur_rc.SetDepthTest(ur::DEPTH_DISABLE);
-	//ur_rc.EnableDepthMask(false);
+	ur_rc.SetClearFlag(ur::MASKC);
+	ur_rc.Clear(0x88888888);
+	ur_rc.SetDepthTest(ur::DEPTH_DISABLE);
+	ur_rc.EnableDepthMask(false);
 	ur_rc.SetCull(ur::CULL_DISABLE);
 
 	DrawBackground();
