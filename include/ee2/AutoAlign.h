@@ -20,7 +20,7 @@ public:
 	void Align(ECS_WORLD_PARAM const std::vector<ee0::GameObj>& objs);
 	void Align(ECS_WORLD_PARAM const ee0::GameObj& src, const ee0::GameObj& dst);
 
-	void Draw() const;
+	void Draw(float cam_scale) const;
 
 	void SetInvisible();
 

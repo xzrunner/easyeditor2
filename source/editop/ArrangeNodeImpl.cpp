@@ -37,8 +37,8 @@
 #include <entity2/SysTransform.h>
 #include <entity2/CompBoundingBox.h>
 #endif // GAME_OBJ_ECS
-#include <painting2/PrimitiveDraw.h>
-#include <painting2/Color.h>
+#include <tessellation/Painter.h>
+#include <painting2/RenderSystem.h>
 
 namespace ee2
 {
@@ -440,6 +440,8 @@ void ArrangeNodeImpl::OnDraw(float cam_scale) const
 		}
 		else
 		{
+			tess::Painter pt;
+
 			if (m_cfg.is_deform_open)
 			{
 				if (m_stage.GetImpl().GetKeyState().GetKeyState(WXK_SHIFT))
@@ -456,12 +458,10 @@ void ArrangeNodeImpl::OnDraw(float cam_scale) const
 					sm::vec2 ctrl_nodes[8];
 					NodeCtrlPoint::GetNodeCtrlPoints(ECS_WORLD_SELF_VAR selected, ctrl_nodes);
 					for (int i = 0; i < 4; ++i) {
-						pt2::PrimitiveDraw::SetColor(pt2::Color(51, 204, 51));
-						pt2::PrimitiveDraw::Circle(nullptr, ctrl_nodes[i], m_ctrl_node_radius, false);
+						pt.AddCircle(ctrl_nodes[i], m_ctrl_node_radius, 0xff33cc33, cam_scale);
 					}
 					for (int i = 4; i < 8; ++i) {
-						pt2::PrimitiveDraw::SetColor(pt2::Color(51, 204, 51));
-						pt2::PrimitiveDraw::Circle(nullptr, ctrl_nodes[i], m_ctrl_node_radius, true);
+						pt.AddCircleFilled(ctrl_nodes[i], m_ctrl_node_radius, 0xff33cc33);
 					}
 				}
 			}
@@ -469,13 +469,14 @@ void ArrangeNodeImpl::OnDraw(float cam_scale) const
 			if (m_cfg.is_offset_open)
 			{
 				sm::vec2 offset = GetNodeOffset(selected);
-				pt2::PrimitiveDraw::SetColor(pt2::Color(204, 51, 51));
-				pt2::PrimitiveDraw::Circle(nullptr, offset, m_ctrl_node_radius, true);
+				pt.AddCircleFilled(offset, m_ctrl_node_radius, 0xff3333cc);
 			}
+
+			pt2::RenderSystem::DrawPainter(pt);
 		}
 	}
 
-	m_align.Draw();
+	m_align.Draw(cam_scale);
 }
 
 void ArrangeNodeImpl::Clear()

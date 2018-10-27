@@ -5,7 +5,10 @@
 #include <ee0/CameraHelper.h>
 #include <ee0/color_config.h>
 
-#include <painting2/PrimitiveDraw.h>
+#include <tessellation/Painter.h>
+#include <painting0/Camera.h>
+#include <painting2/RenderSystem.h>
+#include <painting2/OrthoCamera.h>
 
 namespace ee2
 {
@@ -53,21 +56,23 @@ bool DrawSelectRectState::OnDraw() const
 		return false;
 	}
 
-	pt2::PrimitiveDraw::LineWidth(2);
+	float line_width = 2;
+	if (m_camera->TypeID() == pt0::GetCamTypeID<pt2::OrthoCamera>()) {
+		line_width *= std::dynamic_pointer_cast<pt2::OrthoCamera>(m_camera)->GetScale();
+	}
+
+	tess::Painter pt;
 	if (m_last_pos.x > m_first_pos.x)
 	{
-		pt2::PrimitiveDraw::SetColor(ee0::LIGHT_GREEN);
-		pt2::PrimitiveDraw::Rect(nullptr, m_first_pos, m_last_pos, true);
-		pt2::PrimitiveDraw::SetColor(ee0::SELECT_RED);
-		pt2::PrimitiveDraw::Rect(nullptr, m_first_pos, m_last_pos, false);
+		pt.AddRectFilled(m_first_pos, m_last_pos, ee0::LIGHT_GREEN.ToABGR());
+		pt.AddRect(m_first_pos, m_last_pos, ee0::SELECT_RED.ToABGR(), line_width);
 	}
 	else
 	{
-		pt2::PrimitiveDraw::SetColor(ee0::LIGHT_BLUE);
-		pt2::PrimitiveDraw::Rect(nullptr, m_first_pos, m_last_pos, true);
-		pt2::PrimitiveDraw::SetColor(ee0::SELECT_RED);
-		pt2::PrimitiveDraw::Rect(nullptr, m_first_pos, m_last_pos, false);
+		pt.AddRectFilled(m_first_pos, m_last_pos, ee0::LIGHT_BLUE.ToABGR());
+		pt.AddRect(m_first_pos, m_last_pos, ee0::SELECT_RED.ToABGR(), line_width);
 	}
+	pt2::RenderSystem::DrawPainter(pt);
 
 	return false;
 }

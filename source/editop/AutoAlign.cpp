@@ -12,8 +12,8 @@
 #include <entity2/CompBoundingBox.h>
 #include <entity2/SysTransform.h>
 #endif // GAME_OBJ_ECS
-#include <painting2/PrimitiveDraw.h>
-#include <painting2/Color.h>
+#include <tessellation/Painter.h>
+#include <painting2/RenderSystem.h>
 
 namespace ee2
 {
@@ -291,17 +291,18 @@ void AutoAlign::Align(ECS_WORLD_PARAM const ee0::GameObj& src, const ee0::GameOb
 	}
 }
 
-void AutoAlign::Draw() const
+void AutoAlign::Draw(float cam_scale) const
 {
 	if (m_open)
 	{
-		pt2::PrimitiveDraw::SetColor(pt2::Color(0, 0, 0));
+		tess::Painter pt;
 		if (m_hor[0] != m_hor[1]) {
-			pt2::PrimitiveDraw::DashLine(nullptr, m_hor[0], m_hor[1]);
+			pt.AddDashLine(m_hor[0], m_hor[1], 0xff000000, cam_scale);
 		}
 		if (m_ver[0] != m_ver[1]) {
-			pt2::PrimitiveDraw::DashLine(nullptr, m_ver[0], m_ver[1]);
+			pt.AddDashLine(m_ver[0], m_ver[1], 0xff000000, cam_scale);
 		}
+		pt2::RenderSystem::DrawPainter(pt);
 	}
 }
 

@@ -94,11 +94,17 @@ void WxStageCanvas::OnDrawSprites() const
 void WxStageCanvas::DrawBackground() const
 {
 	// draw cross
+
+	float line_width = 1;
+	if (m_camera->TypeID() == pt0::GetCamTypeID<pt2::OrthoCamera>()) {
+		line_width *= std::dynamic_pointer_cast<pt2::OrthoCamera>(m_camera)->GetScale();
+	}
+
 	const float HALF_EDGE = 50;
 	tess::Painter pt;
-	pt.AddLine(sm::vec2(-HALF_EDGE, 0), sm::vec2(HALF_EDGE, 0), ee0::LIGHT_GREY.ToABGR());
-	pt.AddLine(sm::vec2(0, -HALF_EDGE), sm::vec2(0, HALF_EDGE), ee0::LIGHT_GREY.ToABGR());
-	pt2::RenderSystem::DrawPainter(pt, sm::mat4());
+	pt.AddLine(sm::vec2(-HALF_EDGE, 0), sm::vec2(HALF_EDGE, 0), ee0::LIGHT_GREY.ToABGR(), line_width);
+	pt.AddLine(sm::vec2(0, -HALF_EDGE), sm::vec2(0, HALF_EDGE), ee0::LIGHT_GREY.ToABGR(), line_width);
+	pt2::RenderSystem::DrawPainter(pt);
 }
 
 void WxStageCanvas::DrawForeground() const

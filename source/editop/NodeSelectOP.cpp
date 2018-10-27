@@ -20,8 +20,9 @@
 #endif // GAME_OBJ_ECS
 #include <SM_Test.h>
 #include <guard/check.h>
-#include <painting2/Color.h>
-#include <painting2/PrimitiveDraw.h>
+#include <tessellation/Painter.h>
+#include <painting2/RenderSystem.h>
+#include <painting2/OrthoCamera.h>
 
 namespace ee2
 {
@@ -128,8 +129,14 @@ bool NodeSelectOP::OnDraw() const
 		}
 #endif // GAME_OBJ_ECS
 
-		pt2::PrimitiveDraw::SetColor(pt2::Color(255, 0, 0));
-		pt2::PrimitiveDraw::Polyline(nullptr, bound, true);
+		float line_width = 1;
+		if (m_camera->TypeID() == pt0::GetCamTypeID<pt2::OrthoCamera>()) {
+			line_width *= std::dynamic_pointer_cast<pt2::OrthoCamera>(m_camera)->GetScale();
+		}
+
+		tess::Painter pt;
+		pt.AddPolygon(bound.data(), bound.size(), 0xff0000ff, line_width);
+		pt2::RenderSystem::DrawPainter(pt);
 
 		return true;
 	});
