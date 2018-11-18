@@ -119,6 +119,10 @@ void WxStageCanvas::DrawForeground() const
 			rp.SetPatch(patch);
 		}
 
+		if (m_camera->TypeID() == pt0::GetCamTypeID<pt2::OrthoCamera>()) {
+			rp.SetCamScale(std::dynamic_pointer_cast<pt2::OrthoCamera>(m_camera)->GetScale());
+		}
+
 		n2::RenderSystem::Instance()->Draw(obj, rp);
 #else
 		e2::RenderParams rp;
