@@ -6,7 +6,7 @@
 
 #include <vector>
 
-namespace ee0 { class NodeContainer; }
+namespace ee0 { class SceneNodeContainer; }
 ECS_WORLD_DECL
 
 namespace ee2
@@ -15,7 +15,7 @@ namespace ee2
 class AutoAlign
 {
 public:
-	AutoAlign(ee0::NodeContainer& objs);
+	AutoAlign(ee0::SceneNodeContainer& objs);
 
 	void Align(ECS_WORLD_PARAM const std::vector<ee0::GameObj>& objs);
 	void Align(ECS_WORLD_PARAM const ee0::GameObj& src, const ee0::GameObj& dst);
@@ -28,7 +28,7 @@ public:
 	void SetOpen(bool open) { m_open = open; }
 
 private:
-	ee0::NodeContainer& m_objs;
+	ee0::SceneNodeContainer& m_objs;
 
 	bool m_open;
 	sm::vec2 m_hor[2], m_ver[2];

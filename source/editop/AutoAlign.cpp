@@ -1,6 +1,6 @@
 #include "ee2/AutoAlign.h"
 
-#include <ee0/NodeContainer.h>
+#include <ee0/SceneNodeContainer.h>
 
 #include <SM_Rect.h>
 #ifndef GAME_OBJ_ECS
@@ -18,7 +18,7 @@
 namespace ee2
 {
 
-AutoAlign::AutoAlign(ee0::NodeContainer& objs)
+AutoAlign::AutoAlign(ee0::SceneNodeContainer& objs)
 	: m_objs(objs)
 	, m_open(true)
 {
