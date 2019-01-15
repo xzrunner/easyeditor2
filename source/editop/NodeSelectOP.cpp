@@ -28,13 +28,12 @@ namespace ee2
 {
 
 NodeSelectOP::NodeSelectOP(const std::shared_ptr<pt0::Camera>& camera,
-	                       ECS_WORLD_PARAM
-	                       ee0::WxStagePage& stage)
+	                       ECS_WORLD_PARAM ee0::WxStagePage& stage, uint32_t cam_cfg)
 	: ee0::NodeSelectOP(camera, stage)
 	ECS_WORLD_SELF_ASSIGN
 	, m_draw_state_disable(false)
 {
-	SetPrevEditOP(std::make_shared<CamControlOP>(camera, stage.GetSubjectMgr()));
+	SetPrevEditOP(std::make_shared<CamControlOP>(camera, stage.GetSubjectMgr(), cam_cfg));
 
 	m_draw_state = std::make_unique<DrawSelectRectState>(camera, stage.GetSubjectMgr());
 }
