@@ -17,7 +17,6 @@
 #include "ee2/DownLayerNodeAO.h"
 #include "ee2/UpLayerNodeAO.h"
 
-#include <ee0/KeysState.h>
 #include <ee0/RightPopupMenu.h>
 #include <ee0/KeyType.h>
 #include <ee0/CameraHelper.h>
@@ -64,7 +63,7 @@ ArrangeNodeImpl::ArrangeNodeImpl(ee0::WxStagePage& stage,
 
 bool ArrangeNodeImpl::OnKeyDown(int keycode)
 {
-	if (m_stage.GetImpl().GetKeyState().GetKeyState(WXK_SHIFT) && OnSpriteShortcutKey(keycode)) {
+	if (wxGetKeyState(WXK_SHIFT) && OnSpriteShortcutKey(keycode)) {
 		return true;
 	}
 
@@ -203,7 +202,7 @@ void ArrangeNodeImpl::OnMouseLeftDown(int x, int y)
 	}
 
 	// scale
-	if (m_cfg.is_deform_open && !m_stage.GetImpl().GetKeyState().GetKeyState(WXK_SHIFT))
+	if (m_cfg.is_deform_open && !wxGetKeyState(WXK_SHIFT))
 	{
 		sm::vec2 ctrl_nodes[8];
 		NodeCtrlPoint::GetNodeCtrlPoints(ECS_WORLD_SELF_VAR selected, ctrl_nodes);
@@ -444,7 +443,7 @@ void ArrangeNodeImpl::OnDraw(float cam_scale) const
 
 			if (m_cfg.is_deform_open)
 			{
-				if (m_stage.GetImpl().GetKeyState().GetKeyState(WXK_SHIFT))
+				if (wxGetKeyState(WXK_SHIFT))
 				{
 					//sm::vec2 ctrl_nodes[4];
 					//NodeCtrlPoint::GetNodeCtrlPointsExt(*selected, ctrl_nodes);
@@ -515,7 +514,7 @@ ee0::GameObj ArrangeNodeImpl::QueryEditedNode(const sm::vec2& pos) const
 		}
 	}
 
-	if (m_cfg.is_deform_open && !m_stage.GetImpl().GetKeyState().GetKeyState(WXK_SHIFT))
+	if (m_cfg.is_deform_open && !wxGetKeyState(WXK_SHIFT))
 	{
 		sm::vec2 ctrl_nodes[8];
 		NodeCtrlPoint::GetNodeCtrlPoints(ECS_WORLD_SELF_VAR selected, ctrl_nodes);

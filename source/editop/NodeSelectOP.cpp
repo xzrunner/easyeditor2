@@ -45,9 +45,9 @@ bool NodeSelectOP::OnKeyDown(int key_code)
 	}
 
 	// group
-	if (m_stage.GetKeyState(WXK_CONTROL) && key_code == 'G') {
+	if (wxGetKeyState(WXK_CONTROL) && key_code == 'G') {
 		BuildGroup();
-	}  else if (m_stage.GetKeyState(WXK_CONTROL) && key_code == 'B') {
+	}  else if (wxGetKeyState(WXK_CONTROL) && key_code == 'B') {
 		BreakUpGroup();
 	}
 
