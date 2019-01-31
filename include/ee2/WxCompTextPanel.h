@@ -5,7 +5,8 @@
 #include <ee0/GameObj.h>
 
 ECS_WORLD_DECL
-namespace pt2 { class Textbox; class Color; }
+namespace pt0 { class Color; }
+namespace pt2 { class Textbox; }
 
 class wxTextCtrl;
 class wxChoice;
@@ -34,7 +35,7 @@ private:
 
 	void UpdateBoundingBox(const pt2::Textbox& tb);
 
-	static wxColour ToWxColor(const pt2::Color& col);
+	static wxColour ToWxColor(const pt0::Color& col);
 
 private:
 	ECS_WORLD_SELF_DEF

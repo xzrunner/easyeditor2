@@ -448,7 +448,7 @@ void ArrangeNodeImpl::OnDraw(float cam_scale) const
 					//sm::vec2 ctrl_nodes[4];
 					//NodeCtrlPoint::GetNodeCtrlPointsExt(*selected, ctrl_nodes);
 					//for (int i = 0; i < 4; ++i) {
-					//	pt2::PrimitiveDraw::SetColor(pt2::Color(51, 204, 51));
+					//	pt2::PrimitiveDraw::SetColor(pt0::Color(51, 204, 51));
 					//	pt2::PrimitiveDraw::Circle(nullptr, ctrl_nodes[i], m_ctrl_node_radius, true);
 					//}
 				}

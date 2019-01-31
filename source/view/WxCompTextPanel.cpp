@@ -399,7 +399,7 @@ void WxCompTextPanel::UpdateBoundingBox(const pt2::Textbox& tb)
 #endif // GAME_OBJ_ECS
 }
 
-wxColour WxCompTextPanel::ToWxColor(const pt2::Color& col)
+wxColour WxCompTextPanel::ToWxColor(const pt0::Color& col)
 {
 	return wxColour(col.r, col.g, col.b, col.a);
 }
