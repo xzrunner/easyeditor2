@@ -19,15 +19,15 @@ namespace ee2
 TranslateNodeState::TranslateNodeState(const std::shared_ptr<pt0::Camera>& camera,
 	                                   const ee0::SubjectMgrPtr& sub_mgr,
 	                                   ECS_WORLD_PARAM
-		                               const ee0::SelectionSet<ee0::GameObjWithPos>& selection,
-		                               const sm::vec2& first_pos)
+		                               const ee0::SelectionSet<ee0::GameObjWithPos>& selection)
 	: ee0::EditOpState(camera)
 	, m_sub_mgr(sub_mgr)
 	ECS_WORLD_SELF_ASSIGN
 	, m_selection(selection)
 	, m_dirty(false)
 {
-	m_first_pos = m_last_pos = first_pos;
+    m_first_pos.MakeInvalid();
+    m_last_pos.MakeInvalid();
 }
 
 bool TranslateNodeState::OnMousePress(int x, int y)
@@ -109,6 +109,16 @@ bool TranslateNodeState::OnDirectionKeyDown(int type)
 	Translate(offset);
 
 	return true;
+}
+
+bool TranslateNodeState::Clear()
+{
+    m_first_pos.MakeInvalid();
+    m_last_pos.MakeInvalid();
+
+    m_dirty = false;
+
+    return false;
 }
 
 void TranslateNodeState::Translate(const sm::vec2& offset)

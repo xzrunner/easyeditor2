@@ -17,7 +17,7 @@ class TranslateNodeState : public ee0::EditOpState
 public:
 	TranslateNodeState(const std::shared_ptr<pt0::Camera>& camera,
 		const ee0::SubjectMgrPtr& sub_mgr, ECS_WORLD_PARAM
-		const ee0::SelectionSet<ee0::GameObjWithPos>& selection, const sm::vec2& first_pos);
+		const ee0::SelectionSet<ee0::GameObjWithPos>& selection);
 
 	virtual bool OnMousePress(int x, int y) override;
 	virtual bool OnMouseRelease(int x, int y) override;
@@ -25,16 +25,19 @@ public:
 
 	virtual bool OnDirectionKeyDown(int type) override;
 
-private:
-	void Translate(const sm::vec2& offset);
+    virtual bool Clear() override;
+
+protected:
+	virtual void Translate(const sm::vec2& offset);
+
+protected:
+    const ee0::SelectionSet<ee0::GameObjWithPos>& m_selection;
+
+    sm::vec2 m_first_pos, m_last_pos;
 
 private:
 	ee0::SubjectMgrPtr m_sub_mgr;
 	ECS_WORLD_SELF_DEF
-
-	const ee0::SelectionSet<ee0::GameObjWithPos>& m_selection;
-
-	sm::vec2 m_first_pos, m_last_pos;
 
 	bool m_dirty;
 

@@ -57,6 +57,10 @@ public:
 
 	auto& GetCfgRef() { return m_cfg; }
 
+    void SetTranslateOP(const std::shared_ptr<ee0::EditOpState>& translate_op) {
+        m_translate_op = translate_op;
+    }
+
 protected:
 	virtual void OnDirectionKeyDown(int type);
 	virtual void OnSpaceKeyDown();
@@ -87,7 +91,8 @@ private:
 
 	AutoAlign m_align;
 
-	std::unique_ptr<ee0::EditOpState> m_op_state = nullptr;
+    std::shared_ptr<ee0::EditOpState> m_translate_op = nullptr;
+	std::shared_ptr<ee0::EditOpState> m_curr_op = nullptr;
 
 	sm::vec2 m_left_down_pos, m_right_down_pos;
 
