@@ -31,15 +31,16 @@ protected:
 	virtual void Translate(const sm::vec2& offset);
 
 protected:
+    ee0::SubjectMgrPtr m_sub_mgr;
+
     const ee0::SelectionSet<ee0::GameObjWithPos>& m_selection;
 
-    sm::vec2 m_first_pos, m_last_pos;
-
 private:
-	ee0::SubjectMgrPtr m_sub_mgr;
 	ECS_WORLD_SELF_DEF
 
 	bool m_dirty;
+
+    sm::vec2 m_first_pos, m_last_pos;
 
 }; // TranslateState
 
