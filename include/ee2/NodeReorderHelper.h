@@ -14,6 +14,8 @@ public:
 	static void UpOneLayer(ee0::SubjectMgr& sub_mgr, const ee0::SelectionSet<ee0::GameObjWithPos>& selection);
 	static void DownOneLayer(ee0::SubjectMgr& sub_mgr, const ee0::SelectionSet<ee0::GameObjWithPos>& selection);
 
+    static void SortNodes(ee0::SubjectMgr& sub_mgr, const n0::SceneNodePtr& up, const n0::SceneNodePtr& down);
+
 }; // NodeReorderHelper
 
 }

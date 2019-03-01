@@ -94,4 +94,21 @@ void NodeReorderHelper::DownOneLayer(ee0::SubjectMgr& sub_mgr,
 	sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
 
+void NodeReorderHelper::SortNodes(ee0::SubjectMgr& sub_mgr, const n0::SceneNodePtr& up, const n0::SceneNodePtr& down)
+{
+    ee0::VariantSet vars;
+
+    ee0::Variant var_obj_up;
+    var_obj_up.m_type = ee0::VT_PVOID;
+    var_obj_up.m_val.pv = &std::const_pointer_cast<n0::SceneNode>(up);
+    vars.SetVariant("obj_up", var_obj_up);
+
+    ee0::Variant var_obj_down;
+    var_obj_down.m_type = ee0::VT_PVOID;
+    var_obj_down.m_val.pv = &std::const_pointer_cast<n0::SceneNode>(down);
+    vars.SetVariant("obj_down", var_obj_down);
+
+    sub_mgr.NotifyObservers(ee0::MSG_REORDER_SCENE_NODE, vars);
+}
+
 }
