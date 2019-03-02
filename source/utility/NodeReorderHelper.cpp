@@ -41,7 +41,7 @@ void NodeReorderHelper::UpOneLayer(ee0::SubjectMgr& sub_mgr,
 		var_up.m_val.bl = true;
 		vars.SetVariant("up", var_up);
 
-		sub_mgr.NotifyObservers(ee0::MSG_REORDER_SCENE_NODE, vars);
+		sub_mgr.NotifyObservers(ee0::MSG_SCENE_NODE_UP_DOWN, vars);
 	}
 
 	sub_mgr.NotifyObservers(ee0::MSG_NODE_SELECTION_CLEAR);
@@ -83,7 +83,7 @@ void NodeReorderHelper::DownOneLayer(ee0::SubjectMgr& sub_mgr,
 		var_up.m_val.bl = false;
 		vars.SetVariant("up", var_up);
 
-		sub_mgr.NotifyObservers(ee0::MSG_REORDER_SCENE_NODE, vars);
+		sub_mgr.NotifyObservers(ee0::MSG_SCENE_NODE_UP_DOWN, vars);
 
 		return true;
 	});
@@ -94,7 +94,7 @@ void NodeReorderHelper::DownOneLayer(ee0::SubjectMgr& sub_mgr,
 	sub_mgr.NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 }
 
-void NodeReorderHelper::SortNodes(ee0::SubjectMgr& sub_mgr, const n0::SceneNodePtr& up, const n0::SceneNodePtr& down)
+void NodeReorderHelper::SwapNodes(ee0::SubjectMgr& sub_mgr, const n0::SceneNodePtr& up, const n0::SceneNodePtr& down)
 {
     ee0::VariantSet vars;
 
@@ -108,7 +108,7 @@ void NodeReorderHelper::SortNodes(ee0::SubjectMgr& sub_mgr, const n0::SceneNodeP
     var_obj_down.m_val.pv = &std::const_pointer_cast<n0::SceneNode>(down);
     vars.SetVariant("obj_down", var_obj_down);
 
-    sub_mgr.NotifyObservers(ee0::MSG_REORDER_SCENE_NODE, vars);
+    sub_mgr.NotifyObservers(ee0::MSG_SCENE_NODE_SWAP, vars);
 }
 
 }
