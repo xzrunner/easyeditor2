@@ -30,7 +30,7 @@ void NodeReorderHelper::UpOneLayer(ee0::SubjectMgr& sub_mgr,
 		ee0::Variant var_obj;
 		var_obj.m_type = ee0::VT_PVOID;
 #ifndef GAME_OBJ_ECS
-		var_obj.m_val.pv = &std::const_pointer_cast<n0::SceneNode>(itr->GetNode());
+		var_obj.m_val.pv = &itr->GetNode();
 #else
 		var_obj.m_val.pv = &(*itr);
 #endif // GAME_OBJ_ECS
@@ -72,9 +72,9 @@ void NodeReorderHelper::DownOneLayer(ee0::SubjectMgr& sub_mgr,
 		ee0::Variant var_obj;
 		var_obj.m_type = ee0::VT_PVOID;
 #ifndef GAME_OBJ_ECS
-		var_obj.m_val.pv = &std::const_pointer_cast<n0::SceneNode>(opw.GetNode());
+		var_obj.m_val.pv = &opw.GetNode();
 #else
-		var_obj.m_val.pv = &const_cast<ee0::GameObjWithPos&>(opw);
+		var_obj.m_val.pv = &opw;
 #endif // GAME_OBJ_ECS
 		vars.SetVariant("obj", var_obj);
 
@@ -100,12 +100,12 @@ void NodeReorderHelper::SwapNodes(ee0::SubjectMgr& sub_mgr, const n0::SceneNodeP
 
     ee0::Variant var_obj_up;
     var_obj_up.m_type = ee0::VT_PVOID;
-    var_obj_up.m_val.pv = &std::const_pointer_cast<n0::SceneNode>(up);
+    var_obj_up.m_val.pv = &up;
     vars.SetVariant("obj_up", var_obj_up);
 
     ee0::Variant var_obj_down;
     var_obj_down.m_type = ee0::VT_PVOID;
-    var_obj_down.m_val.pv = &std::const_pointer_cast<n0::SceneNode>(down);
+    var_obj_down.m_val.pv = &down;
     vars.SetVariant("obj_down", var_obj_down);
 
     sub_mgr.NotifyObservers(ee0::MSG_SCENE_NODE_SWAP, vars);
