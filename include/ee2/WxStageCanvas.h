@@ -3,6 +3,9 @@
 #include <ee0/WxStageCanvas.h>
 #include <ee0/Observer.h>
 #include <ee0/Config.h>
+#include <ee0/GameObj.h>
+
+#include <SM_Rect.h>
 
 #include <memory>
 
@@ -27,6 +30,10 @@ protected:
 
 	virtual void DrawBackground() const;
 	virtual void DrawForeground() const;
+
+private:
+    sm::rect CalcScreenRegion() const;
+    bool ScreenCullingTest(const sm::rect& screen, const ee0::GameObj& obj) const;
 
 protected:
 	ee0::WxStagePage* m_stage;

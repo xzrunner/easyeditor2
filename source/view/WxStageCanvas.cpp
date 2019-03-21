@@ -14,10 +14,13 @@
 #include <node0/SceneNode.h>
 #include <node2/RenderSystem.h>
 #include <node2/CompUniquePatch.h>
+#include <node2/CompBoundingBox.h>
+#include <node2/CompTransform.h>
 #else
 #include <entity2/SysRender.h>
 #endif // GAME_OBJ_ECS
 #include <tessellation/Painter.h>
+#include <SM_Calc.h>
 
 namespace
 {
@@ -108,9 +111,14 @@ void WxStageCanvas::DrawForeground() const
 	var.m_val.l = ee0::WxStagePage::TRAV_DRAW;
 	vars.SetVariant("type", var);
 
+    auto screen_region = CalcScreenRegion();
 	m_stage->Traverse([&](const ee0::GameObj& obj)->bool
 	{
 #ifndef GAME_OBJ_ECS
+        if (screen_region.IsValid() && ScreenCullingTest(screen_region, obj)) {
+            return true;
+        }
+
 		n2::RenderParams rp;
 		if (obj->HasUniqueComp<n2::CompUniquePatch>())
 		{
@@ -130,6 +138,39 @@ void WxStageCanvas::DrawForeground() const
 #endif // GAME_OBJ_ECS
 		return true;
 	}, vars);
+}
+
+sm::rect WxStageCanvas::CalcScreenRegion() const
+{
+    sm::rect r;
+    if (m_camera->TypeID() == pt0::GetCamTypeID<pt2::OrthoCamera>())
+    {
+        auto o_cam = std::dynamic_pointer_cast<pt2::OrthoCamera>(m_camera);
+
+        auto& wc = GetWidnowContext();
+        assert(wc.wc2);
+        const float w = wc.wc2->GetScreenWidth() * o_cam->GetScale();
+        const float h = wc.wc2->GetScreenHeight() * o_cam->GetScale();
+
+        r.Build(w, h);
+        r.Translate(o_cam->GetPosition());
+    }
+    return r;
+}
+
+bool WxStageCanvas::ScreenCullingTest(const sm::rect& screen, const ee0::GameObj& obj) const
+{
+    assert(screen.IsValid());
+    auto& cbb = obj->GetUniqueComp<n2::CompBoundingBox>();
+
+    auto& ctrans = obj->GetUniqueComp<n2::CompTransform>();
+    auto& mt = ctrans.GetTrans().GetMatrix();
+
+    auto& sz = cbb.GetSize();
+    const sm::vec2 min = mt * sm::vec2(sz.xmin, sz.ymin);
+    const sm::vec2 max = mt * sm::vec2(sz.xmax, sz.ymax);
+
+    return !sm::is_rect_intersect_rect(screen, sm::rect(min, max));
 }
 
 }
