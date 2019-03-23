@@ -120,6 +120,8 @@ void WxStageCanvas::DrawForeground() const
         }
 
 		n2::RenderParams rp;
+        rp.SetScreenRegion(screen_region);
+
 		if (obj->HasUniqueComp<n2::CompUniquePatch>())
 		{
 			auto patch = &obj->GetUniqueComp<n2::CompUniquePatch>();
