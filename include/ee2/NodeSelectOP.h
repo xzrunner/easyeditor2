@@ -31,7 +31,7 @@ public:
 
 	virtual bool OnDraw() const override;
 
-private:
+protected:
 	virtual ee0::GameObj QueryByPos(int screen_x, int screen_y) const override;
 	virtual void QueryByRect(const sm::ivec2& p0, const sm::ivec2& p1,
 		bool contain, std::vector<ee0::GameObj>& result) const;
@@ -40,6 +40,7 @@ private:
 	void QueryByRect(const ee0::GameObj& obj, const sm::rect& rect,
 		bool contain, std::vector<ee0::GameObj>& result) const;
 
+private:
 	void BuildGroup();
 	void BreakUpGroup();
 
