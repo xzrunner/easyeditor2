@@ -113,7 +113,7 @@ void WxCompMeshPanel::OnSetBasePath(wxCommandEvent& event)
 #ifndef GAME_OBJ_ECS
 	auto& cmesh = m_obj->GetSharedComp<n2::CompMesh>();
 	auto mesh = std::make_unique<pt2::Mesh<n0::SceneNodePtr>>();
-//	mesh->SetMesh(std::make_unique<pm::TrianglesMesh>);
+//	mesh->SetMesh(std::make_unique<pm2::TrianglesMesh>);
 	cmesh.SetMesh(mesh);
 
 	auto& cid = obj->GetUniqueComp<n0::CompIdentity>();
