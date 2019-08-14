@@ -5,7 +5,7 @@
 
 #include <node0/SceneNode.h>
 #include <node2/CompShape.h>
-#include <geoshape/Shape.h>
+#include <geoshape/Shape2D.h>
 
 #include <wx/sizer.h>
 #include <wx/textctrl.h>
