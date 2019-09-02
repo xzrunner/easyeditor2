@@ -392,7 +392,10 @@ void ArrangeNodeImpl::OnMouseDrag(int x, int y)
 
 void ArrangeNodeImpl::OnPopMenuSelected(int type)
 {
-	m_stage.GetImpl().GetPopupMenu().OnRightPopupMenu(type);
+    auto popup = m_stage.GetImpl().GetPopupMenu();
+    if (popup) {
+        popup->OnRightPopupMenu(type);
+    }
 }
 
 void ArrangeNodeImpl::OnDraw(float cam_scale) const
@@ -632,7 +635,10 @@ void ArrangeNodeImpl::OnSpaceKeyDown()
 
 void ArrangeNodeImpl::SetRightPopupMenu(wxMenu& menu, int x, int y)
 {
-	m_stage.GetImpl().GetPopupMenu().SetRightPopupMenu(menu, x, y);
+    auto popup = m_stage.GetImpl().GetPopupMenu();
+    if (popup) {
+        popup->SetRightPopupMenu(menu, x, y);
+    }
 }
 
 bool ArrangeNodeImpl::OnDeleteKeyDown()
