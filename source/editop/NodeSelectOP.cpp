@@ -12,6 +12,8 @@
 #include <node0/SceneNode.h>
 #include <node0/SceneTreeHelper.h>
 #include <node0/CompComplex.h>
+#include <node0/NodeFlagsHelper.h>
+#include <node0/NodeFlags.h>
 #include <node2/CompBoundingBox.h>
 #include <node2/CompTransform.h>
 #else
@@ -164,6 +166,9 @@ ee0::GameObj NodeSelectOP::QueryByPos(int screen_x, int screen_y) const
 #endif // GAME_OBJ_ECS
 	m_stage.Traverse([&](const ee0::GameObj& obj)->bool
 	{
+        if (n0::NodeFlagsHelper::GetFlag<n0::NodeNotVisible>(*obj)) {
+            return true;
+        }
 		auto query = QueryByPos(obj, pos);
 		if (GAME_OBJ_VALID(query))
 		{
