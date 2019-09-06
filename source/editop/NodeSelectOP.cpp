@@ -228,6 +228,9 @@ ee0::GameObj NodeSelectOP::QueryByPos(const ee0::GameObj& obj, const sm::vec2& p
 		auto& children = ccomplex.GetAllChildren();
 		for (auto& child : children)
 		{
+            if (n0::NodeFlagsHelper::GetFlag<n0::NodeNotVisible>(*child)) {
+                continue;
+            }
 			auto ret = QueryByPos(child, child_pos);
 			if (ret) {
 				return ret;
