@@ -18,9 +18,10 @@ CamControlOP::CamControlOP(const std::shared_ptr<pt0::Camera>& camera,
 	, m_sub_mgr(sub_mgr)
 	, m_flag(flag)
 {
-	m_zoom_state      = std::make_shared<CamZoomState>(camera, sub_mgr);
-	m_left_pan_state  = std::make_shared<CamTranslateState>(camera, sub_mgr);
-	m_right_pan_state = std::make_shared<CamTranslateState>(camera, sub_mgr);
+	m_zoom_state       = std::make_shared<CamZoomState>(camera, sub_mgr);
+	m_left_pan_state   = std::make_shared<CamTranslateState>(camera, sub_mgr);
+	m_right_pan_state  = std::make_shared<CamTranslateState>(camera, sub_mgr);
+    m_middle_pan_state = std::make_shared<CamTranslateState>(camera, sub_mgr);
 	m_op_state = m_zoom_state;
 }
 
@@ -57,6 +58,22 @@ bool CamControlOP::OnMouseLeftDown(int x, int y)
 
 bool CamControlOP::OnMouseLeftUp(int x, int y)
 {
+	return m_op_state->OnMouseRelease(x, y);
+}
+
+bool CamControlOP::OnMouseMiddleDown(int x, int y)
+{
+	if (m_flag & MIDDLE_TAP) {
+		ChangeEditOpState(m_middle_pan_state);
+	}
+	return m_op_state->OnMousePress(x, y);
+}
+
+bool CamControlOP::OnMouseMiddleUp(int x, int y)
+{
+	if (m_flag & MIDDLE_TAP) {
+		ChangeEditOpState(m_zoom_state);
+	}
 	return m_op_state->OnMouseRelease(x, y);
 }
 
