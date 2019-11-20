@@ -77,6 +77,8 @@ private:
 
 	bool OnSpriteShortcutKey(int keycode);
 
+    void AutoSetCamera();
+
 private:
 	ee0::WxStagePage& m_stage;
 

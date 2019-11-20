@@ -38,6 +38,7 @@
 #endif // GAME_OBJ_ECS
 #include <tessellation/Painter.h>
 #include <painting2/RenderSystem.h>
+#include <painting2/OrthoCamera.h>
 
 namespace ee2
 {
@@ -95,6 +96,10 @@ bool ArrangeNodeImpl::OnKeyDown(int keycode)
 		ret = true;
 		OnSpaceKeyDown();
 		break;
+    case 'H':
+        ret = true;
+        AutoSetCamera();
+        break;
 
 // 		// for debug
 // 	case 'O':
@@ -715,6 +720,21 @@ bool ArrangeNodeImpl::OnSpriteShortcutKey(int keycode)
 {
 	// todo
 	return false;
+}
+
+void ArrangeNodeImpl::AutoSetCamera()
+{
+    m_stage.Traverse([&](const ee0::GameObj& obj)->bool
+    {
+        auto& ctrans = obj->GetUniqueComp<n2::CompTransform>();
+        auto type = m_camera->TypeID();
+        if (type == pt0::GetCamTypeID<pt2::OrthoCamera>())
+        {
+            auto o_cam = std::dynamic_pointer_cast<pt2::OrthoCamera>(m_camera);
+            o_cam->Set(ctrans.GetTrans().GetPosition(), 1);
+        }
+        return false;
+    });
 }
 
 }
