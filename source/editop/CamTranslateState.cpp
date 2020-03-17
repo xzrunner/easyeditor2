@@ -67,4 +67,15 @@ bool CamTranslateState::OnMouseDrag(int x, int y)
 	return false;
 }
 
+void CamTranslateState::Translate(const std::shared_ptr<pt0::Camera>& camera,
+                                  const sm::vec2& offset)
+{
+    auto type = camera->TypeID();
+    if (type == pt0::GetCamTypeID<pt2::OrthoCamera>())
+    {
+        auto o_cam = std::dynamic_pointer_cast<pt2::OrthoCamera>(camera);
+        o_cam->Translate(offset);
+    }
+}
+
 }

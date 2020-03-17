@@ -38,6 +38,22 @@ bool CamControlOP::OnKeyDown(int key_code)
 		m_camera->Reset();
 		m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
 		break;
+    case WXK_LEFT:
+        CamTranslateState::Translate(m_camera, sm::vec2(-10, 0));
+        m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+        break;
+    case WXK_RIGHT:
+        CamTranslateState::Translate(m_camera, sm::vec2(10, 0));
+        m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+        break;
+    case WXK_DOWN:
+        CamTranslateState::Translate(m_camera, sm::vec2(0, -10));
+        m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+        break;
+    case WXK_UP:
+        CamTranslateState::Translate(m_camera, sm::vec2(0, 10));
+        m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+        break;
 	}
 
 	return false;
