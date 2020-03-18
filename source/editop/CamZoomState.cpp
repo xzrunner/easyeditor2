@@ -57,4 +57,14 @@ bool CamZoomState::OnMouseWheelRotation(int x, int y, int direction)
 	return false;
 }
 
+void CamZoomState::Scale(const std::shared_ptr<pt0::Camera>& camera, float scale)
+{
+	auto type = camera->TypeID();
+	if (type == pt0::GetCamTypeID<pt2::OrthoCamera>())
+	{
+		auto o_cam = std::dynamic_pointer_cast<pt2::OrthoCamera>(camera);
+		o_cam->Set(o_cam->GetPosition(), o_cam->GetScale() * scale);
+	}
+}
+
 }

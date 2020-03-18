@@ -43,8 +43,7 @@ bool CamTranslateState::OnMouseDrag(int x, int y)
 	auto type = m_camera->TypeID();
 	if (type == pt0::GetCamTypeID<pt2::OrthoCamera>())
 	{
-		auto o_cam = std::dynamic_pointer_cast<pt2::OrthoCamera>(m_camera);
-		o_cam->Translate(sm::vec2(static_cast<float>(offx), static_cast<float>(offy)));
+        Translate(m_camera, sm::vec2(static_cast<float>(offx), static_cast<float>(offy)));
 	}
 	else if (type == pt0::GetCamTypeID<pt2::Pseudo3DCamera>())
 	{

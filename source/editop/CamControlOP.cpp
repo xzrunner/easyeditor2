@@ -54,6 +54,14 @@ bool CamControlOP::OnKeyDown(int key_code)
         CamTranslateState::Translate(m_camera, sm::vec2(0, 10));
         m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
         break;
+    case WXK_PAGEDOWN:
+        CamZoomState::Scale(m_camera, 1.1f);
+        m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+        break;
+    case WXK_PAGEUP:
+        CamZoomState::Scale(m_camera, 0.9f);
+        m_sub_mgr->NotifyObservers(ee0::MSG_SET_CANVAS_DIRTY);
+        break;
 	}
 
 	return false;

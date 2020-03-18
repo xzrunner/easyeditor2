@@ -14,6 +14,8 @@ public:
 
 	virtual bool OnMouseWheelRotation(int x, int y, int direction) override;
 
+    static void Scale(const std::shared_ptr<pt0::Camera>& camera, float scale);
+
 private:
 	ee0::SubjectMgrPtr m_sub_mgr;
 
