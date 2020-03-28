@@ -31,7 +31,7 @@ protected:
 	virtual void DrawBackground() const;
 	virtual void DrawForeground() const;
 
-private:
+protected:
     sm::rect CalcScreenRegion() const;
     bool ScreenCullingTest(const sm::rect& screen, const ee0::GameObj& obj) const;
 
