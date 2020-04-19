@@ -1,4 +1,5 @@
 #include "ee2/ArrangeNodeImpl.h"
+#include "ee2/Utility.h"
 
 #include "ee2/CopyPasteNodeState.h"
 #include "ee2/MoveNodeState.h"
@@ -24,6 +25,7 @@
 #include <ee0/MessageID.h>
 #include <ee0/MsgHelper.h>
 #include <ee0/WxStagePage.h>
+#include <ee0/WxStageCanvas.h>
 
 #include <guard/check.h>
 #include <SM_Calc.h>
@@ -37,6 +39,7 @@
 #include <entity2/CompBoundingBox.h>
 #endif // GAME_OBJ_ECS
 #include <tessellation/Painter.h>
+#include <unirender2/RenderState.h>
 #include <painting2/RenderSystem.h>
 #include <painting2/OrthoCamera.h>
 
@@ -481,11 +484,14 @@ void ArrangeNodeImpl::OnDraw(float cam_scale) const
 				pt.AddCircleFilled(offset, m_ctrl_node_radius, 0xff3333cc);
 			}
 
-			pt2::RenderSystem::DrawPainter(pt);
+            auto& canvas = m_stage.GetImpl().GetCanvas();
+			pt2::RenderSystem::DrawPainter(canvas->GetRenderDevice(),
+                *canvas->GetRenderContext().ur_ctx, Utility::GetRenderState2D(), pt);
 		}
 	}
 
-	m_align.Draw(cam_scale);
+    auto canvas = m_stage.GetImpl().GetCanvas();
+	m_align.Draw(canvas->GetRenderDevice(), *canvas->GetRenderContext().ur_ctx, cam_scale);
 }
 
 void ArrangeNodeImpl::Clear()

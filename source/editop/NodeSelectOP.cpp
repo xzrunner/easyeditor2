@@ -3,6 +3,7 @@
 #include "ee2/DrawSelectRectState.h"
 #include "ee2/BuildGroupAO.h"
 #include "ee2/BreakUpAO.h"
+#include "ee2/Utility.h"
 
 #include <ee0/CameraHelper.h>
 #include <ee0/WxStagePage.h>
@@ -23,6 +24,7 @@
 #include <SM_Test.h>
 #include <guard/check.h>
 #include <tessellation/Painter.h>
+#include <unirender2/RenderState.h>
 #include <painting2/RenderSystem.h>
 #include <painting2/OrthoCamera.h>
 
@@ -37,7 +39,10 @@ NodeSelectOP::NodeSelectOP(const std::shared_ptr<pt0::Camera>& camera,
 {
 	SetPrevEditOP(std::make_shared<CamControlOP>(camera, stage.GetSubjectMgr(), cam_cfg));
 
-	m_draw_state = std::make_unique<DrawSelectRectState>(camera, stage.GetSubjectMgr());
+    auto canvas = m_stage.GetImpl().GetCanvas();
+	m_draw_state = std::make_unique<DrawSelectRectState>(
+        camera, stage.GetSubjectMgr()
+    );
 }
 
 bool NodeSelectOP::OnKeyDown(int key_code)
@@ -98,9 +103,9 @@ bool NodeSelectOP::OnMouseDrag(int x, int y)
 	return false;
 }
 
-bool NodeSelectOP::OnDraw() const
+bool NodeSelectOP::OnDraw(const ur2::Device& dev, ur2::Context& ctx) const
 {
-	if (ee0::NodeSelectOP::OnDraw()) {
+	if (ee0::NodeSelectOP::OnDraw(dev, ctx)) {
 		return true;
 	}
 
@@ -137,13 +142,16 @@ bool NodeSelectOP::OnDraw() const
 
 		tess::Painter pt;
 		pt.AddPolygon(bound.data(), bound.size(), 0xff0000ff, line_width);
-		pt2::RenderSystem::DrawPainter(pt);
+
+        auto canvas = m_stage.GetImpl().GetCanvas();
+		pt2::RenderSystem::DrawPainter(canvas->GetRenderDevice(),
+            *canvas->GetRenderContext().ur_ctx, Utility::GetRenderState2D(), pt);
 
 		return true;
 	});
 
 	if (!m_draw_state_disable) {
-		m_draw_state->OnDraw();
+		m_draw_state->OnDraw(dev, ctx);
 	}
 
 	return false;

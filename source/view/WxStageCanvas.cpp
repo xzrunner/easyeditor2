@@ -1,10 +1,13 @@
 #include "ee2/WxStageCanvas.h"
+#include "ee2/Utility.h"
 
 #include <ee0/WxStagePage.h>
 #include <ee0/color_config.h>
 #include <ee0/EditOP.h>
 #include <ee0/SubjectMgr.h>
 
+#include <unirender2/Context.h>
+#include <unirender2/RenderState.h>
 #include <painting2/OrthoCamera.h>
 #include <painting2/Blackboard.h>
 #include <painting2/RenderContext.h>
@@ -35,9 +38,9 @@ const uint32_t MESSAGES[] =
 namespace ee2
 {
 
-WxStageCanvas::WxStageCanvas(ee0::WxStagePage* stage, ECS_WORLD_PARAM
+WxStageCanvas::WxStageCanvas(const ur2::Device& dev, ee0::WxStagePage* stage, ECS_WORLD_PARAM
                              const ee0::RenderContext* rc, const ee0::WindowContext* wc)
-	: ee0::WxStageCanvas(stage, stage->GetImpl(), std::make_shared<pt2::OrthoCamera>(), rc, wc, HAS_2D)
+	: ee0::WxStageCanvas(dev, stage, stage->GetImpl(), std::make_shared<pt2::OrthoCamera>(), rc, wc, HAS_2D)
 	, m_stage(stage)
 	ECS_WORLD_SELF_ASSIGN
 {
@@ -63,17 +66,6 @@ void WxStageCanvas::OnNotify(uint32_t msg, const ee0::VariantSet& variants)
 	}
 }
 
-void WxStageCanvas::OnSize(int w, int h)
-{
-	auto& wc = pt2::Blackboard::Instance()->GetWindowContext();
-	if (wc)
-	{
-		wc->SetViewport(0, 0, w, h);
-		wc->SetScreen(w, h);
-		wc->SetProjection(w, h);
-	}
-}
-
 void WxStageCanvas::OnDrawSprites() const
 {
 	ee0::RenderContext::Reset2D(true);
@@ -83,7 +75,7 @@ void WxStageCanvas::OnDrawSprites() const
 
 	auto& op = m_stage->GetImpl().GetEditOP();
 	if (op) {
-		op->OnDraw();
+		op->OnDraw(m_dev, *GetRenderContext().ur_ctx);
 	}
 }
 
@@ -100,7 +92,9 @@ void WxStageCanvas::DrawBackground() const
 	tess::Painter pt;
 	pt.AddLine(sm::vec2(-HALF_EDGE, 0), sm::vec2(HALF_EDGE, 0), ee0::LIGHT_GREY.ToABGR(), line_width);
 	pt.AddLine(sm::vec2(0, -HALF_EDGE), sm::vec2(0, HALF_EDGE), ee0::LIGHT_GREY.ToABGR(), line_width);
-	pt2::RenderSystem::DrawPainter(pt);
+
+	pt2::RenderSystem::DrawPainter(m_dev,
+        *GetRenderContext().ur_ctx, Utility::GetRenderState2D(), pt);
 }
 
 void WxStageCanvas::DrawForeground() const
@@ -110,6 +104,8 @@ void WxStageCanvas::DrawForeground() const
 	var.m_type = ee0::VT_LONG;
 	var.m_val.l = ee0::WxStagePage::TRAV_DRAW;
 	vars.SetVariant("type", var);
+
+    ur2::RenderState rs = Utility::GetRenderState2D();
 
     auto screen_region = CalcScreenRegion();
 	m_stage->Traverse([&](const ee0::GameObj& obj)->bool
@@ -133,7 +129,7 @@ void WxStageCanvas::DrawForeground() const
 			rp.SetCamScale(std::dynamic_pointer_cast<pt2::OrthoCamera>(m_camera)->GetScale());
 		}
 
-		n2::RenderSystem::Instance()->Draw(obj, rp);
+		n2::RenderSystem::Instance()->Draw(m_dev, *GetRenderContext().ur_ctx, rs, obj, rp);
 #else
 		e2::RenderParams rp;
 		e2::SysRender::Draw(m_world, obj, rp);
@@ -149,10 +145,8 @@ sm::rect WxStageCanvas::CalcScreenRegion() const
     {
         auto o_cam = std::dynamic_pointer_cast<pt2::OrthoCamera>(m_camera);
 
-        auto& wc = GetWidnowContext();
-        assert(wc.wc2);
-        const float w = wc.wc2->GetScreenWidth() * o_cam->GetScale();
-        const float h = wc.wc2->GetScreenHeight() * o_cam->GetScale();
+        const float w = m_screen_sz.x * o_cam->GetScale();
+        const float h = m_screen_sz.y * o_cam->GetScale();
 
         r.Build(w, h);
         r.Translate(o_cam->GetPosition());

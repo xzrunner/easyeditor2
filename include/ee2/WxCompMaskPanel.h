@@ -7,13 +7,16 @@ ECS_WORLD_DECL
 
 class wxTextCtrl;
 
+namespace ur2 { class Device; }
+
 namespace ee2
 {
 
 class WxCompMaskPanel : public ee0::WxCompPanel
 {
 public:
-	WxCompMaskPanel(wxWindow* parent, ECS_WORLD_PARAM const ee0::GameObj& obj);
+	WxCompMaskPanel(const ur2::Device& dev,
+        wxWindow* parent, ECS_WORLD_PARAM const ee0::GameObj& obj);
 
 	virtual void RefreshNodeComp() override;
 
@@ -27,6 +30,8 @@ private:
 	ee0::GameObj CreateNodeFromFile();
 
 private:
+    const ur2::Device& m_dev;
+
 	ECS_WORLD_SELF_DEF
 	const ee0::GameObj& m_obj;
 

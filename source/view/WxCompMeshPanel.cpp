@@ -23,8 +23,10 @@
 namespace ee2
 {
 
-WxCompMeshPanel::WxCompMeshPanel(wxWindow* parent, ECS_WORLD_PARAM const ee0::GameObj& obj)
+WxCompMeshPanel::WxCompMeshPanel(const ur2::Device& dev, wxWindow* parent,
+                                 ECS_WORLD_PARAM const ee0::GameObj& obj)
 	: ee0::WxCompPanel(parent, "Mesh")
+    , m_dev(dev)
 	ECS_WORLD_SELF_ASSIGN
 	, m_obj(obj)
 {
@@ -137,7 +139,7 @@ ee0::GameObj WxCompMeshPanel::CreateNodeFromFile()
 
 	std::string filepath = dlg.GetPath().ToStdString();
 #ifndef GAME_OBJ_ECS
-	auto obj = ns::NodeFactory::Create(filepath);
+	auto obj = ns::NodeFactory::Create(m_dev, filepath);
 #else
 	auto obj = es::EntityFactory::Create(m_world, filepath);
 #endif // GAME_OBJ_ECS

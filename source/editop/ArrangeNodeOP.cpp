@@ -138,9 +138,9 @@ bool ArrangeNodeOP::OnPopMenuSelected(int type)
 	return false;
 }
 
-bool ArrangeNodeOP::OnDraw() const
+bool ArrangeNodeOP::OnDraw(const ur2::Device& dev, ur2::Context& ctx) const
 {
-	if (EditOP::OnDraw()) {
+	if (EditOP::OnDraw(dev, ctx)) {
 		return true;
 	}
 

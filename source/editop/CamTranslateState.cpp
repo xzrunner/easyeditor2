@@ -48,14 +48,10 @@ bool CamTranslateState::OnMouseDrag(int x, int y)
 	else if (type == pt0::GetCamTypeID<pt2::Pseudo3DCamera>())
 	{
 		auto p_cam = std::dynamic_pointer_cast<pt2::Pseudo3DCamera>(m_camera);
-		auto& wc = pt2::Blackboard::Instance()->GetWindowContext();
-		if (!wc) {
-			return false;
-		}
-		int w = wc->GetScreenWidth(),
-			h = wc->GetScreenHeight();
-		sm::vec2 last = p_cam->TransPosScreenToProject(m_last_pos.x, m_last_pos.y, w, h);
-		sm::vec2 curr = p_cam->TransPosScreenToProject(x, y, w, h);
+        const int screen_w = static_cast<int>(p_cam->GetSize().x);
+        const int screen_h = static_cast<int>(p_cam->GetSize().y);
+		sm::vec2 last = p_cam->TransPosScreenToProject(m_last_pos.x, m_last_pos.y, screen_w, screen_h);
+		sm::vec2 curr = p_cam->TransPosScreenToProject(x, y, screen_w, screen_h);
 		p_cam->Translate(sm::vec3(curr.x - last.x, curr.y - last.y, 0));
 	}
 

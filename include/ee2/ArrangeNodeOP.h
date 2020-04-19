@@ -36,7 +36,7 @@ public:
 
 	virtual bool OnPopMenuSelected(int type);
 
-	virtual bool OnDraw() const override;
+	virtual bool OnDraw(const ur2::Device& dev, ur2::Context& ctx) const override;
 	virtual bool Clear() override;
 
 	virtual void SetCamera(const std::shared_ptr<pt0::Camera>& camera) override;

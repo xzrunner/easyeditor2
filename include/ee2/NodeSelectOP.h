@@ -20,7 +20,7 @@ class NodeSelectOP : public ee0::NodeSelectOP
 {
 public:
 	NodeSelectOP(const std::shared_ptr<pt0::Camera>& camera,
-		ECS_WORLD_PARAM ee0::WxStagePage& stage, 
+		ECS_WORLD_PARAM ee0::WxStagePage& stage,
         uint32_t cam_cfg = CamControlOP::DEFAULT_FLAG);
 	virtual ~NodeSelectOP() = default;
 
@@ -29,7 +29,7 @@ public:
 	virtual bool OnMouseLeftUp(int x, int y) override;
 	virtual bool OnMouseDrag(int x, int y) override;
 
-	virtual bool OnDraw() const override;
+	virtual bool OnDraw(const ur2::Device& dev, ur2::Context& ctx) const override;
 
 protected:
 	virtual ee0::GameObj QueryByPos(int screen_x, int screen_y) const override;

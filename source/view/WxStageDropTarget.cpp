@@ -31,10 +31,12 @@
 namespace ee2
 {
 
-WxStageDropTarget::WxStageDropTarget(ECS_WORLD_PARAM
+WxStageDropTarget::WxStageDropTarget(const ur2::Device& dev,
+                                     ECS_WORLD_PARAM
 	                                 ee0::WxLibraryPanel* library,
 	                                 ee0::WxStagePage* stage)
 	: WxDropTarget()
+    , m_dev(dev)
 	, m_library(library)
 	, m_stage(stage)
 	ECS_WORLD_SELF_ASSIGN
@@ -63,7 +65,7 @@ void WxStageDropTarget::OnDropText(wxCoord x, wxCoord y, const wxString& text)
 		}
 
 #ifndef GAME_OBJ_ECS
-		auto obj = ns::NodeFactory::Create(item->GetFilepath());
+		auto obj = ns::NodeFactory::Create(m_dev, item->GetFilepath());
 		if (!obj) {
 			continue;
 		}

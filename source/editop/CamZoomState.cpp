@@ -26,13 +26,9 @@ bool CamZoomState::OnMouseWheelRotation(int x, int y, int direction)
 	auto type = m_camera->TypeID();
 	if (type == pt0::GetCamTypeID<pt2::OrthoCamera>())
 	{
-		auto& wc = pt2::Blackboard::Instance()->GetWindowContext();
-		if (!wc) {
-			return false;
-		}
+        const int screen_w = static_cast<int>(m_camera->GetSize().x);
+        const int screen_h = static_cast<int>(m_camera->GetSize().y);
 
-		int w = wc->GetScreenWidth(),
-			h = wc->GetScreenHeight();
 		float scale = 1;
 		//if (GetKeyState(WXK_CONTROL)) {
 		//	scale = direction > 0 ? 1 / 1.01f : 1.01f;
@@ -40,9 +36,9 @@ bool CamZoomState::OnMouseWheelRotation(int x, int y, int direction)
 			scale = direction > 0 ? 1 / 1.1f : 1.1f;
 		//}
 		const float cx = static_cast<float>(x),
-				    cy = static_cast<float>(h - y);
+				    cy = static_cast<float>(screen_h - y);
 		auto o_cam = std::dynamic_pointer_cast<pt2::OrthoCamera>(m_camera);
-		o_cam->Scale(scale, static_cast<int>(cx), static_cast<int>(cy), w, h);
+		o_cam->Scale(scale, static_cast<int>(cx), static_cast<int>(cy), screen_w, screen_h);
 	}
 	else if (type == pt0::GetCamTypeID<pt2::Pseudo3DCamera>())
 	{

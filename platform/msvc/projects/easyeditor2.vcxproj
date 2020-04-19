@@ -43,6 +43,7 @@
     <ClInclude Include="..\..\..\include\ee2\TranslateNodeAO.h" />
     <ClInclude Include="..\..\..\include\ee2\TranslateNodeState.h" />
     <ClInclude Include="..\..\..\include\ee2\UpLayerNodeAO.h" />
+    <ClInclude Include="..\..\..\include\ee2\Utility.h" />
     <ClInclude Include="..\..\..\include\ee2\VisibleNodeAO.h" />
     <ClInclude Include="..\..\..\include\ee2\WxCompColComPanel.h" />
     <ClInclude Include="..\..\..\include\ee2\WxCompColMapPanel.h" />
@@ -92,6 +93,7 @@
     <ClCompile Include="..\..\..\source\utility\BreakUpAO.cpp" />
     <ClCompile Include="..\..\..\source\utility\NodeGroupHelper.cpp" />
     <ClCompile Include="..\..\..\source\utility\NodeReorderHelper.cpp" />
+    <ClCompile Include="..\..\..\source\utility\Utility.cpp" />
     <ClCompile Include="..\..\..\source\view\WxCompColComPanel.cpp" />
     <ClCompile Include="..\..\..\source\view\WxCompColMapPanel.cpp" />
     <ClCompile Include="..\..\..\source\view\WxCompImagePanel.cpp" />
@@ -149,7 +151,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\easyeditor0\include;..\..\..\..\cu\src;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\unirender\include;..\..\..\..\rigging\src\rigging;..\..\..\..\guard\include;..\..\..\..\polymesh2\include;..\..\..\..\tessellation\include;..\..\..\..\primitive\include;..\..\..\..\geoshape\include;..\..\..\..\painting0\include;..\..\..\..\painting2\include;..\..\..\..\node0\include;..\..\..\..\node2\include;..\..\..\..\node3\include;..\..\..\..\facade\include;..\..\..\..\nserializer\include;..\..\..\..\eserializer\include;..\..\..\..\memmgr\include;..\..\..\..\moon\include;..\..\..\..\serializerx\include;..\..\..\..\cpputil\include;..\..\..\..\entity0\include;..\..\..\..\entity2\include;..\..\..\..\primitive\include;..\..\..\..\external-editor\wx\include;..\..\..\..\external\rapidjson\include;..\..\..\..\external\json\include;..\..\..\..\external\boost\include;..\..\..\..\external\rttr\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\easyeditor0\include;..\..\..\..\cu\src;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\unirender2\include;..\..\..\..\rigging\src\rigging;..\..\..\..\guard\include;..\..\..\..\polymesh2\include;..\..\..\..\tessellation\include;..\..\..\..\primitive\include;..\..\..\..\geoshape\include;..\..\..\..\painting0\include;..\..\..\..\painting2\include;..\..\..\..\node0\include;..\..\..\..\node2\include;..\..\..\..\node3\include;..\..\..\..\facade\include;..\..\..\..\nserializer\include;..\..\..\..\eserializer\include;..\..\..\..\memmgr\include;..\..\..\..\moon\include;..\..\..\..\serializerx\include;..\..\..\..\cpputil\include;..\..\..\..\entity0\include;..\..\..\..\entity2\include;..\..\..\..\primitive\include;..\..\..\..\external-editor\wx\include;..\..\..\..\external\rapidjson\include;..\..\..\..\external\json\include;..\..\..\..\external\boost\include;..\..\..\..\external\rttr\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -163,7 +165,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\easyeditor0\include;..\..\..\..\cu\src;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\unirender\include;..\..\..\..\rigging\src\rigging;..\..\..\..\guard\include;..\..\..\..\polymesh2\include;..\..\..\..\tessellation\include;..\..\..\..\primitive\include;..\..\..\..\geoshape\include;..\..\..\..\painting0\include;..\..\..\..\painting2\include;..\..\..\..\node0\include;..\..\..\..\node2\include;..\..\..\..\node3\include;..\..\..\..\facade\include;..\..\..\..\nserializer\include;..\..\..\..\eserializer\include;..\..\..\..\memmgr\include;..\..\..\..\moon\include;..\..\..\..\serializerx\include;..\..\..\..\cpputil\include;..\..\..\..\entity0\include;..\..\..\..\entity2\include;..\..\..\..\primitive\include;..\..\..\..\external-editor\wx\include;..\..\..\..\external\rapidjson\include;..\..\..\..\external\json\include;..\..\..\..\external\boost\include;..\..\..\..\external\rttr\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\easyeditor0\include;..\..\..\..\cu\src;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\unirender2\include;..\..\..\..\rigging\src\rigging;..\..\..\..\guard\include;..\..\..\..\polymesh2\include;..\..\..\..\tessellation\include;..\..\..\..\primitive\include;..\..\..\..\geoshape\include;..\..\..\..\painting0\include;..\..\..\..\painting2\include;..\..\..\..\node0\include;..\..\..\..\node2\include;..\..\..\..\node3\include;..\..\..\..\facade\include;..\..\..\..\nserializer\include;..\..\..\..\eserializer\include;..\..\..\..\memmgr\include;..\..\..\..\moon\include;..\..\..\..\serializerx\include;..\..\..\..\cpputil\include;..\..\..\..\entity0\include;..\..\..\..\entity2\include;..\..\..\..\primitive\include;..\..\..\..\external-editor\wx\include;..\..\..\..\external\rapidjson\include;..\..\..\..\external\json\include;..\..\..\..\external\boost\include;..\..\..\..\external\rttr\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>

@@ -20,10 +20,12 @@
 namespace ee2
 {
 
-WxCompImagePanel::WxCompImagePanel(wxWindow* parent,
+WxCompImagePanel::WxCompImagePanel(const ur2::Device& dev,
+                                   wxWindow* parent,
 	                               ECS_WORLD_PARAM
 	                               const ee0::GameObj& obj)
 	: ee0::WxCompPanel(parent, "Image")
+    , m_dev(dev)
 	ECS_WORLD_SELF_ASSIGN
 	, m_obj(obj)
 {
@@ -83,7 +85,7 @@ void WxCompImagePanel::OnSetFilepath(wxCommandEvent& event)
 	if (dlg.ShowModal() == wxID_OK)
 	{
 		auto& path = dlg.GetPath();
-		auto img = facade::ResPool::Instance().Fetch<facade::Image>(path.ToStdString());
+		auto img = facade::ResPool::Instance().Fetch<facade::Image>(path.ToStdString(), &m_dev);
 #ifndef GAME_OBJ_ECS
 		auto& cimage = m_obj->GetSharedComp<n2::CompImage>();
 		cimage.SetTexture(img->GetTexture());
