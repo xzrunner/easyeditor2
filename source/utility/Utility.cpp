@@ -10,6 +10,12 @@ ur2::RenderState Utility::GetRenderState2D()
     rs.depth_test.enabled = false;
     rs.facet_culling.enabled = false;
 
+    rs.blending.enabled = true;
+    rs.blending.separately = false;
+    rs.blending.src = ur2::BlendingFactor::One;
+    rs.blending.dst = ur2::BlendingFactor::OneMinusSrcAlpha;
+    rs.blending.equation = ur2::BlendEquation::Add;
+
     return rs;
 }
 
