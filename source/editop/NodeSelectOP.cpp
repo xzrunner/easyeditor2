@@ -3,7 +3,6 @@
 #include "ee2/DrawSelectRectState.h"
 #include "ee2/BuildGroupAO.h"
 #include "ee2/BreakUpAO.h"
-#include "ee2/Utility.h"
 
 #include <ee0/CameraHelper.h>
 #include <ee0/WxStagePage.h>
@@ -25,6 +24,7 @@
 #include <guard/check.h>
 #include <tessellation/Painter.h>
 #include <unirender2/RenderState.h>
+#include <unirender2/Factory.h>
 #include <painting2/RenderSystem.h>
 #include <painting2/OrthoCamera.h>
 
@@ -145,7 +145,7 @@ bool NodeSelectOP::OnDraw(const ur2::Device& dev, ur2::Context& ctx) const
 
         auto canvas = m_stage.GetImpl().GetCanvas();
 		pt2::RenderSystem::DrawPainter(canvas->GetRenderDevice(),
-            *canvas->GetRenderContext().ur_ctx, Utility::GetRenderState2D(), pt);
+            *canvas->GetRenderContext().ur_ctx, ur2::DefaultRenderState2D(), pt);
 
 		return true;
 	});

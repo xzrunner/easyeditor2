@@ -1,5 +1,4 @@
 #include "ee2/WxStageCanvas.h"
-#include "ee2/Utility.h"
 
 #include <ee0/WxStagePage.h>
 #include <ee0/color_config.h>
@@ -8,6 +7,7 @@
 
 #include <unirender2/Context.h>
 #include <unirender2/RenderState.h>
+#include <unirender2/Factory.h>
 #include <painting2/OrthoCamera.h>
 #include <painting2/Blackboard.h>
 #include <painting2/RenderContext.h>
@@ -94,7 +94,7 @@ void WxStageCanvas::DrawBackground() const
 	pt.AddLine(sm::vec2(0, -HALF_EDGE), sm::vec2(0, HALF_EDGE), ee0::LIGHT_GREY.ToABGR(), line_width);
 
 	pt2::RenderSystem::DrawPainter(m_dev,
-        *GetRenderContext().ur_ctx, Utility::GetRenderState2D(), pt);
+        *GetRenderContext().ur_ctx, ur2::DefaultRenderState2D(), pt);
 }
 
 void WxStageCanvas::DrawForeground() const
@@ -105,7 +105,7 @@ void WxStageCanvas::DrawForeground() const
 	var.m_val.l = ee0::WxStagePage::TRAV_DRAW;
 	vars.SetVariant("type", var);
 
-    ur2::RenderState rs = Utility::GetRenderState2D();
+    ur2::RenderState rs = ur2::DefaultRenderState2D();
 
     auto screen_region = CalcScreenRegion();
 	m_stage->Traverse([&](const ee0::GameObj& obj)->bool

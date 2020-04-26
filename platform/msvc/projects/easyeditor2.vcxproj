@@ -43,7 +43,6 @@
     <ClInclude Include="..\..\..\include\ee2\TranslateNodeAO.h" />
     <ClInclude Include="..\..\..\include\ee2\TranslateNodeState.h" />
     <ClInclude Include="..\..\..\include\ee2\UpLayerNodeAO.h" />
-    <ClInclude Include="..\..\..\include\ee2\Utility.h" />
     <ClInclude Include="..\..\..\include\ee2\VisibleNodeAO.h" />
     <ClInclude Include="..\..\..\include\ee2\WxCompColComPanel.h" />
     <ClInclude Include="..\..\..\include\ee2\WxCompColMapPanel.h" />
@@ -93,7 +92,6 @@
     <ClCompile Include="..\..\..\source\utility\BreakUpAO.cpp" />
     <ClCompile Include="..\..\..\source\utility\NodeGroupHelper.cpp" />
     <ClCompile Include="..\..\..\source\utility\NodeReorderHelper.cpp" />
-    <ClCompile Include="..\..\..\source\utility\Utility.cpp" />
     <ClCompile Include="..\..\..\source\view\WxCompColComPanel.cpp" />
     <ClCompile Include="..\..\..\source\view\WxCompColMapPanel.cpp" />
     <ClCompile Include="..\..\..\source\view\WxCompImagePanel.cpp" />

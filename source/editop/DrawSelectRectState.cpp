@@ -1,5 +1,4 @@
 #include "ee2/DrawSelectRectState.h"
-#include "ee2/Utility.h"
 
 #include <ee0/SubjectMgr.h>
 #include <ee0/MessageID.h>
@@ -8,6 +7,7 @@
 
 #include <tessellation/Painter.h>
 #include <unirender2/RenderState.h>
+#include <unirender2/Factory.h>
 #include <painting0/Camera.h>
 #include <painting2/RenderSystem.h>
 #include <painting2/OrthoCamera.h>
@@ -75,7 +75,7 @@ bool DrawSelectRectState::OnDraw(const ur2::Device& dev, ur2::Context& ctx) cons
 		pt.AddRect(m_first_pos, m_last_pos, ee0::SELECT_RED.ToABGR(), line_width);
 	}
 
-	pt2::RenderSystem::DrawPainter(dev, ctx, Utility::GetRenderState2D(), pt);
+	pt2::RenderSystem::DrawPainter(dev, ctx, ur2::DefaultRenderState2D(), pt);
 
 	return false;
 }

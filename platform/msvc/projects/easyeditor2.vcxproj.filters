@@ -216,9 +216,6 @@
     <ClInclude Include="..\..\..\include\ee2\WxCompShapePanel.h">
       <Filter>view\detail\asset</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\ee2\Utility.h">
-      <Filter>utility</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\editop\CamControlOP.cpp">
@@ -358,9 +355,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\view\WxCompShapePanel.cpp">
       <Filter>view\detail\asset</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\utility\Utility.cpp">
-      <Filter>utility</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

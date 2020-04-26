@@ -1,5 +1,4 @@
 #include "ee2/AutoAlign.h"
-#include "ee2/Utility.h"
 
 #include <ee0/SceneNodeContainer.h>
 
@@ -15,6 +14,7 @@
 #endif // GAME_OBJ_ECS
 #include <tessellation/Painter.h>
 #include <unirender2/RenderState.h>
+#include <unirender2/Factory.h>
 #include <painting2/RenderSystem.h>
 
 namespace ee2
@@ -304,7 +304,7 @@ void AutoAlign::Draw(const ur2::Device& dev, ur2::Context& ctx, float cam_scale)
 		if (m_ver[0] != m_ver[1]) {
 			pt.AddDashLine(m_ver[0], m_ver[1], 0xff000000, cam_scale);
 		}
-		pt2::RenderSystem::DrawPainter(dev, ctx, Utility::GetRenderState2D(), pt);
+		pt2::RenderSystem::DrawPainter(dev, ctx, ur2::DefaultRenderState2D(), pt);
 	}
 }
 

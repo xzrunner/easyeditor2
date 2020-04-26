@@ -1,5 +1,4 @@
 #include "ee2/ArrangeNodeImpl.h"
-#include "ee2/Utility.h"
 
 #include "ee2/CopyPasteNodeState.h"
 #include "ee2/MoveNodeState.h"
@@ -39,6 +38,7 @@
 #include <entity2/CompBoundingBox.h>
 #endif // GAME_OBJ_ECS
 #include <tessellation/Painter.h>
+#include <unirender2/Factory.h>
 #include <unirender2/RenderState.h>
 #include <painting2/RenderSystem.h>
 #include <painting2/OrthoCamera.h>
@@ -486,7 +486,7 @@ void ArrangeNodeImpl::OnDraw(float cam_scale) const
 
             auto& canvas = m_stage.GetImpl().GetCanvas();
 			pt2::RenderSystem::DrawPainter(canvas->GetRenderDevice(),
-                *canvas->GetRenderContext().ur_ctx, Utility::GetRenderState2D(), pt);
+                *canvas->GetRenderContext().ur_ctx, ur2::DefaultRenderState2D(), pt);
 		}
 	}
 
