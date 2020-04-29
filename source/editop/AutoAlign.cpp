@@ -13,8 +13,8 @@
 #include <entity2/SysTransform.h>
 #endif // GAME_OBJ_ECS
 #include <tessellation/Painter.h>
-#include <unirender2/RenderState.h>
-#include <unirender2/Factory.h>
+#include <unirender/RenderState.h>
+#include <unirender/Factory.h>
 #include <painting2/RenderSystem.h>
 
 namespace ee2
@@ -293,7 +293,7 @@ void AutoAlign::Align(ECS_WORLD_PARAM const ee0::GameObj& src, const ee0::GameOb
 	}
 }
 
-void AutoAlign::Draw(const ur2::Device& dev, ur2::Context& ctx, float cam_scale) const
+void AutoAlign::Draw(const ur::Device& dev, ur::Context& ctx, float cam_scale) const
 {
 	if (m_open)
 	{
@@ -304,7 +304,7 @@ void AutoAlign::Draw(const ur2::Device& dev, ur2::Context& ctx, float cam_scale)
 		if (m_ver[0] != m_ver[1]) {
 			pt.AddDashLine(m_ver[0], m_ver[1], 0xff000000, cam_scale);
 		}
-		pt2::RenderSystem::DrawPainter(dev, ctx, ur2::DefaultRenderState2D(), pt);
+		pt2::RenderSystem::DrawPainter(dev, ctx, ur::DefaultRenderState2D(), pt);
 	}
 }
 

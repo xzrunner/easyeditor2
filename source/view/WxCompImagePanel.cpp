@@ -20,7 +20,7 @@
 namespace ee2
 {
 
-WxCompImagePanel::WxCompImagePanel(const ur2::Device& dev,
+WxCompImagePanel::WxCompImagePanel(const ur::Device& dev,
                                    wxWindow* parent,
 	                               ECS_WORLD_PARAM
 	                               const ee0::GameObj& obj)

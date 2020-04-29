@@ -23,7 +23,7 @@
 namespace ee2
 {
 
-WxCompMeshPanel::WxCompMeshPanel(const ur2::Device& dev, wxWindow* parent,
+WxCompMeshPanel::WxCompMeshPanel(const ur::Device& dev, wxWindow* parent,
                                  ECS_WORLD_PARAM const ee0::GameObj& obj)
 	: ee0::WxCompPanel(parent, "Mesh")
     , m_dev(dev)

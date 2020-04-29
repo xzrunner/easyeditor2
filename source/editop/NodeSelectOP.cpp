@@ -23,8 +23,8 @@
 #include <SM_Test.h>
 #include <guard/check.h>
 #include <tessellation/Painter.h>
-#include <unirender2/RenderState.h>
-#include <unirender2/Factory.h>
+#include <unirender/RenderState.h>
+#include <unirender/Factory.h>
 #include <painting2/RenderSystem.h>
 #include <painting2/OrthoCamera.h>
 
@@ -103,7 +103,7 @@ bool NodeSelectOP::OnMouseDrag(int x, int y)
 	return false;
 }
 
-bool NodeSelectOP::OnDraw(const ur2::Device& dev, ur2::Context& ctx) const
+bool NodeSelectOP::OnDraw(const ur::Device& dev, ur::Context& ctx) const
 {
 	if (ee0::NodeSelectOP::OnDraw(dev, ctx)) {
 		return true;
@@ -145,7 +145,7 @@ bool NodeSelectOP::OnDraw(const ur2::Device& dev, ur2::Context& ctx) const
 
         auto canvas = m_stage.GetImpl().GetCanvas();
 		pt2::RenderSystem::DrawPainter(canvas->GetRenderDevice(),
-            *canvas->GetRenderContext().ur_ctx, ur2::DefaultRenderState2D(), pt);
+            *canvas->GetRenderContext().ur_ctx, ur::DefaultRenderState2D(), pt);
 
 		return true;
 	});

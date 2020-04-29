@@ -7,7 +7,7 @@ ECS_WORLD_DECL
 
 class wxTextCtrl;
 
-namespace ur2 { class Device; }
+namespace ur { class Device; }
 
 namespace ee2
 {
@@ -15,7 +15,7 @@ namespace ee2
 class WxCompImagePanel : public ee0::WxCompPanel
 {
 public:
-	WxCompImagePanel(const ur2::Device& dev, wxWindow* parent,
+	WxCompImagePanel(const ur::Device& dev, wxWindow* parent,
         ECS_WORLD_PARAM const ee0::GameObj& obj);
 
 	virtual void RefreshNodeComp() override;
@@ -26,7 +26,7 @@ private:
 	void OnSetFilepath(wxCommandEvent& event);
 
 private:
-    const ur2::Device& m_dev;
+    const ur::Device& m_dev;
 
 	ECS_WORLD_SELF_DEF
 	const ee0::GameObj& m_obj;

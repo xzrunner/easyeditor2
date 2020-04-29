@@ -24,7 +24,7 @@
 namespace ee2
 {
 
-WxCompMaskPanel::WxCompMaskPanel(const ur2::Device& dev,
+WxCompMaskPanel::WxCompMaskPanel(const ur::Device& dev,
                                  wxWindow* parent, ECS_WORLD_PARAM
 	                             const ee0::GameObj& obj)
 	: ee0::WxCompPanel(parent, "Mask")

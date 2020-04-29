@@ -5,9 +5,9 @@
 #include <ee0/EditOP.h>
 #include <ee0/SubjectMgr.h>
 
-#include <unirender2/Context.h>
-#include <unirender2/RenderState.h>
-#include <unirender2/Factory.h>
+#include <unirender/Context.h>
+#include <unirender/RenderState.h>
+#include <unirender/Factory.h>
 #include <painting2/OrthoCamera.h>
 #include <painting2/Blackboard.h>
 #include <painting2/RenderContext.h>
@@ -38,7 +38,7 @@ const uint32_t MESSAGES[] =
 namespace ee2
 {
 
-WxStageCanvas::WxStageCanvas(const ur2::Device& dev, ee0::WxStagePage* stage, ECS_WORLD_PARAM
+WxStageCanvas::WxStageCanvas(const ur::Device& dev, ee0::WxStagePage* stage, ECS_WORLD_PARAM
                              const ee0::RenderContext* rc, const ee0::WindowContext* wc)
 	: ee0::WxStageCanvas(dev, stage, stage->GetImpl(), std::make_shared<pt2::OrthoCamera>(), rc, wc, HAS_2D)
 	, m_stage(stage)
@@ -94,7 +94,7 @@ void WxStageCanvas::DrawBackground() const
 	pt.AddLine(sm::vec2(0, -HALF_EDGE), sm::vec2(0, HALF_EDGE), ee0::LIGHT_GREY.ToABGR(), line_width);
 
 	pt2::RenderSystem::DrawPainter(m_dev,
-        *GetRenderContext().ur_ctx, ur2::DefaultRenderState2D(), pt);
+        *GetRenderContext().ur_ctx, ur::DefaultRenderState2D(), pt);
 }
 
 void WxStageCanvas::DrawForeground() const
@@ -105,7 +105,7 @@ void WxStageCanvas::DrawForeground() const
 	var.m_val.l = ee0::WxStagePage::TRAV_DRAW;
 	vars.SetVariant("type", var);
 
-    ur2::RenderState rs = ur2::DefaultRenderState2D();
+    ur::RenderState rs = ur::DefaultRenderState2D();
 
     auto screen_region = CalcScreenRegion();
 	m_stage->Traverse([&](const ee0::GameObj& obj)->bool
